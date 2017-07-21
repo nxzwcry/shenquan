@@ -3,11 +3,20 @@ namespace App\Http\Controllers;
 
 use App\Student;
 use App\Lesson;
+use Illuminate\Http\Request; 
 
 class WeuserinfController extends Controller
 {
+	
 	//处理微信的请求消息
-	public function index()
+	public function login()
+	{
+
+		return view( 'student.login' );
+	}
+	
+	//显示用户信息
+	public function userinfo(Request $request)
 	{
 		//主键查找
 //      $students = Student::find(1);
@@ -20,7 +29,10 @@ class WeuserinfController extends Controller
 //			->orderBy('created_at','desc')
 //			->first();
 //		dd($students);
-		$uid = '1';
+//		$this->validate($request, [
+//		        'uid' => 'required|unique:posts|max:7',
+//		    ]);
+		$uid = $request -> uid;
 		$students = Student::find($uid);
 		$lessons = Lesson::where( 'uid' , $uid )
 			-> orderBy( 'time' )

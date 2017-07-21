@@ -18,7 +18,11 @@ Route::get('/', function () {
 Route::any('wechat','WechatController@serve');
 Route::any('wechat/menu','WechatController@menu');
 
-Route::any('wechat/userinfo','WeuserinfController@index');
+Route::any('wechat/login','WeuserinfController@login');
+Route::any('wechat/userinfo','WeuserinfController@userinfo');
 Route::any('wechat/enter','EnterController@index');
 Route::get('create','WeuserinfController@createuser');
 Route::get('createlesson','WeuserinfController@createlesson');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

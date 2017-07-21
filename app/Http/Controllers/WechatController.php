@@ -40,7 +40,7 @@ class WechatController extends Controller
             [
                 "type" => "view",
                 "name" => "用户信息",
-                "url"  => "http://101.200.52.162/wechat/userinfo"
+                "url"  => "http://101.200.52.162/wechat/login"
             ],
 		];
 		$menu->add($buttons);
