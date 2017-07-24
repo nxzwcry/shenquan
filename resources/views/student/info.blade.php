@@ -15,7 +15,10 @@
 	  <div class="weui-flex__item">性别：{{ $students -> sex }}</div>
 	</div>
 	<div class="weui-flex">
-	  <div class="weui-flex__item">年龄：{{ $students -> age }}</div>
+	  <div class="weui-flex__item">生日：{{ $students -> birthday }}</div>
+	</div>
+	<div class="weui-flex">
+	  <div class="weui-flex__item">邮箱：{{ $students -> email }}</div>
 	</div>
 @stop
 

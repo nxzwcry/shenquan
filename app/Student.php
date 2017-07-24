@@ -19,7 +19,7 @@ class Student extends Model
     public $timestamps = true;
     
     //允许批量赋值的字段
-    protected $fillable = ['name','age','ename','sex','birthday'];
+    protected $fillable = ['name','age','ename','sex','birthday','email'];
     
     protected function getDateFormat()
     {
