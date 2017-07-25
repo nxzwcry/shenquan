@@ -16,20 +16,34 @@ Route::get('/', function () {
 });
 
 Route::any('wechat','WechatController@serve');
-Route::any('wechat/menu','WechatController@menu');
 
-Route::any('wechat/connectto','WeuserinfController@connect');
 Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connect', function () {
-    return view('student.connect');
+    	return view('student.connect');
     });
+    Route::any('wechat/connectto','WeuserinfController@connect');
 });
+
 Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function () {
     Route::any('wechat/userinfo', 'WeuserinfController@userinfo');
 });
-Route::any('wechat/enter','EnterController@index');
-Route::get('create','WeuserinfController@createuser');
-Route::get('createlesson','WeuserinfController@createlesson');
-Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/admin', 'HomeController@index')->name('home');
+
+
+Route::group(['middleware' => ['auth']], function () {
+    
+	Route::any('wechat/menu','WechatController@menu');
+	Route::any('wechat/enter','EnterController@index');
+	
+	Route::get('createlesson','WeuserinfController@createlesson');
+		
+	Route::get('createstudent',function () {
+	    	return view('admin.cstudent');
+	    });
+	    
+    Route::post('createstudent','StudentController@create');
+});
+
+Auth::routes();
