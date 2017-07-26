@@ -29,11 +29,12 @@ Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function ()
 });
 
 
-Route::get('/admin', 'HomeController@index')->name('home');
 
 
 Route::group(['middleware' => ['auth']], function () {
     
+	Route::get('/admin', 'AdminhomeController@index')->name('home');
+	
 	Route::any('wechat/menu','WechatController@menu');
 	Route::any('wechat/enter','EnterController@index');
 	

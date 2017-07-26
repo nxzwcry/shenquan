@@ -81,19 +81,6 @@ class WeuserinfController extends Controller
 			return view( 'student.connect' );
 	}
 	
-	public function createuser()
-	{
-//		$student = new Student();
-//		$student->name = 'Daisy';
-//		$student->sex = 'girl';
-//		$bool = $student->save();
-		
-		//使用模型的Create方法新增数据
-		$student = Student::create(
-			['name'=>'高梦琪','ename' => 'Lily']
-		);
-	}
-	
 	public function createlesson()
 	{
 		$lasson = Lesson::create(

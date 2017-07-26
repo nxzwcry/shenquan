@@ -10,6 +10,7 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4",
         "mews/captcha": "^2.1",
+        "nesbot/carbon": "^1.22",
         "overtrue/laravel-wechat": "~3.0"
     },
     "require-dev": {
