@@ -19,7 +19,7 @@ class Lesson extends Model
     public $timestamps = true;
     
     //允许批量赋值的字段
-    protected $fillable = ['sid','tname','time', 'stime' , 'etime' , 'cid'];
+    protected $fillable = ['sid','tname', 'name' , 'date', 'stime' , 'etime' , 'cid' , 'conduct'];
     
     protected function getDateFormat()
     {

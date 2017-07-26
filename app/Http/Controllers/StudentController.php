@@ -20,7 +20,7 @@ class StudentController extends Controller
         ],[
             'required' => '输入不能为空',
             'ename.alpha' => '请输入正确的英文名',
-            'birthday.date_format' => '请按照正确格式输入日期',
+            'birthday.date' => '请按照正确格式输入日期',
         ]);
         
 //		$student = new Student();
@@ -34,13 +34,13 @@ class StudentController extends Controller
 			'name'=> $request -> name,
 			'ename' => $request -> ename,
 			'sex' => $request -> sex,
-			'birthday' => Carbon::parse($request -> birthday),
+			'birthday' => Carbon::parse($request -> birthday) ,
 			'gread' => $request -> gread,
 			'email' => $request -> email,
 		]
 		);
 		
-        return 1;
+        return route('AdminhomeController@index');
 	}
 }
 ?>

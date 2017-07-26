@@ -21,7 +21,7 @@
 							<td>{{ $student -> email }}</td>
 							<td><a href="">修改信息</a> 
 								<a href="">增加固定课程</a>
-								<a href="">增加单节课程</a>
+								<a href="/createlesson/{{ $student -> id }}">增加单节课程</a>
 								<a href="">删除用户</a></td>
 						</tr>
 					@endforeach

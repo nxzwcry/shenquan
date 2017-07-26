@@ -37,14 +37,16 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::any('wechat/menu','WechatController@menu');
 	Route::any('wechat/enter','EnterController@index');
-	
-	Route::get('createlesson','WeuserinfController@createlesson');
 		
 	Route::get('createstudent',function () {
 	    	return view('admin.cstudent');
 	    });
 	    
     Route::post('createstudent','StudentController@create');
+    
+	Route::get('createlesson/{id}', 'LessonController@index');
+	    
+    Route::post('createlesson','LessonController@create');
 });
 
 Auth::routes();
