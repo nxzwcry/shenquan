@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Student;
 
 class AdminhomeController extends Controller
 {
@@ -14,6 +15,10 @@ class AdminhomeController extends Controller
      */
     public function index()
     {
-        return view('admin.home');
+    	$students = Student::where('valid' , 1)
+    		-> orderby('created_at' , 'DESC')
+    		-> get();
+//  	dd($students);
+        return view('admin.home' , ['students' => $students]);
     }
 }

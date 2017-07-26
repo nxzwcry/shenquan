@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Student extends Model
 {
@@ -18,10 +19,18 @@ class Student extends Model
     //自动维护时间戳
     public $timestamps = true;
     
-    // 转换属性
-//  protected $casts = [
-//  	'birthday' => 'timestamp',
-//  ];
+    public function setBirthdayAttribute($value)
+    {
+        $this->attributes['birthday'] = $value -> getTimestamp() ;
+    }
+    
+    public function getBirthdayAttribute($value)
+    {
+        return Carbon::createFromTimeStamp($value);
+    }
+    
+    // 调整为日期属性
+//  protected $dates = ['birthday'];
     
     //允许批量赋值的字段
     protected $fillable = ['name','age','ename','sex','birthday','email'];
