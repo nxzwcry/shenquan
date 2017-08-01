@@ -21,7 +21,7 @@ class WeuserinfController extends Controller
 		Log::info('after captcha.');
 		$user = session('wechat.oauth_user'); // 拿到授权用户资料
 		$sid = $request -> sid;
-		$students = Student::find($sid);
+		$students = Student::where('id' , $sid) -> where('valid' , 1) -> first();
 //		dd($user);
 		if( $students != null )
 		{
@@ -65,20 +65,22 @@ class WeuserinfController extends Controller
 //		$this->validate($request, [
 //		        'uid' => 'required|unique:posts|max:7',
 //		    ]);
+		
 		$sid = $request->session()->get('sid', null);
 		
 //			dd($sid);
+		if ( $sid == null ) return view( 'student.connect' );
+
+		$students = Student::where( 'id' , $sid ) -> where( 'valid' , 1 ) -> first();
+		
+		if ( $students == null ) return view( 'student.connect' );
 			
-		if ( $sid != null )
-		{
-			$students = Student::where( 'id' , $sid ) -> first();
-			$lessons = Lesson::where( 'sid' , $sid )
-				-> orderBy( 'time' )
-				-> get();
-			return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons ]);
-		}
-		else
-			return view( 'student.connect' );
+		$lessons = Lesson::where( 'sid' , $sid )
+			-> orderBy( 'date'  , 'desc' )
+			->orderBy('stime','desc')
+			-> get();
+		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons ]);
+
 	}
 	
 	public function createlesson()
@@ -86,7 +88,7 @@ class WeuserinfController extends Controller
 		$lasson = Lesson::create(
 			[ 'sid' => '1',
 			  'tname' => 'Brooky',
-			  'time' => '20170701',
+			  'date' => '20170701',
 			  'vurl' => 'baidu.com',
 			  'furl' => 'baidu.com'
 			]

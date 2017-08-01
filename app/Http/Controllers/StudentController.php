@@ -40,7 +40,7 @@ class StudentController extends Controller
 		]
 		);
 		
-        return route('AdminhomeController@index');
+        return redirect('/admin');
 	}
 }
 ?>

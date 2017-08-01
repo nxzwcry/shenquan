@@ -1,4 +1,4 @@
-@extends('layouts')
+@extends('layouts.layouts')
 
 <!--@section('header')
 	hello world!
@@ -27,7 +27,7 @@
 		<tr><th>上课时间</th><th>上课教师</th><th>课程名称</th><th>课程附件</th></tr>
 	@foreach ( $lessons as $lesson )
 		<tr>
-			<td>{{ $lesson -> time }}</td>
+			<td>{{ $lesson -> date }}</td>
 			<td>{{ $lesson -> tname }}</td>
 			<td>{{ $lesson -> name }}</td>
 			<td><a href="{{ $lesson -> vurl }}">视频</a> <a href="{{ $lesson -> furl }}">课件</a></td>

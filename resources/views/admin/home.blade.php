@@ -9,7 +9,7 @@
 
                 <div class="panel-body">
                     <table class="table table-hover">
-						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>邮箱</th><th>操作</th></tr>
+						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>邮箱</th><th>创建时间</th><th>操作</th></tr>
 					@foreach ( $students as $student )
 						<tr>
 							<!--<td>{{ $student -> id }}</td>-->
@@ -19,10 +19,23 @@
 							<td>{{ Carbon\Carbon::now() -> diffInYears($student -> birthday , 'true') }}岁</td>
 							<td>{{ $student -> grade }}</td>
 							<td>{{ $student -> email }}</td>
-							<td><a href="">修改信息</a> 
-								<a href="">增加固定课程</a>
+							<td>{{ $student -> created_at }}</td>
+							<td><div class="btn-group">
+								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+									操作 <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="#">修改学生信息</a></li>
+									<li><a href="#">查看课程信息</a></li>
+									<li><a href="#">跟进学生信息</a></li>
+									<li class="divider"></li>
+									<li><a href="#">删除学生</a></li>
+								</ul>
+							</div></td>
+							<!--<td><a href="">修改信息</a> 
+								<a href="/createclass/{{ $student -> id }}">增加固定课程</a>
 								<a href="/createlesson/{{ $student -> id }}">增加单节课程</a>
-								<a href="">删除用户</a></td>
+								<a href="">删除用户</a></td>-->
 						</tr>
 					@endforeach
 					</table>

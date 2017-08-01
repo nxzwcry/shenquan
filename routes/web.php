@@ -15,7 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('wechat/send', 'LessonController@send' );
+
 Route::any('wechat','WechatController@serve');
+
+Route::any('wechat/video', function () {
+	return view('student.video');
+});
 
 Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connect', function () {
@@ -47,6 +54,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('createlesson/{id}', 'LessonController@index');
 	    
     Route::post('createlesson','LessonController@create');
+    
+	Route::get('createclass/{id}', 'ClassController@index');
+	    
+    Route::post('createclass','ClassController@create');
 });
 
 Auth::routes();

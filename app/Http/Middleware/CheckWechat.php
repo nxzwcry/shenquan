@@ -3,6 +3,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Wechat;
+use App\Student;
 
 class CheckWechat{
 	
@@ -19,6 +20,16 @@ class CheckWechat{
     	
         if ( $con == null ) {
             return redirect('wechat/connect');
+        }
+        
+        $student = Student::where( 'id' , $con -> sid )
+    		-> where( 'valid' , '1' ) -> first();
+    		
+		if ( $student == null ) {
+			Wechat::where( 'openid' , $user->id )
+    		-> where( 'valid' , '1' ) 
+    		-> update(['valid'=> 0]);
+        	return redirect('wechat/connect');
         }
         
         $request->session()->put('sid', $con -> sid);

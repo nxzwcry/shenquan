@@ -19,7 +19,7 @@ class Wechat extends Model
     public $timestamps = true;
     
     //允许批量赋值的字段
-    protected $fillable = ['openid','sid','name'.'nickname'];
+    protected $fillable = ['openid','sid','name','nickname','created_at','updated_at'];
     
     protected function getDateFormat()
     {

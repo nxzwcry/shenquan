@@ -22,6 +22,8 @@ class LessonController extends Controller
 	//处理添加学生请求
 	public function create(Request $request)
 	{
+		dd($request);
+		
 		$this -> validate($request,[
             'sid' => 'required|numeric|exists:students,id',
             'stime' => 'required',
@@ -45,7 +47,6 @@ class LessonController extends Controller
         	$conduct = 0;
         }
         
-//      dd($conduct);
         
 //		$student = new Student();
 //		$student->name = 'Daisy';
@@ -69,6 +70,25 @@ class LessonController extends Controller
 		);
 		
         return 1;
+	}
+	
+	// 发送上课提醒
+	public function send()
+	{
+		$wechat = app('wechat');
+		$notice = $wechat->notice;
+		$messageId = $notice->send([
+	        'touser' => 'o1XxxxB81qwbsP75Ecoquf5mdCyg',
+	        'template_id' => '0vuoBhcp-78VRZTe4Kw50ID6GVRY8v9nWbX8ORHJ2qU',
+	        'url' => 'deepspring.cn/wechat/userinfo',
+	        'data' => [
+	            'first' => '明天有朱瀚东的外教英语课！',
+	            'keyword1' => '认识字母A',
+	            'keyword2' => '2017-07-28 20:00 ~ 20:30',
+	            'remark' => "会议ID:1111111111",
+	        ],
+	    ]);
+	    return 1;
 	}
 }
 ?>
