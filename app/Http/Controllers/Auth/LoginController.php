@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -26,6 +27,25 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/admin';
+    
+     // 因为logout之后想重定向到login界面，所以重写logout方法
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return redirect('/login');
+    }
+    
+//  public function authenticate()
+//  {
+//      if (Auth::attempt(['email' => $email, 'password' => $password])) {
+//          // 认证通过...
+//          return redirect('/admin');
+//      }
+//  }
+//  
 
     /**
      * Create a new controller instance.

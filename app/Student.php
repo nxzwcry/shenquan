@@ -32,8 +32,8 @@ class Student extends Model
     // 调整为日期属性
 //  protected $dates = ['birthday'];
     
-    //允许批量赋值的字段
-    protected $fillable = ['name','age','ename','sex','birthday','email'];
+    //不允许批量赋值的字段
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
     
     protected function getDateFormat()
     {

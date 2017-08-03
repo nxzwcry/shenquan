@@ -18,8 +18,8 @@ class Recharge extends Model
     //自动维护时间戳
     public $timestamps = true;
     
-    //允许批量赋值的字段
-    protected $fillable = ['sid','lessons', 'note'];
+    //不允许批量赋值的字段
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
     
     protected function getDateFormat()
     {

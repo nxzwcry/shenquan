@@ -18,8 +18,8 @@ class Wechat extends Model
     //自动维护时间戳
     public $timestamps = true;
     
-    //允许批量赋值的字段
-    protected $fillable = ['openid','sid','name','nickname','created_at','updated_at'];
+    //不允许批量赋值的字段
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
     
     protected function getDateFormat()
     {

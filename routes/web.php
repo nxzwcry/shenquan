@@ -58,6 +58,12 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('createclass/{id}', 'ClassController@index');
 	    
     Route::post('createclass','ClassController@create');
+    
+	Route::get('recharge/{id}', 'RechargeController@index');
+	    
+    Route::post('recharge','RechargeController@create');
+    
+	Route::get('lessonsinfo/{id}', 'LessonController@info');
 });
 
 Auth::routes();

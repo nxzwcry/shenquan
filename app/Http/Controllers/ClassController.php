@@ -14,6 +14,7 @@ class ClassController extends Controller
 	public function index($sid)
 	{
 		$students = Student::where('id' , $sid)
+			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 //  	dd($students);
@@ -51,36 +52,55 @@ class ClassController extends Controller
 //			'cid' => $request -> cid
 //		]
 //		);
+
 		
 		
-		$class = new Classes();
-		$class->sid = $request -> sid;
-		$class->tname = $request -> tname;
-		$class->dow = $request -> dow;
-		$class->sdate = Carbon::parse($request -> sdate . ' 0:00:00');
-		if ( $request -> edate == null )
+		
+		$classinfo = $request -> all();
+		
+		$classinfo['sdate'] = Carbon::parse($classinfo['sdate'] . ' 0:00:00');
+		if ( $classinfo['edate'] <> null )
 		{
-			$class->edate = null;
+			$classinfo['edate'] = Carbon::parse($classinfo['edate'] . ' 23:59:59');
 		}
-		else
-		{
-			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
-		}
-		$class->stime = $request -> stime;
-		$class->etime = $request -> etime;
-		$class->mid = $request -> mid;
-		$class->cost = $request -> cost;
-		$class->cid = $request -> cid;		
 		
-		$bool = $class->save();
+//		dd($classinfo);
+		
+//		else
+//		{
+//			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
+//		}
+//		
+//		$class = new Classes();
+//		$class->sid = $request -> sid;
+//		$class->tname = $request -> tname;
+//		$class->dow = $request -> dow;
+//		$class->sdate = Carbon::parse($request -> sdate . ' 0:00:00');
+//		if ( $request -> edate == null )
+//		{
+//			$class->edate = null;
+//		}
+//		else
+//		{
+//			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
+//		}
+//		$class->stime = $request -> stime;
+//		$class->etime = $request -> etime;
+//		$class->mid = $request -> mid;
+//		$class->cost = $request -> cost;
+//		$class->cid = $request -> cid;	
+		$class = Classes::create($classinfo);			
+		
+//		dd($class-> toArray());
+//		$bool = $class->save();
 
 
-		if ( $bool ){
+//		if ( $bool ){
 		    $this-> clesson($class);
 		    return redirect('/admin');
-		    }
-		else
-			return 0;
+//		    }
+//		else
+//			return 0;
 	}
 	
 	//根据固定课程添加单节课程请求
@@ -126,21 +146,31 @@ class ClassController extends Controller
 	public function createlesson( Classes $class , Carbon $date , $conduct )
 	{			
 //		使用模型的Create方法新增单节数据
-		$lesson = Lesson::create(
-		[
-			'classid' => $class -> id,
-			'sid'=> $class -> sid,
-			'tname' => $class -> tname,
-			'name' => $class -> name,
-			'date' => $date -> toDateString(),
-			'stime' => $class -> stime,
-			'etime' => $class -> etime,
-			'mid' => $class -> mid,
-			'cost' => $class -> cost,
-			'cid' => $class -> cid,
-			'conduct' => $conduct,
-		]
-		);
+		$lessoninfo = $class -> toArray();
+		$lessoninfo['classid'] = $class -> id;
+		$lessoninfo['date'] = $date -> toDateString();
+		$lessoninfo['conduct'] = $conduct;
+		unset($lessoninfo['dow']);
+		unset($lessoninfo['sdate']);
+		unset($lessoninfo['edate']);
+//		dd($lessoninfo);
+		$lesson = Lesson::create($lessoninfo);
+//		$lesson = Lesson::create(
+//		[
+//			'classid' => $class -> id,
+//			'sid'=> $class -> sid,
+//			'name' =>
+//			'tname' => $class -> tname,
+//			'name' => $class -> name,
+//			'date' => $date -> toDateString(),
+//			'stime' => $class -> stime,
+//			'etime' => $class -> etime,
+//			'mid' => $class -> mid,
+//			'cost' => $class -> cost,
+//			'cid' => $class -> cid,
+//			'conduct' => $conduct,
+//		]
+//		);
 		return $lesson;
 	}
 	

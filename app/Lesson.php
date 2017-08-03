@@ -18,8 +18,8 @@ class Lesson extends Model
     //自动维护时间戳
     public $timestamps = true;
     
-    //允许批量赋值的字段
-    protected $fillable = ['sid','tname', 'name' , 'date', 'stime' , 'etime' , 'cid' , 'conduct'];
+    //不允许批量赋值的字段
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
     
     protected function getDateFormat()
     {

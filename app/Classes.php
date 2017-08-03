@@ -19,8 +19,8 @@ class Classes extends Model
     //自动维护时间戳
     public $timestamps = true;
     
-    //允许批量赋值的字段
-    protected $fillable = ['sid','tname', 'dow' , 'sdate' , 'edate' , 'stime' , 'etime' , 'cid' , 'mid' , 'cost'];
+    //不允许批量赋值的字段
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
     
     protected function getDateFormat()
     {

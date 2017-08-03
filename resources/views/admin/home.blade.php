@@ -25,11 +25,13 @@
 									操作 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="#">修改学生信息</a></li>
-									<li><a href="#">查看课程信息</a></li>
+									<li><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">查看课程信息</a></li>
+									<li><a href="{{ url('createclass') . '/' . $student -> id }}">添加课程</a></li>
 									<li><a href="#">跟进学生信息</a></li>
+									<li><a href="{{ url('recharge') . '/' . $student -> id }}">课时充值</a></li>
 									<li class="divider"></li>
-									<li><a href="#">删除学生</a></li>
+									<li><a href="#">修改学生信息</a></li>
+									<li hidden><a href="#">删除学生</a></li>
 								</ul>
 							</div></td>
 							<!--<td><a href="">修改信息</a> 

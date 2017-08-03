@@ -15,8 +15,8 @@ return [
     */
 
     'mailgun' => [
-        'domain' => env('MAILGUN_DOMAIN'),
-        'secret' => env('MAILGUN_SECRET'),
+        'domain' => env('resetpassword@deepspring.cn'),
+        'secret' => env('Shen2017'),
     ],
 
     'ses' => [

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
 use App\Lesson;
+use App\Classes;
+use App\Recharge;
 
 class LessonController extends Controller
 {
@@ -13,16 +15,57 @@ class LessonController extends Controller
 	public function index($sid)
 	{
 		$students = Student::where('id' , $sid)
+			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 //  	dd($students);
         return view('admin.clesson' , ['students' => $students]);
 	}
 	
-	//处理添加学生请求
+	// 显示学生课程信息
+	public function info($sid)
+	{
+		$students = Student::where('id' , $sid)
+			-> where('valid' , 1 )
+    		-> get(['id' , 'name' , 'ename'])
+			-> first();
+			
+		$classes = Classes::where('sid' , $sid)
+			-> where('valid' , 1 )
+			-> orderby('dow')
+    		-> get();
+			
+		$recharges = Recharge::where('sid' , $sid)
+			-> where('valid' , 1 )
+    		-> get();
+    	
+    	$lessons = Lesson::where('sid' , $sid)
+			-> where('valid' , 1 )
+			-> orderby('date' , 'desc' )
+			-> orderby('etime' , 'desc' )
+    		-> get();
+    		
+    	$newlessons = Lesson::where('sid' , $sid)
+			-> where('valid' , 1 )
+			-> where('conduct' , 0 )
+			-> orderby('date' )
+			-> orderby('stime' )
+    		-> get();
+    	
+//  	dd($students);
+        return view('admin.lessonsinfo' , 
+        ['students' => $students , 
+        'classes' => $classes , 
+        'recharges' => $recharges , 
+        'lessons' => $lessons,
+        'newlessons' => $newlessons]);
+	}
+	
+	//处理添加单节课程请求
 	public function create(Request $request)
 	{
-		dd($request);
+
+        $this -> validate -> errors() -> add('lerror' , '1');
 		
 		$this -> validate($request,[
             'sid' => 'required|numeric|exists:students,id',
@@ -35,6 +78,7 @@ class LessonController extends Controller
             'required' => '输入不能为空',
             'date.date' => '请按照正确格式输入日期',
         ]);
+        
         
         $etime = Carbon::parse($request -> date . ' ' . $request -> etime);
                 
