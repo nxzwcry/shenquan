@@ -136,14 +136,49 @@
 	 				<div role="tabpanel" class="tab-pane fade" id="lessons">
 	
 		                <div class="panel-body">
-		                	已上课程列表
+		                	<table class="table table-hover">
+								<tr><th>老师姓名</th><th>课程内容</th><th>上课日期</th><th>附件</th><th>消耗课时</th><th>课程类型</th><th>操作</th></tr>
+							@foreach ( $lessons as $lesson )
+								<tr>
+									<td>{{ $lesson -> tname }}</td>
+									<td>{{ $lesson -> name }}</td>
+									<td>{{ $lesson -> date }}</td>
+									<td>
+										
+										<a href="{{ $lesson -> vurl }}" {{ $lesson -> vurl == null ? 'hidden' : '' }}>视频</a>
+										<a href="{{ $lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
+									</td>
+									<td>{{ $lesson -> cost }}</td>
+									<td>{{ $lesson  -> cid == 1 ? 'KK' : '辅导君' }}{{ $lesson -> classid == null ? '单节课程' : '固定课程' }}</td>									
+									<td>
+										<a href="#" class="btn btn-default btn-xs active" role="button">修改</a>
+										<a href="#" class="btn btn-default btn-xs active" role="button">删除</a>
+									</td>
+								</tr>
+							@endforeach
+							</table>
 		                </div>
 		            </div>
 		            
 	 				<div role="tabpanel" class="tab-pane fade" id="recharges">
 	
 		                <div class="panel-body">
-		                	购课记录
+		                	<table class="table table-hover">
+								<tr><th>课程类别</th><th>充值课时数</th><th>缴费金额</th><th>创建时间</th><th>备注</th><th>操作</th></tr>
+							@foreach ( $recharges as $recharge )
+								<tr>
+									<td>{{ $recharge -> cid == 1 ? 'KK' : '辅导君' }}</td>
+									<td>{{ $recharge -> lessons }}</td>
+									<td>{{ $recharge -> money }}</td>
+									<td>{{ $recharge -> created_at -> toDateString() }}</td>									
+									<td>{{ $recharge -> note }}</td>								
+									<td>
+										<a href="#" class="btn btn-default btn-xs active" role="button">修改</a>
+										<a href="#" class="btn btn-default btn-xs active" role="button">删除</a>
+									</td>
+								</tr>
+							@endforeach
+							</table>
 		                </div>
 		            </div>
                 	

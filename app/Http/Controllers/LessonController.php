@@ -37,6 +37,7 @@ class LessonController extends Controller
 			
 		$recharges = Recharge::where('sid' , $sid)
 			-> where('valid' , 1 )
+			-> orderby('created_at' , 'desc' )
     		-> get();
     	
     	$lessons = Lesson::where('sid' , $sid)

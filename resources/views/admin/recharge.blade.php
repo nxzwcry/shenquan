@@ -44,6 +44,18 @@
                             </div>                            
                         </div>
                         
+                        <div class="form-group{{ $errors->has('cid') ? ' has-error' : '' }}">                     
+		                            <label class="col-md-4 control-label">课程类别*</label>
+		                            <div class="col-md-6">
+				                        <label class="radio-inline">
+										  	<input type="radio" name="cid" id="kk" value="1" checked="checked" required> KK Talkee
+										</label>
+										<label class="radio-inline">
+										  	<input type="radio" name="cid" id="fu" value="2"  {{ old('cid')==2 ? ' checked' : '' }} required> 辅导君
+										</label>
+									</div>
+		                       </div> 
+		                         
                         <input type="text" name="sid" value="{{ $students -> id }}"  hidden>
                         
                         <div class="form-group{{ $errors->has('lessons') ? ' has-error' : '' }}">

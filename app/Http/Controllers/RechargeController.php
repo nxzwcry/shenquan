@@ -46,14 +46,16 @@ class RechargeController extends Controller
             'lessons.max:200' => '请输入200以下的数字',
         ]);
        	
+       	$rechargeinfo = $request -> all();
+       	
 //		使用模型的Create方法新增充值记录
-		$recharge = Recharge::create(
-		[
-			'sid'=> $request -> sid,
-			'lessons' => $request -> lessons,
-			'money' => $request -> money,
-			'note' => $request -> note
-		]
+		$recharge = Recharge::create($rechargeinfo
+//		[
+//			'sid'=> $request -> sid,
+//			'lessons' => $request -> lessons,
+//			'money' => $request -> money,
+//			'note' => $request -> note
+//		]
 		);
 
 		
