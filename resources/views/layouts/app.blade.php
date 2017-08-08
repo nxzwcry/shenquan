@@ -20,7 +20,6 @@
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-
                     <!-- Collapsed Hamburger -->
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
                         <span class="sr-only">Toggle Navigation</span>
@@ -62,6 +61,9 @@
                                         <a href="{{ url('/createstudent') }}" >添加学生</a>
                                     </li>	
                                     <li>
+                                        <a href="{{ url('/cwupdate') }}" >上传课件</a>
+                                    </li>	
+                                    <li>
                                         <a href="{{ route('register') }}">注册管理员</a>
                                     </li>
                                     
@@ -91,3 +93,4 @@
     @yield('tail')
 </body>
 </html>
+		

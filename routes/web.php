@@ -64,6 +64,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('recharge','RechargeController@create');
     
 	Route::get('lessonsinfo/{id}', 'LessonController@info');
+	
+	Route::get('cwupdate', 'CoursewareController@index');
+	    
+	Route::post('newcw','CoursewareController@newcw');
+	
+	Route::post('getcwlist','CoursewareController@getlist');
+	
+	Route::post('updatecw','CoursewareController@update');
+	
 });
 
 Auth::routes();
