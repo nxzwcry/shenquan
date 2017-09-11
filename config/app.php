@@ -182,7 +182,7 @@ return [
 
 	Collective\Html\HtmlServiceProvider::class,
 
-	// captcha (yanzhengam)
+	// captcha (yanzhengma)
 	Mews\Captcha\CaptchaServiceProvider::class,
 
     ],

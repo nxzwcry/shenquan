@@ -9,9 +9,9 @@ class WechatController extends Controller
 	//处理微信的请求消息
 	public function serve()
 	{
-//		Log::info('request arrived.'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
-//
-//      $wechat = app('wechat');
+		Log::info('request arrived.'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
+
+        $wechat = app('wechat');
 //      $wechat->server->setMessageHandler(function($message use ($app){
 //	        if ($message->MsgType=='event') {
 //	             $user_openid = $message->FromUserName;
@@ -44,10 +44,13 @@ class WechatController extends Controller
 //	        
 //	    });
     
+        $wechat->server->setMessageHandler(function($message){
+            return "欢迎关注 overtrue！";
+        });
 
-//      Log::info('return response.');
+        Log::info('return response.');
 
-//      return $wechat->server->serve();
+        return $wechat->server->serve();
 	}
 	
 	public function menu()

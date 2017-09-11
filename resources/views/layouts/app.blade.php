@@ -63,6 +63,7 @@
                                     <li>
                                         <a href="{{ url('/cwupdate') }}" >上传课件</a>
                                     </li>	
+									<li class="divider"></li>
                                     <li>
                                         <a href="{{ route('register') }}">注册管理员</a>
                                     </li>

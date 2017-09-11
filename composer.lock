@@ -4,8 +4,92 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "28eb750f7203f593c30217cd201554aa",
+    "content-hash": "aecf56cf4473e9db964f8071729abb2f",
     "packages": [
+        {
+            "name": "brayun/aliyun-core",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brayun/aliyun-core.git",
+                "reference": "9c44b52bb422798114b8b2421509404c1ac8643b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brayun/aliyun-core/zipball/9c44b52bb422798114b8b2421509404c1ac8643b",
+                "reference": "9c44b52bb422798114b8b2421509404c1ac8643b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Aliyun\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ethan",
+                    "homepage": "https://www.brayun.com"
+                }
+            ],
+            "description": "Aliyun Core SDK for PHP",
+            "homepage": "https://www.brayun.com",
+            "keywords": [
+                "aliyun",
+                "sdk"
+            ],
+            "time": "2017-09-08T22:57:35+00:00"
+        },
+        {
+            "name": "brayun/aliyun-vod",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brayun/aliyun-vod.git",
+                "reference": "ae06a23f081e821b08ff3f7ccaaf53a02c8f42e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brayun/aliyun-vod/zipball/ae06a23f081e821b08ff3f7ccaaf53a02c8f42e0",
+                "reference": "ae06a23f081e821b08ff3f7ccaaf53a02c8f42e0",
+                "shasum": ""
+            },
+            "require": {
+                "brayun/aliyun-core": "^1.0",
+                "php": ">=5.5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "vod\\": "vod/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ethan",
+                    "homepage": "https://www.brayun.com"
+                }
+            ],
+            "description": "Aliyun VOD SDK for PHP",
+            "homepage": "https://www.brayun.com",
+            "keywords": [
+                "aliyun",
+                "sdk",
+                "vod"
+            ],
+            "time": "2017-09-08T23:19:22+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -1375,6 +1459,63 @@
                 "random"
             ],
             "time": "2017-03-13T16:27:32+00:00"
+        },
+        {
+            "name": "php-curl-class/php-curl-class",
+            "version": "7.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-curl-class/php-curl-class.git",
+                "reference": "0dcf0230ef7b1cc49d5f8c1a3457acb325ab3707"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/0dcf0230ef7b1cc49d5f8c1a3457acb325ab3707",
+                "reference": "0dcf0230ef7b1cc49d5f8c1a3457acb325ab3707",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Curl\\": "src/Curl/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Unlicense"
+            ],
+            "authors": [
+                {
+                    "name": "Zach Borboa"
+                }
+            ],
+            "description": "PHP Curl Class makes it easy to send HTTP requests and integrate with web APIs.",
+            "homepage": "https://github.com/php-curl-class/php-curl-class",
+            "keywords": [
+                "api",
+                "class",
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "json",
+                "php",
+                "requests",
+                "rest",
+                "restful",
+                "web service",
+                "xml"
+            ],
+            "time": "2017-06-27T23:57:16+00:00"
         },
         {
             "name": "pimple/pimple",

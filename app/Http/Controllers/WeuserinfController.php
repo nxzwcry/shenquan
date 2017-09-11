@@ -7,6 +7,11 @@ use App\Wechat;
 use Illuminate\Http\Request; 
 use App\Http\Controllers\Controller;
 use Log;
+use Aliyun\Core\Profile\DefaultProfile;
+use Aliyun\Core\DefaultAcsClient;
+use vod\Request\V20170321\GetVideoPlayInfoRequest;
+use Aliyun\Core\Config;
+
 
 class WeuserinfController extends Controller
 {
@@ -85,7 +90,7 @@ class WeuserinfController extends Controller
 	
 	public function createlesson()
 	{
-		$lasson = Lesson::create(
+		$lesson = Lesson::create(
 			[ 'sid' => '1',
 			  'tname' => 'Brooky',
 			  'date' => '20170701',
@@ -93,7 +98,25 @@ class WeuserinfController extends Controller
 			  'furl' => 'baidu.com'
 			]
 		);
-		dd($lasson);
+		dd($lesson);
+	}
+	
+	public function videoplay( $vid )
+	{
+		Config::load();
+		$videoid = '3a0241ea20254bf4a0fd824b091b8195';
+		$regionId = 'cn-shanghai';
+		$access_key_id = 'LTAIM1kjoOKiPGrq';
+		$access_key_secret = 'rIZhoCetGywhK1rFPPVL9yA4lgSsAa';
+		$profile = DefaultProfile::getProfile($regionId, $access_key_id, $access_key_secret);
+		$client = new DefaultAcsClient($profile);
+		$request = new GetVideoPlayInfoRequest();
+		$request->setAcceptFormat('JSON');
+		$request->setRegionId($regionId);
+		$request->setVideoId($videoid);            //视频ID
+		$request->setChannel('HTTP');
+		$response = $client->getAcsResponse($request);
+		dd($response);
 	}
 }
 ?>

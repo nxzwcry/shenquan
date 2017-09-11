@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Student;
 use App\Classes;
 use App\Lesson;
+use App\Courseware;
 
 class ClassController extends Controller
 {
@@ -17,8 +18,9 @@ class ClassController extends Controller
 			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
+		$cws = Courseware::all();
 //  	dd($students);
-        return view('admin.cclass' , ['students' => $students]);
+        return view('admin.cclass' , ['students' => $students , 'cws' => $cws]);
 	}
 	
 	//处理添加固定课程请求
@@ -122,7 +124,7 @@ class ClassController extends Controller
        	if ( $class -> edate == null )
        	{
        		$edate = Carbon::now();	
-       		$edate -> addDays( 20 );	
+       		$edate -> addDays( 60 );	
        	}
        	else 
        	{
@@ -131,30 +133,32 @@ class ClassController extends Controller
        	       	
        	while ( $next -> lte( $edate ) && $next -> lte( $now ) )
        	{
-       		$this -> createlesson( $class , $next , 1 );
+       		$this -> precreate( $class -> toArray() , $next -> toDateString() );
        		$next = $next -> addDays(7);
        	}
        	
        	if ( $next -> lte( $edate ) && $next -> gt( $now ) )
        	{
-       		$this -> createlesson( $class , $next , 0 );       		
+       		$this -> precreate( $class -> toArray() , $next -> toDateString() );       		
        	}
        	return 1;
 	}
+		
+	use LessonCreate;
 	
 	//添加单节课程操作
-	public function createlesson( Classes $class , Carbon $date , $conduct )
+	public function precreate( $lessoninfo , $date )
 	{			
 //		使用模型的Create方法新增单节数据
-		$lessoninfo = $class -> toArray();
-		$lessoninfo['classid'] = $class -> id;
-		$lessoninfo['date'] = $date -> toDateString();
-		$lessoninfo['conduct'] = $conduct;
+		$lessoninfo['classid'] = $lessoninfo['id'];
+		$lessoninfo['date'] = $date;
+//		$lessoninfo['conduct'] = $conduct;
+		unset($lessoninfo['id']);
 		unset($lessoninfo['dow']);
 		unset($lessoninfo['sdate']);
 		unset($lessoninfo['edate']);
 //		dd($lessoninfo);
-		$lesson = Lesson::create($lessoninfo);
+		$lesson = $this -> createlesson($lessoninfo);
 //		$lesson = Lesson::create(
 //		[
 //			'classid' => $class -> id,

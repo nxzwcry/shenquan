@@ -9,10 +9,10 @@
 
                 <div class="panel-body">
                     <table class="table table-hover">
-						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>邮箱</th><th>创建时间</th><th>操作</th></tr>
+						<tr><th>学生号</th><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>邮箱</th><th>创建时间</th><th>操作</th></tr>
 					@foreach ( $students as $student )
 						<tr>
-							<!--<td>{{ $student -> id }}</td>-->
+							<td>{{ $student -> id }}</td>
 							<td>{{ $student -> name }}</td>
 							<td>{{ $student -> sex }}</td>
 							<td>{{ $student -> ename }}</td>

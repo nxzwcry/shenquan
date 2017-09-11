@@ -166,6 +166,18 @@
 										</label>
 									</div>
 		                       </div>   
+		                                   
+		                        <div class="form-group{{ $errors->has('cwurl') ? ' has-error' : '' }}">
+			                        <label for="cwurl" class="col-md-4 control-label" >课程课件</label>
+			
+			                        <div class="col-md-6">
+										<select id="cwurl-class" class="form-control" name="cwurl" required>
+											@foreach ( $cws as $cw )
+											  	<option value="{{$cw -> url}}" {{ old('cwurl')==$cw -> url ? ' selected' : '' }}>{{$cw -> name}}</option>
+											@endforeach
+										</select>	
+									</div>
+		                        </div>         
 		                                       
 		                        <div class="form-group">
 		                            <div class="col-md-8 col-md-offset-4">

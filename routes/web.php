@@ -12,27 +12,30 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
+    Route::any('/wechat/video', function () {
+	    	return view('student.video');
+	    });
+	    
+    Route::any('/wechat/video/{vid}', 'WeuserinfController@videoplay');
 
 Route::get('wechat/send', 'LessonController@send' );
 
 Route::any('wechat','WechatController@serve');
 
-Route::any('wechat/video', function () {
-	return view('student.video');
-});
-
 Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connect', function () {
     	return view('student.connect');
     });
-    Route::any('wechat/connectto','WeuserinfController@connect');
+    Route::any('wechat/connectto','WeuserinfController@connect');    
 });
 
 Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function () {
     Route::any('wechat/userinfo', 'WeuserinfController@userinfo');
+       
+
 });
 
 
