@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Log;
 use Aliyun\Core\Profile\DefaultProfile;
 use Aliyun\Core\DefaultAcsClient;
-use vod\Request\V20170321\GetVideoPlayInfoRequest;
+use vod\Request\V20170321\GetPlayInfoRequest;
 use Aliyun\Core\Config;
 
 
@@ -101,22 +101,27 @@ class WeuserinfController extends Controller
 		dd($lesson);
 	}
 	
-	public function videoplay( $vid )
+	public function videoplay( $videoid )
 	{
-		Config::load();
-		$videoid = '3a0241ea20254bf4a0fd824b091b8195';
+		Config::load();		
+//		$videoid = '3a0241ea20254bf4a0fd824b091b8195';
 		$regionId = 'cn-shanghai';
 		$access_key_id = 'LTAIM1kjoOKiPGrq';
 		$access_key_secret = 'rIZhoCetGywhK1rFPPVL9yA4lgSsAa';
 		$profile = DefaultProfile::getProfile($regionId, $access_key_id, $access_key_secret);
 		$client = new DefaultAcsClient($profile);
-		$request = new GetVideoPlayInfoRequest();
-		$request->setAcceptFormat('JSON');
-		$request->setRegionId($regionId);
+		$request = new GetPlayInfoRequest();
+//		$request->setAcceptFormat('JSON');
+//		$request->setRegionId($regionId);
 		$request->setVideoId($videoid);            //视频ID
-		$request->setChannel('HTTP');
+		$request->setFormats('mp4');
+		$request->setAuthTimeout('1800');
+//		$request->setChannel('HTTP');
 		$response = $client->getAcsResponse($request);
-		dd($response);
+		$playurl = $response -> PlayInfoList -> PlayInfo[0] -> PlayURL;
+		$title = $response -> VideoBase -> Title;
+		
+		return view( 'student.video' , [ 'playurl' => $playurl , 'title' => $title ]);
 	}
 }
 ?>

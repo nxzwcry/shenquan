@@ -1,13 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Carbon\Carbon;
-
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Student;
 use App\Lesson;
-use App\Classes;
-use App\Recharge;
 
 trait LessonCreate
 {

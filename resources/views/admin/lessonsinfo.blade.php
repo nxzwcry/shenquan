@@ -144,9 +144,9 @@
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
 									<td>
-										
-										<a href="{{ $lesson -> vurl }}" {{ $lesson -> vurl == null ? 'hidden' : '' }}>视频</a>
+										<a href="{{ '/video/' . $lesson -> vurl }}" {{ $lesson -> vurl == null ? 'hidden' : '' }}>视频</a>
 										<a href="{{ $lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
+										<a href="{{ $lesson -> vurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>{{ $lesson -> cost }}</td>
 									<td>{{ $lesson  -> cid == 1 ? 'KK' : '辅导君' }}{{ $lesson -> classid == null ? '单节课程' : '固定课程' }}</td>									

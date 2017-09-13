@@ -30,7 +30,17 @@
 			<td>{{ $lesson -> date }}</td>
 			<td>{{ $lesson -> tname }}</td>
 			<td>{{ $lesson -> name }}</td>
-			<td><a href="{{ url('wechat/video') . '/' . $lesson -> id }}">视频</a> <a href="{{ $lesson -> furl }}">课件</a></td>
+			<td>
+				@if ( $lesson -> vurl <> null )
+					<a href="{{ url('wechat/video') . '/' . $lesson -> vurl }}">视频</a>
+				@endif
+				@if ( $lesson -> furl <> null )
+					<a href="{{ $lesson -> furl }}">附件</a>
+				@endif
+				@if ( $lesson -> cwurl <> null )
+					<a href="{{ $lesson -> cwurl }}">课件</a>
+				@endif
+			</td>
 		</tr>
 	@endforeach
 	</table>

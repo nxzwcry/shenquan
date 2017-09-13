@@ -15,16 +15,18 @@ Route::get('/', function () {
     return view('index');
 });
 
-    Route::any('/wechat/video', function () {
-	    	return view('student.video');
-	    });
-	    
-    Route::any('/wechat/video/{vid}', 'WeuserinfController@videoplay');
+//  Route::any('/wechat/video', function () {
+//	    	return view('student.video');
+//	    });
+//	    
+//  Route::any('/wechat/video/{videoid}', 'WeuserinfController@videoplay');
 
+// 测试区域
 Route::get('wechat/send', 'LessonController@send' );
 
 Route::any('wechat','WechatController@serve');
 
+// 绑定微信号（确认微信已登录）
 Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connect', function () {
     	return view('student.connect');
@@ -32,15 +34,17 @@ Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connectto','WeuserinfController@connect');    
 });
 
+// 用户微信操作中间件（拿到用户信息）
 Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function () {
     Route::any('wechat/userinfo', 'WeuserinfController@userinfo');
        
+    Route::any('/wechat/video/{videoid}', 'WeuserinfController@videoplay');
 
 });
 
 
 
-
+// 后台操作中间件（确认后台已登录）
 Route::group(['middleware' => ['auth']], function () {
     
 	Route::get('/admin', 'AdminhomeController@index')->name('home');
@@ -75,6 +79,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getcwlist','CoursewareController@getlist');
 	
 	Route::post('updatecw','CoursewareController@update');
+	
+    Route::any('video/{videoid}', 'WeuserinfController@videoplay');
 	
 });
 

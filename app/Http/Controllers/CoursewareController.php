@@ -94,12 +94,6 @@ class CoursewareController extends Controller
 		return 0;
 	}
 	
-	//根据url得到该目录下的文件列表
-	public function getfilelist( $url )
-	{
-		$files = Storage::disk('uploads') -> files($url);
-		
-        return $files;
-	}
+	use FileGet;
 }
 ?>
