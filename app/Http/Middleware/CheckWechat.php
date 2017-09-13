@@ -13,8 +13,7 @@ class CheckWechat{
     {
     	$user = session('wechat.oauth_user'); // 拿到授权用户资料
     	
-    	$con = Wechat::where( 'openid' , $user->id )
-    		-> where( 'valid' , '1' ) -> first();
+    	$con = Wechat::where( 'openid' , $user->id ) -> first();
     	
 //  	dd($con);
     	
@@ -22,13 +21,10 @@ class CheckWechat{
             return redirect('wechat/connect');
         }
         
-        $student = Student::where( 'id' , $con -> sid )
-    		-> where( 'valid' , '1' ) -> first();
+        $student = Student::where( 'id' , $con -> sid ) -> first();
     		
 		if ( $student == null ) {
-			Wechat::where( 'openid' , $user->id )
-    		-> where( 'valid' , '1' ) 
-    		-> update(['valid'=> 0]);
+			Wechat::where( 'openid' , $user->id ) -> delete();
         	return redirect('wechat/connect');
         }
         

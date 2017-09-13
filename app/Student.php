@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
 
 class Student extends Model
@@ -32,8 +33,10 @@ class Student extends Model
     // 调整为日期属性
 //  protected $dates = ['birthday'];
     
+    protected $dates = ['deleted_at'];
+    
     //不允许批量赋值的字段
-    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' ];
     
     protected function getDateFormat()
     {

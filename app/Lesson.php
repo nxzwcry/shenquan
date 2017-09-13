@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Lesson extends Model
 {
@@ -18,8 +19,10 @@ class Lesson extends Model
     //自动维护时间戳
     public $timestamps = true;
     
+    protected $dates = ['deleted_at'];
+    
     //不允许批量赋值的字段
-    protected $guarded = [ 'id' , 'created_at' , 'updated_at' , 'valid' ];
+    protected $guarded = [ 'id' , 'created_at' , 'updated_at' ];
     
     protected function getDateFormat()
     {

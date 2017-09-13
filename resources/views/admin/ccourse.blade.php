@@ -3,6 +3,28 @@
 @section('head')
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+
+<script type="text/javascript">	
+function getlist1(){
+    var strvalue=$("#cwid-class option:selected").val();
+    console.log(strvalue);
+//  var strvalue=$("#name").val();
+    $.ajax({
+      timeout: 3000,
+      async: false,
+      url: 'getcwlist',
+      type: "post",
+      data: {'id':strvalue, '_token': $('input[name=_token]').val()},
+      success: function(data){
+        $('#list').html("已有课件<br/>"); //清空
+        for (var i=0;i<data.length;i++){		
+			$('#list').append( data[i] + "<br/>");
+		}
+      }
+    });      
+  }
+
+</script>
 @endsection
 
 @section('content')
@@ -13,7 +35,7 @@
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">      
 					<li role="presentation" class="active">
-					  	<a href="#classes" role="tab" data-toggle="tab">增加固定课程</a>
+					  	<a href="#courses" role="tab" data-toggle="tab">增加固定课程</a>
 					</li>    
 					<li role="presentation">
 					  	<a href="#lessons" role="tab" data-toggle="tab">增加单节课程</a>
@@ -21,10 +43,10 @@
 				</ul> 
 				<div class="tab-content"> 
 
-	 				<div role="tabpanel" class="tab-pane fade in active" id="classes">
+	 				<div role="tabpanel" class="tab-pane fade in active" id="courses">
 	
 		                <div class="panel-body">
-		                    <form class="form-horizontal" method="POST" action="{{ url('/createclass') }}">
+		                    <form class="form-horizontal" method="POST" action="{{ url('/createcourse') }}">
 		                    	<input type="hidden" name="_token" value="{csrf_token()}"/>
 		                        {{ csrf_field() }}
 		
@@ -167,13 +189,13 @@
 									</div>
 		                       </div>   
 		                                   
-		                        <div class="form-group{{ $errors->has('cwurl') ? ' has-error' : '' }}">
-			                        <label for="cwurl" class="col-md-4 control-label" >课程课件</label>
+		                        <div class="form-group{{ $errors->has('cwid') ? ' has-error' : '' }}">
+			                        <label for="cwid" class="col-md-4 control-label" >课程课件</label>
 			
 			                        <div class="col-md-6">
-										<select id="cwurl-class" class="form-control" name="cwurl" required>
+										<select onchange="getlist1()" id="cwid-class" class="form-control" name="cwid" required>
 											@foreach ( $cws as $cw )
-											  	<option value="{{$cw -> url}}" {{ old('cwurl')==$cw -> url ? ' selected' : '' }}>{{$cw -> name}}</option>
+											  	<option value="{{$cw -> id}}" {{ old('cwid')==$cw -> id ? ' selected' : '' }}>{{$cw -> name}}</option>
 											@endforeach
 										</select>	
 									</div>

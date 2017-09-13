@@ -15,8 +15,7 @@ class AdminhomeController extends Controller
      */
     public function index()
     {
-    	$students = Student::where('valid' , 1)
-    		-> orderby('created_at' , 'DESC')
+    	$students = Student::orderby('created_at' , 'DESC')
     		-> get();
 //  	dd($students);
         return view('admin.home' , ['students' => $students]);

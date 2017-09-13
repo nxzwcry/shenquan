@@ -5,7 +5,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
-use App\Classes;
 use App\Lesson;
 use App\Recharge;
 
@@ -15,16 +14,13 @@ class RechargeController extends Controller
 	public function index($sid)
 	{
 		$students = Student::where('id' , $sid)
-			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 //  	dd($students);
 		$recharges = Recharge::where('sid' , $sid)
-			-> where('valid' , 1 )
     		-> get();
     	$all = $recharges -> sum('lessons');
     	$lessons = Lesson::where('sid' , $sid)
-			-> where('valid' , 1 )
 			-> where('conduct' , 1 )
 			-> where('cost' , '>' , 0)
     		-> get();

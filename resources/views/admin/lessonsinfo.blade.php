@@ -15,7 +15,7 @@
 					  	<a href="#baseinfo" role="tab" data-toggle="tab">学生课程信息</a>
 					</li>    
 					<!--<li role="presentation">
-					  	<a href="#classes" role="tab" data-toggle="tab">课程详细信息</a>
+					  	<a href="#courses" role="tab" data-toggle="tab">课程详细信息</a>
 					</li>   		-->
 					<li role="presentation">
 					  	<a href="#lessons" role="tab" data-toggle="tab">已上课程列表</a>
@@ -43,7 +43,7 @@
 			                   		<strong>下节课程</strong>
 			                   </div>
 			                   <div class="col-md-2">
-			                   		<a href="{{ url('createclass') . '/' . $students -> id }}" class="btn btn-primary btn-primary btn-sm active" role="button">增加课程</a>			                   
+			                   		<a href="{{ url('createcourse') . '/' . $students -> id }}" class="btn btn-primary btn-primary btn-sm active" role="button">增加课程</a>			                   
 			                   </div>
 			                </div>
 			                   	@foreach ( $newlessons as $newlesson )			                   		
@@ -57,7 +57,7 @@
 			                   			</div>
 			                   			
 			                			<div class="col-md-2">
-			                   				{{ $newlesson -> classid == null ? '单节课程' : '固定课程' }}
+			                   				{{ $newlesson -> courseid == null ? '单节课程' : '固定课程' }}
 			                   			</div>
 			                			<div class="col-md-2">
 			                   				{{ $newlesson -> cid == 1 ? 'KK' : '辅导君' }}
@@ -91,33 +91,33 @@
 			                   		<strong>固定课程</strong>
 			                   </div>
 			                   <div class="col-md-2">
-			                   		<a href="{{ url('createclass') . '/' . $students -> id }}" class="btn btn-primary btn-primary btn-sm active" role="button">增加课程</a>			                   
+			                   		<a href="{{ url('createcourse') . '/' . $students -> id }}" class="btn btn-primary btn-primary btn-sm active" role="button">增加课程</a>			                   
 			                   </div>
 			                </div>
-			                   	@foreach ( $classes as $class )			                   		
+			                   	@foreach ( $courses as $course )			                   		
 	                   			<div class="bg-info">
 		                			<div class="row">
 			                			<div class="col-md-4">
-			                   				每周{{ numtoweek($class -> dow) }}
+			                   				每周{{ numtoweek($course -> dow) }}
 			                   			</div>
 			                   			<div class="col-md-6">
-			                   				{{ substr( $class -> stime , 0 , 5 ) . '~' . substr( $class -> etime , 0 , 5 ) }}
+			                   				{{ substr( $course -> stime , 0 , 5 ) . '~' . substr( $course -> etime , 0 , 5 ) }}
 			                   			</div>			                   			
 			                			<div class="col-md-2">
-			                   				{{ $class -> cid == 1 ? 'KK' : '辅导君' }}
+			                   				{{ $course -> cid == 1 ? 'KK' : '辅导君' }}
 			                   			</div>
 			                   		</div>
 			                   		<div class="row">
 			                			<div class="col-md-12">
-			                   				课程名称：{{ $class -> name }}
+			                   				课程名称：{{ $course -> name }}
 			                   			</div>
 			                   		</div>
 			                   		<div class="row">
 			                			<div class="col-md-4">
-			                   				授课教师：{{ $class -> tname }}
+			                   				授课教师：{{ $course -> tname }}
 			                   			</div>
 			                			<div class="col-md-6">
-			                   				会议ID：{{ $class -> mid }}
+			                   				会议ID：{{ $course -> mid }}
 			                   			</div>
 			                   			<div class="col-md-2">
 			                   				<a href="#" class="btn btn-primary btn-primary btn-sm active" role="button">修改课程信息</a>
@@ -149,10 +149,19 @@
 										<a href="{{ $lesson -> vurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>{{ $lesson -> cost }}</td>
-									<td>{{ $lesson  -> cid == 1 ? 'KK' : '辅导君' }}{{ $lesson -> classid == null ? '单节课程' : '固定课程' }}</td>									
+									<td>{{ $lesson  -> cid == 1 ? 'KK' : '辅导君' }}{{ $lesson -> courseid == null ? '单节课程' : '固定课程' }}</td>									
 									<td>
-										<a href="#" class="btn btn-default btn-xs active" role="button">修改</a>
-										<a href="#" class="btn btn-default btn-xs active" role="button">删除</a>
+										<div class="btn-group">
+											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+												操作 <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu" role="menu">
+												<li><a href="#">修改课程信息</a></li>
+												<li><a href="#">上传附件</a></li>
+												<li class="divider"></li>
+												<li><a href="#">删除课程</a></li>
+											</ul>
+										</div>
 									</td>
 								</tr>
 							@endforeach

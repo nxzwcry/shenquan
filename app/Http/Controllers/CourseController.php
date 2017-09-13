@@ -5,22 +5,21 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
-use App\Classes;
+use App\Course;
 use App\Lesson;
 use App\Courseware;
 
-class ClassController extends Controller
+class CourseController extends Controller
 {
 	// 显示增加页面
 	public function index($sid)
 	{
 		$students = Student::where('id' , $sid)
-			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 		$cws = Courseware::all();
 //  	dd($students);
-        return view('admin.cclass' , ['students' => $students , 'cws' => $cws]);
+        return view('admin.ccourse' , ['students' => $students , 'cws' => $cws]);
 	}
 	
 	//处理添加固定课程请求
@@ -40,7 +39,7 @@ class ClassController extends Controller
         ]);
        	
 //		使用模型的Create方法新增固定课程数据
-//		$class = Classes::create(
+//		$class = Course::create(
 //		[
 //			'sid'=> $request -> sid,
 //			'tname' => $request -> tname,
@@ -73,7 +72,7 @@ class ClassController extends Controller
 //			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
 //		}
 //		
-//		$class = new Classes();
+//		$class = new Course();
 //		$class->sid = $request -> sid;
 //		$class->tname = $request -> tname;
 //		$class->dow = $request -> dow;
@@ -91,7 +90,7 @@ class ClassController extends Controller
 //		$class->mid = $request -> mid;
 //		$class->cost = $request -> cost;
 //		$class->cid = $request -> cid;	
-		$class = Classes::create($classinfo);			
+		$class = Course::create($classinfo);			
 		
 //		dd($class-> toArray());
 //		$bool = $class->save();
@@ -106,7 +105,7 @@ class ClassController extends Controller
 	}
 	
 	//根据固定课程添加单节课程请求
-	public function clesson(Classes $class)
+	public function clesson(Course $class)
 	{		
        	$now = Carbon::now();
        	
@@ -150,18 +149,20 @@ class ClassController extends Controller
 	public function precreate( $lessoninfo , $date )
 	{			
 //		使用模型的Create方法新增单节数据
-		$lessoninfo['classid'] = $lessoninfo['id'];
+		$lessoninfo['cwurl'] = Courseware::find($lessoninfo['cwid']) -> url;
+		$lessoninfo['courseid'] = $lessoninfo['id'];
 		$lessoninfo['date'] = $date;
 //		$lessoninfo['conduct'] = $conduct;
 		unset($lessoninfo['id']);
 		unset($lessoninfo['dow']);
 		unset($lessoninfo['sdate']);
 		unset($lessoninfo['edate']);
+		unset($lessoninfo['cwid']);
 //		dd($lessoninfo);
 		$lesson = $this -> createlesson($lessoninfo);
 //		$lesson = Lesson::create(
 //		[
-//			'classid' => $class -> id,
+//			'courseid' => $course -> id,
 //			'sid'=> $class -> sid,
 //			'name' =>
 //			'tname' => $class -> tname,

@@ -26,7 +26,7 @@
 								</button>
 								<ul class="dropdown-menu" role="menu">
 									<li><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">查看课程信息</a></li>
-									<li><a href="{{ url('createclass') . '/' . $student -> id }}">添加课程</a></li>
+									<li><a href="{{ url('createcourse') . '/' . $student -> id }}">添加课程</a></li>
 									<li><a href="#">跟进学生信息</a></li>
 									<li><a href="{{ url('recharge') . '/' . $student -> id }}">课时充值</a></li>
 									<li class="divider"></li>
@@ -35,7 +35,7 @@
 								</ul>
 							</div></td>
 							<!--<td><a href="">修改信息</a> 
-								<a href="/createclass/{{ $student -> id }}">增加固定课程</a>
+								<a href="/createcourse/{{ $student -> id }}">增加固定课程</a>
 								<a href="/createlesson/{{ $student -> id }}">增加单节课程</a>
 								<a href="">删除用户</a></td>-->
 						</tr>

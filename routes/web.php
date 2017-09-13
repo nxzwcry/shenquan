@@ -34,11 +34,12 @@ Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connectto','WeuserinfController@connect');    
 });
 
+
 // 用户微信操作中间件（拿到用户信息）
 Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function () {
     Route::any('wechat/userinfo', 'WeuserinfController@userinfo');
        
-    Route::any('/wechat/video/{videoid}', 'WeuserinfController@videoplay');
+    Route::any('/wechat/video/{videoid}', 'VideoController@videoplay');
 
 });
 
@@ -62,9 +63,9 @@ Route::group(['middleware' => ['auth']], function () {
 	    
     Route::post('createlesson','LessonController@create');
     
-	Route::get('createclass/{id}', 'ClassController@index');
+	Route::get('createcourse/{id}', 'CourseController@index');
 	    
-    Route::post('createclass','ClassController@create');
+    Route::post('createcourse','CourseController@create');
     
 	Route::get('recharge/{id}', 'RechargeController@index');
 	    
@@ -80,7 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::post('updatecw','CoursewareController@update');
 	
-    Route::any('video/{videoid}', 'WeuserinfController@videoplay');
+    Route::any('video/{videoid}', 'VideoController@videoplay');
 	
 });
 

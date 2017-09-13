@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
 use App\Lesson;
-use App\Classes;
+use App\Course;
 use App\Recharge;
 
 class LessonController extends Controller
@@ -15,7 +15,6 @@ class LessonController extends Controller
 	public function index($sid)
 	{
 		$students = Student::where('id' , $sid)
-			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 //  	dd($students);
@@ -26,28 +25,23 @@ class LessonController extends Controller
 	public function info($sid)
 	{
 		$students = Student::where('id' , $sid)
-			-> where('valid' , 1 )
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 			
-		$classes = Classes::where('sid' , $sid)
-			-> where('valid' , 1 )
+		$courses = Course::where('sid' , $sid)
 			-> orderby('dow')
     		-> get();
 			
 		$recharges = Recharge::where('sid' , $sid)
-			-> where('valid' , 1 )
 			-> orderby('created_at' , 'desc' )
     		-> get();
     	
     	$lessons = Lesson::where('sid' , $sid)
-			-> where('valid' , 1 )
 			-> orderby('date' , 'desc' )
 			-> orderby('etime' , 'desc' )
     		-> get();
     		
     	$newlessons = Lesson::where('sid' , $sid)
-			-> where('valid' , 1 )
 			-> where('conduct' , 0 )
 			-> orderby('date' )
 			-> orderby('stime' )
@@ -56,7 +50,7 @@ class LessonController extends Controller
 //  	dd($students);
         return view('admin.lessonsinfo' , 
         ['students' => $students , 
-        'classes' => $classes , 
+        'courses' => $courses , 
         'recharges' => $recharges , 
         'lessons' => $lessons,
         'newlessons' => $newlessons]);
