@@ -8,6 +8,7 @@ use Carbon\Carbon;
 
 class Course extends Model
 {
+	use SoftDeletes;
     /**
      * 与模型关联的数据表。
      *

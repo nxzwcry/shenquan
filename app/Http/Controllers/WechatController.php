@@ -2,7 +2,10 @@
 	
 namespace App\Http\Controllers;
 
+use App\Student;
 use Log;
+use Illuminate\Http\Request; 
+use App\Wechat;
 
 class WechatController extends Controller
 {
@@ -78,6 +81,51 @@ class WechatController extends Controller
 		$menu->add($buttons);
 		return $menu->all();
 
+	}
+	
+	//关联微信和学生
+	public function connect(Request $request)
+	{
+		Log::info('before captcha.');
+		$this->validate($request, [
+		    'captcha' => 'required|captcha'
+		]);
+		Log::info('after captcha.');
+		$user = session('wechat.oauth_user'); // 拿到授权用户资料
+		$sid = $request -> sid;
+		$students = Student::where('id' , $sid) -> first();
+//		dd($user);
+		if( $students != null )
+		{
+			if( $request -> sname == $students -> name )
+			{
+				$wechat = Wechat::create(
+					[ 'sid' => $sid,
+					  'openid' => $user -> id,
+					  'name' => $user -> name,
+					  'nickname' => $user -> nickname
+					]
+				);
+				$request->session()->put('sid', $sid);
+			}
+			else
+			{
+				return view( 'student.connect' );
+			}
+		}
+		else
+		{
+			return view( 'student.connect' );
+		}
+		return redirect('wechat/userinfo');
+	}
+	
+	public function test()
+	{
+		$test = Wechat::where( 'id' , '>=' , 1 ) -> delete();
+//		$test = Wechat::withTrashed()->get();
+		dd($test);
+		return 1;
 	}
 }
 ?>

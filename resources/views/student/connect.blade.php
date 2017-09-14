@@ -21,7 +21,7 @@
 		
 	<body>
 	<div class="page">
-		{!! Form::open(['action' => 'WeuserinfController@connect']) !!}
+		{!! Form::open(['url' => 'wechat/connectto']) !!}
 		<div class="weui-cell">
 			<h3>请输入以下信息关注学生</h3>
 		</div>

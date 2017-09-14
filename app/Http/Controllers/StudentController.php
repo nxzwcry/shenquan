@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
+use App\Lesson;
 
 class StudentController extends Controller
 {
@@ -42,5 +43,41 @@ class StudentController extends Controller
 		
         return redirect('/admin');
 	}
+	
+	// 在微信客户端显示用户信息
+	public function userinfo(Request $request)
+	{
+		//主键查找
+//      $students = Student::find(1);
+        
+        //打印时间
+//      echo $students->created_at;
+		//自定义格式打印时间
+//		echo date('Y年m月d日 H:i:s');
+//		$students = Student::where('id','>','1')
+//			->orderBy('created_at','desc')
+//			->first();
+//		dd($students);
+//		$this->validate($request, [
+//		        'uid' => 'required|unique:posts|max:7',
+//		    ]);
+		
+		$sid = $request->session()->get('sid', null);
+		
+//			dd($sid);
+		if ( $sid == null ) return view( 'student.connect' );
+
+		$students = Student::where( 'id' , $sid ) -> first();
+		
+		if ( $students == null ) return view( 'student.connect' );
+			
+		$lessons = Lesson::where( 'sid' , $sid )
+			-> orderBy( 'date'  , 'desc' )
+			->orderBy('stime','desc')
+			-> get();
+		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons ]);
+
+	}
+	
 }
 ?>

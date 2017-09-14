@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Wechat extends Model
 {
+	use SoftDeletes;
     /**
      * 与模型关联的数据表。
      *

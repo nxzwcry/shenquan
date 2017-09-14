@@ -26,18 +26,20 @@ Route::get('wechat/send', 'LessonController@send' );
 
 Route::any('wechat','WechatController@serve');
 
+Route::any('test','WechatController@test');
+
 // 绑定微信号（确认微信已登录）
 Route::group(['middleware' => ['wechat.oauth']], function () {
     Route::any('wechat/connect', function () {
     	return view('student.connect');
     });
-    Route::any('wechat/connectto','WeuserinfController@connect');    
+    Route::any('wechat/connectto','WechatController@connect');    
 });
 
 
 // 用户微信操作中间件（拿到用户信息）
 Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function () {
-    Route::any('wechat/userinfo', 'WeuserinfController@userinfo');
+    Route::any('wechat/userinfo', 'StudentController@userinfo');
        
     Route::any('/wechat/video/{videoid}', 'VideoController@videoplay');
 

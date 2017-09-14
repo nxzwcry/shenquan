@@ -18,6 +18,9 @@ class User extends Authenticatable
         'name', 'email', 'password', 'created_at' , 'updated_at' ,
     ];
 
+	//指定表名
+    protected $table = 'users';
+
     /**
      * The attributes that should be hidden for arrays.
      *
