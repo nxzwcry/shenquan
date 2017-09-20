@@ -31,8 +31,8 @@
 			<td>{{ $lesson -> tname }}</td>
 			<td>{{ $lesson -> name }}</td>
 			<td>
-				@if ( $lesson -> vurl <> null )
-					<a href="{{ url('wechat/video') . '/' . $lesson -> vurl }}">视频</a>
+				@if ( $lesson -> vid <> null )
+					<a href="{{ url('wechat/video') . '/' . $lesson -> vid }}">视频</a>
 				@endif
 				@if ( $lesson -> furl <> null )
 					<a href="{{ $lesson -> furl }}">附件</a>

@@ -63,7 +63,6 @@ class LessonController extends Controller
 	{
 
 //      $this -> validate -> errors() -> add('lerror' , '1');
-		
 		$this -> validate($request,[
             'sid' => 'required|numeric|exists:students,id',
             'stime' => 'required',
@@ -81,5 +80,39 @@ class LessonController extends Controller
         return $ans;
 	}
 	
+	// 显示文件上传页面
+	public function fileupdateindex($lid)
+	{
+		$lesson = Lesson::find($lid);
+		$student = Student::find( $lesson -> sid );
+//  	dd($students);
+        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student]);
+	}
+		
+	// 存储视频上传信息
+	public function videoupdate(Request $request)
+	{		
+		$this -> validate($request,[
+            'name' => 'required',
+            'id' => 'required',
+            'vid' => 'required',           
+        ],[
+            'required' => '输入不能为空',
+        ]);
+
+//      dd($request);
+		$lesson = Lesson::find( $request -> id );
+		$lesson -> name =  $request -> name;
+		$lesson -> tname =  $request -> tname;
+		$lesson -> vid =  $request -> vid;
+		$lesson -> save();
+		return $this -> info( $request -> sid );
+	}
+			
+	// 存储文件上传信息
+	public function fileupdate(Request $request)
+	{
+
+	}
 }
 ?>

@@ -62,7 +62,7 @@ function getlist1(){
 		                            <label for="ename" class="col-md-4 control-label">英文名</label>
 		
 		                            <div class="col-md-6">
-		                                <p class="form-control-static">{{ $students -> eame }}</p>                           
+		                                <p class="form-control-static">{{ $students -> ename }}</p>                           
 		                            </div>                            
 		                        </div>
 		                        
@@ -232,7 +232,7 @@ function getlist1(){
 		                            <label for="ename" class="col-md-4 control-label">英文名</label>
 		
 		                            <div class="col-md-6">
-		                                <p class="form-control-static">{{ $students -> eame }}</p>                           
+		                                <p class="form-control-static">{{ $students -> ename }}</p>                           
 		                            </div>                            
 		                        </div>
 		                        

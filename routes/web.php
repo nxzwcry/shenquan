@@ -26,7 +26,9 @@ Route::get('wechat/send', 'LessonController@send' );
 
 Route::any('wechat','WechatController@serve');
 
-Route::any('test','WechatController@test');
+Route::any('test/{id}','VideoController@update');
+    
+	Route::post('videoupdate','LessonController@videoupdate');
 
 // 绑定微信号（确认微信已登录）
 Route::group(['middleware' => ['wechat.oauth']], function () {
@@ -84,6 +86,12 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('updatecw','CoursewareController@update');
 	
     Route::any('video/{videoid}', 'VideoController@videoplay');
+    
+    Route::any('getvideoupdateauth', 'VideoController@getupdateauth');
+       
+    Route::get('fileupdate/{lessonid}', 'LessonController@fileupdateindex');
+    
+    Route::post('fileupdate', 'LessonController@fileupdate');
 	
 });
 

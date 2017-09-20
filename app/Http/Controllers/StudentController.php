@@ -36,7 +36,7 @@ class StudentController extends Controller
 			'ename' => $request -> ename,
 			'sex' => $request -> sex,
 			'birthday' => Carbon::parse($request -> birthday) ,
-			'gread' => $request -> gread,
+			'grade' => $request -> grade,
 			'email' => $request -> email,
 		]
 		);

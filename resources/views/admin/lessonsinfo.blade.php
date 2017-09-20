@@ -144,9 +144,9 @@
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
 									<td>
-										<a href="{{ '/video/' . $lesson -> vurl }}" {{ $lesson -> vurl == null ? 'hidden' : '' }}>视频</a>
+										<a href="{{ '/video/' . $lesson -> vid }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
 										<a href="{{ $lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
-										<a href="{{ $lesson -> vurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
+										<a href="{{ $lesson -> vid }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>{{ $lesson -> cost }}</td>
 									<td>{{ $lesson  -> cid == 1 ? 'KK' : '辅导君' }}{{ $lesson -> courseid == null ? '单节课程' : '固定课程' }}</td>									
@@ -157,7 +157,7 @@
 											</button>
 											<ul class="dropdown-menu" role="menu">
 												<li><a href="#">修改课程信息</a></li>
-												<li><a href="#">上传附件</a></li>
+												<li><a href="{{ url('fileupdate') . '/' . $lesson -> id }}">上传附件</a></li>
 												<li class="divider"></li>
 												<li><a href="#">删除课程</a></li>
 											</ul>
