@@ -45,7 +45,7 @@ function change(){
                 <div class="panel-body">
                     <form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{ url('/newcw') }}">
                     	<input type="hidden" name="_token" value="{csrf_token()}"/>
-                      
+                       	{{ csrf_field() }}
 						                        
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
 	                        <label for="name" class="col-md-4 control-label" >课件名称*</label>

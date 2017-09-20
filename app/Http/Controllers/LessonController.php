@@ -8,6 +8,7 @@ use App\Student;
 use App\Lesson;
 use App\Course;
 use App\Recharge;
+use App\Courseware;
 
 class LessonController extends Controller
 {
@@ -85,8 +86,24 @@ class LessonController extends Controller
 	{
 		$lesson = Lesson::find($lid);
 		$student = Student::find( $lesson -> sid );
+		$cws = Courseware::all();
+		if ( $lesson -> cwurl == null )
+		{
+			$cwid = 0;
+		}
+		else		
+		{
+			$cw = Courseware::where( 'url' , $lesson -> cwurl );
+			if ( $cw -> first() )
+			{
+				$cwid = $cw -> first() -> id;
+			}
+			else{
+				$cwid = -1;
+			}
+		}
 //  	dd($students);
-        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student]);
+        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student , 'cws' => $cws , 'cwid' => $cwid ]);
 	}
 		
 	// 存储视频上传信息
@@ -112,7 +129,24 @@ class LessonController extends Controller
 	// 存储文件上传信息
 	public function fileupdate(Request $request)
 	{
-
+		$lesson = Lesson::find( $request -> id );
+		if ( $request -> type == 'gd' )
+		{
+			if ( $request -> cwid == 0 )
+			{
+				$lesson -> cwurl =  null;
+			}
+			else
+			{
+				$lesson -> cwurl = Courseware::find( $request -> cwid ) -> url;
+			}
+		}
+		else
+		{
+			$lesson -> cwurl = $request -> cwurl;
+		}
+		$lesson -> save();
+		return $this -> info( $request -> sid );
 	}
 }
 ?>

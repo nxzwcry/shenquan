@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Courseware;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Input;
 
 class CoursewareController extends Controller
 {
@@ -34,10 +35,11 @@ class CoursewareController extends Controller
 		]
 		);    		
     	
-    	$courseware -> url = 'courseware/' . $courseware -> id . '/';
+    	$courseware -> url = $courseware -> id . '/';
     	$courseware -> save();          
 		
-		$this -> store( $request , $courseware -> url );
+		$files = $request -> file('files');
+		$this -> store( $files , 'courseware/' . $courseware -> url );
 		
         return redirect('/admin');
 	}
@@ -54,17 +56,17 @@ class CoursewareController extends Controller
             'exists' => '指定课件系列不存在',
         ]);
            		
-		$courseware = Courseware::find($request -> id);    	      
-		
-		$this -> store( $request , $courseware -> url );
+		$courseware = Courseware::find($request -> id); 
+		   	      
+		$files = $request -> file('files');
+		$this -> store( $files , 'courseware/' . $courseware -> url );
 		
         return redirect('/admin');
 	}
 	
 	// 处理存储课件请求
-	public function store( Request $request , $path )
+	public function store( $files , $path )
 	{
-		$files = $request -> file('files');
         foreach( $files as $file )
         {
     		$filename =  $file->getClientOriginalName(); // 文件原名
@@ -79,6 +81,18 @@ class CoursewareController extends Controller
         }
         return 1;
 	}
+		
+	// 处理存储特殊课件请求（响应视图ajax）
+	public function tscwstore(Request $request)
+	{		   
+		$files = $request -> file('cws');
+//		dd($files);
+		$url = $request -> url;
+//		$files = $_POST['cws'];
+//		$url = $_POST['url'];
+		$this -> store( $files , 'courseware/' . $url );
+        return 1;
+	}
 	
 	// 根据课件id得到课件文件列表(响应视图ajax)
 	public function getlist()
@@ -89,7 +103,7 @@ class CoursewareController extends Controller
 		
 		if ( $cw -> url <> null )
 //			dd($this -> getfilelist( $cw -> url ));
-			return $this -> getfilelist( $cw -> url );
+			return $this -> getfilelist( 'courseware/' . $cw -> url );
 			
 		return 0;
 	}
