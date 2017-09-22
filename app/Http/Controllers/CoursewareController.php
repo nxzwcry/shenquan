@@ -63,24 +63,6 @@ class CoursewareController extends Controller
 		
         return redirect('/admin');
 	}
-	
-	// 处理存储课件请求
-	public function store( $files , $path )
-	{
-        foreach( $files as $file )
-        {
-    		$filename =  $file->getClientOriginalName(); // 文件原名
-//  		$realPath = $file->getRealPath();   //临时文件的绝对路径    		 
-    		
-    		$file->storeAs(
-			    $path , $filename , 'uploads'
-			);
-				
-    		// 使用我们新建的uploads本地存储空间（目录）
-//          $bool = Storage::disk('uploads')->put($filename, file_get_contents($realPath));
-        }
-        return 1;
-	}
 		
 	// 处理存储特殊课件请求（响应视图ajax）
 	public function tscwstore(Request $request)
@@ -186,9 +168,23 @@ class CoursewareController extends Controller
 		
 		if ( $url <> null )
 		{
-			 $data = $this -> getfiles( 'files/' . $url );
-//			 dd($data);
-			 response() -> download( $data[0] -> get('url') );
+			$data = $this -> getfiles( 'files/' . $url );
+			return view('admin.flist' , ['files' => $data , 'title' => '附件列表']);
+		}
+			
+		return 0;
+	}
+	
+	// 根据附件url显示课件列表和链接
+	public function showcwlist(Request $request)
+	{
+		$url = $request -> url;		
+		
+		if ( $url <> null )
+		{
+			$data = $this -> getfiles( 'courseware/' . $url );
+//			dd( $data[0] -> get('name') );
+			return view('admin.flist' , ['files' => $data , 'title' => '课件列表']);
 		}
 			
 		return 0;
