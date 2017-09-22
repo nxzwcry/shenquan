@@ -145,7 +145,7 @@
 									<td>{{ $lesson -> date }}</td>
 									<td>
 										<a href="{{ '/video/' . $lesson -> vid }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
-										<a href="{{ $lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
+										<a href="{{ '/showflist/' .$lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
 										<a href="{{ $lesson -> vid }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>{{ $lesson -> cost }}</td>

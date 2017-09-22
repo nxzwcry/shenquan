@@ -145,6 +145,7 @@ class LessonController extends Controller
 		{
 			$lesson -> cwurl = $request -> cwurl;
 		}
+		$lesson -> furl = $request -> furl;
 		$lesson -> save();
 		return $this -> info( $request -> sid );
 	}

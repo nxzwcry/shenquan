@@ -1,16 +1,23 @@
 @extends('layouts.app')
 
 @section('head')
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<script type="text/javascript">	
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript">	
 	function sendcws(){
 		var fileObj = $("#cws").get(0).files // 获取文件对象
 		var FileController = "{{url('tscwstore')}}";                    // 接收上传文件的后台地址
 		 // FormData 对象
 
         var form = new FormData();
-
-        form.append("url", "lesson{{ $lesson -> id }}/");                        // 可以增加表单数据
+		var cwurl;
+		if ( $('#cwurl').val() == '' )
+		{
+			cwurl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			cwurl = $('#cwurl').val();
+		}
+        form.append("url", cwurl);                        // 可以增加表单数据
         form.append("_token", $('input[name=_token]').val());
 
         for(var i=0; i< fileObj.length; i++){
@@ -28,25 +35,73 @@
         xhr.onload = function () {
 
             $('#cwpercent').text("上传成功");
-
+            $('#cwurl').val(cwurl);
+			$('#cwurl').attr("readonly", "readonly");
+			setlist();
         };
+        
+        xhr.upload.addEventListener("progress", progressFunction, false);
 
         xhr.send(form);
 
+    
+	}
+	
+	function sendfs(){
+		var fileObj = $("#fs").get(0).files // 获取文件对象
+		var FileController = "{{url('fstore')}}";                    // 接收上传文件的后台地址
+		 // FormData 对象
 
-//	    $.ajax({
-//	      async: true,
-//	      url: 'getcwlist',
-//	      type: "post",
-//	      data: {'id':strvalue, '_token': $('input[name=_token]').val()},
-//	      success: function(data){
-//	        $('#list').html("已有课件<br/>"); //清空
-//	        for (var i=0;i<data.length;i++){		
-//				$('#list').append( data[i] + "<br/>");
-//			}
-//	      }
-//	    });      
-	  }
+        var form = new FormData();
+		var furl;
+		if ( $('#furl').val() == '' )
+		{
+			furl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			furl = $('#furl').val();
+		}
+        form.append("url", furl);                        // 可以增加表单数据
+        form.append("_token", $('input[name=_token]').val());
+
+        for(var i=0; i< fileObj.length; i++){
+        	form.append("fs["+i+"]" , fileObj[i] );
+    	}
+
+
+
+        // XMLHttpRequest 对象
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("post", FileController, true);
+
+        xhr.onload = function () {
+
+            $('#fpercent').text("上传成功");
+            $('#furl').val(furl);
+			$('#furl').attr("readonly", "readonly");
+			setflist();
+        };
+        
+        xhr.upload.addEventListener("progress", fprogressFunction, false);
+
+        xhr.send(form);
+
+    
+	}
+	  
+	function progressFunction(evt) {
+	  		
+	  	$('#cwpercent').text("上传进度："+Math.round(evt.loaded / evt.total * 100) + "%");
+
+    }  
+    
+	function fprogressFunction(evt) {
+	  		
+	  	$('#fpercent').text("上传进度："+Math.round(evt.loaded / evt.total * 100) + "%");
+
+    }  
 	
 	function changetogdcw()
 	{
@@ -59,6 +114,95 @@
 		$("#tscw").removeAttr("class");
 		
 	}
+	function setlist()
+	{
+		var cwurl;
+		if ( $('#cwurl').val() == '' )
+		{
+			cwurl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			cwurl = $('#cwurl').val();
+		}
+		$.ajax({
+	      timeout: 3000,
+	      async: true,
+	      url: '/urlgetcwlist',
+	      type: "post",
+	      data: {'url':cwurl, '_token': $('input[name=_token]').val()},
+	      success: function(data){
+	      	$('#cwlist').html(""); //清空
+	        for (var i=0;i<data.length;i++){ 		
+				$('#cwlist').append( '<tr><td class="col-md-11">'+data[i]+'</td><td class="col-md-1"><a href="javascript:void(0);"  onclick="cwdel(\''+data[i]+'\')" ><span class="glyphicon glyphicon-remove" ></span></a></td></tr>' );
+			}
+	      }
+	   });   		
+	}
+	function cwdel(fname){
+    	var cwurl;
+		if ( $('#cwurl').val() == '' )
+		{
+			cwurl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			cwurl = $('#cwurl').val();
+		}
+		$.ajax({
+	      timeout: 3000,
+	      async: true,
+	      url: '/deletecw',
+	      type: "post",
+	      data: {'url':cwurl+fname, '_token': $('input[name=_token]').val()},
+	      success: function(data){
+	      	setlist();
+	      }
+	   });  
+  	}
+  	
+	function setflist()
+	{
+		var furl;
+		if ( $('#furl').val() == '' )
+		{
+			furl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			furl = $('#furl').val();
+		}
+		$.ajax({
+	      timeout: 3000,
+	      async: true,
+	      url: '/urlgetflist',
+	      type: "post",
+	      data: {'url':furl, '_token': $('input[name=_token]').val()},
+	      success: function(data){
+	      	$('#flist').html(""); //清空
+	        for (var i=0;i<data.length;i++){ 		
+				$('#flist').append( '<tr><td class="col-md-11">'+data[i]+'</td><td class="col-md-1"><a href="javascript:void(0);"  onclick="fdel(\''+data[i]+'\')" ><span class="glyphicon glyphicon-remove" ></span></a></td></tr>' );
+			}
+	      }
+	   });   		
+	}
+	function fdel(fname){
+    	var furl;
+		if ( $('#furl').val() == '' )
+		{
+			furl = "lesson{{ $lesson -> id }}/";
+		}
+		else{
+			furl = $('#furl').val();
+		}
+		$.ajax({
+	      timeout: 3000,
+	      async: true,
+	      url: '/deletef',
+	      type: "post",
+	      data: {'url':furl+fname, '_token': $('input[name=_token]').val()},
+	      success: function(data){
+	      	setflist();
+	      }
+	   });  
+  	}
 
 </script>
 @endsection
@@ -74,7 +218,7 @@
 					  	<a href="#video" role="tab" data-toggle="tab">上传视频</a>
 					</li>    
 					<li role="presentation">
-					  	<a href="#file" role="tab" data-toggle="tab">上传课件/附件</a>
+					  	<a href="#file" role="tab" data-toggle="tab">上传课件/文件</a>
 					</li>    					  
 				</ul> 
 				<div class="tab-content"> 
@@ -189,7 +333,7 @@
 			                        <div class="form-group">
 			                        	<label class="col-md-4 control-label" ></label>
 								        <div class="col-md-4">
-								            <input type="file" name="cws[]" id="cws" class="projectfile" multiple="multiple" onchange="sendcws()"/>					            
+								            <input type="file" id="cws" class="projectfile" multiple="multiple" onchange="sendcws()"/>					            
 								        </div>
 								        <div class="col-md-4">
 				                    		<p class="form-control-static" id="cwpercent"></p>
@@ -207,19 +351,67 @@
 				                            @endif
 				                        </div>
 			                        </div>
-			                        <div class="form-group{{ $errors->has('cwurl') ? ' has-error' : '' }}">
+			                        <div class="form-group">
+				                    	<div class="col-md-4">
+				                    	</div>
+				                    	<div class="col-md-6">
+				                    		<p class="help-block">URL的最后需包含"/"</p>
+				                    	</div>
+				                    </div>
+			                        <div class="form-group">
 			                        	<label class="col-md-4 control-label" >课件列表</label>
 			                        	<div class="col-md-6">
 					                        <div data-spy="scroll" data-target="#navbar-example" data-offset="0" style="height:100px;overflow:auto; position: relative;">
-												<h4 id="ios">iOS</h4>
-												<p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple 
-													TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。
-												</p>
+												<table class="table table-hover" id="cwlist">
+																									
+												</table>
 												
 											</div>
 										</div>
 									</div>
 								</div>
+								<hr/>
+								<div class="form-group">
+				            		<label class="col-md-4 control-label" >文件（反馈/作业）</label>				                        
+		                            <div class="col-md-4">
+								            <input type="file" id="fs" class="projectfile" multiple="multiple" onchange="sendfs()"/>					            
+							        </div>
+							        <div class="col-md-4">
+			                    		<p class="form-control-static" id="fpercent"></p>
+			                    	</div>
+							   </div> 
+			                    	
+				                    <div class="form-group{{ $errors->has('furl') ? ' has-error' : '' }}">
+				                        <label for="furl" class="col-md-4 control-label" >附件URL</label>
+				
+				                        <div class="col-md-6">
+				                            <input id="furl" type="text" class="form-control" name="furl" value="{{ old('furl') <> null ? old('furl') : $lesson -> furl }}" />
+					                        @if ($errors->has('furl'))
+				                                <span class="help-block">
+				                                    <strong>{{ $errors->first('furl') }}</strong>
+				                                </span>
+				                            @endif
+				                        </div>
+			                        </div>
+			                        <div class="form-group">
+				                    	<div class="col-md-4">
+				                    	</div>
+				                    	<div class="col-md-6">
+				                    		<p class="help-block">URL的最后需包含"/"</p>
+				                    	</div>
+				                    </div>
+			                        <div class="form-group">
+			                        	<label class="col-md-4 control-label" >附件列表</label>
+			                        	<div class="col-md-6">
+					                        <div data-spy="scroll" data-target="#navbar-example" data-offset="0" style="height:100px;overflow:auto; position: relative;">
+												<table class="table table-hover" id="flist">
+																									
+												</table>
+												
+											</div>
+										</div>
+									</div>
+								
 								<div class="form-group text-center ">
 							        <div class="col-md-10 col-md-offset-1">
 							            <button type="submit" class="btn btn-primary btn-lg" >保存</button>
@@ -304,6 +496,15 @@
 		    }
 		});
 		uploader.init();
+		if ( {{ $cwid }} < 0 )
+		{
+			changetotscw();
+			setlist();
+		}
+		if ( !$('#furl').val() == '' )
+		{
+			setflist();
+		}
 //		$('#msg').append("<br/> 初始化成功");
 	};
 	     	

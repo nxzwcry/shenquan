@@ -91,7 +91,19 @@ class CoursewareController extends Controller
 //		$files = $_POST['cws'];
 //		$url = $_POST['url'];
 		$this -> store( $files , 'courseware/' . $url );
-        return 1;
+        return $url;
+	}
+	
+	// 处理存储附件请求（响应视图ajax）
+	public function fstore(Request $request)
+	{		   
+		$files = $request -> file('fs');
+//		dd($files);
+		$url = $request -> url;
+//		$files = $_POST['cws'];
+//		$url = $_POST['url'];
+		$this -> store( $files , 'files/' . $url );
+        return $url;
 	}
 	
 	// 根据课件id得到课件文件列表(响应视图ajax)
@@ -104,6 +116,80 @@ class CoursewareController extends Controller
 		if ( $cw -> url <> null )
 //			dd($this -> getfilelist( $cw -> url ));
 			return $this -> getfilelist( 'courseware/' . $cw -> url );
+			
+		return 0;
+	}
+	
+	// 根据课件url得到课件文件列表(响应视图ajax)
+	public function urlgetcwlist(Request $request)
+	{
+		$url = $request -> url;
+		
+		if ( $url <> null )
+		{
+			return $this -> getfilelist( 'courseware/' . $url );
+		}
+			
+		return 0;
+	}
+	
+	// 根据课件url删除课件(响应视图ajax)
+	public function deletecw(Request $request)
+	{
+		$url = $request -> url;
+		
+		if ( $url <> null )
+		{
+			if ( $this -> deletefile( 'courseware/' . $url ) )
+				return 1;
+			else 
+				return 0;
+		}
+			
+		return 0;
+	}
+	
+	
+	// 根据课件url得到附件文件列表(响应视图ajax)
+	public function urlgetflist(Request $request)
+	{
+		$url = $request -> url;
+		
+		if ( $url <> null )
+		{
+			return $this -> getfilelist( 'files/' . $url );
+		}
+			
+		return 0;
+	}
+	
+	// 根据课件url删除附件(响应视图ajax)
+	public function deletef(Request $request)
+	{
+		$url = $request -> url;
+		
+		if ( $url <> null )
+		{
+			if ( $this -> deletefile( 'files/' . $url ) )
+				return 1;
+			else 
+				return 0;
+		}
+			
+		return 0;
+	}
+	
+	// 根据附件url显示文件列表和链接
+	public function showflist(Request $request)
+	{
+		$url = $request -> url;		
+		
+		if ( $url <> null )
+		{
+			 $data = $this -> getfiles( 'files/' . $url );
+//			 dd($data);
+			 response() -> download( $data[0] -> get('url') );
+		}
 			
 		return 0;
 	}

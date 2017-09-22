@@ -83,6 +83,14 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::post('updatecw','CoursewareController@update');
 	
+	Route::post('urlgetcwlist','CoursewareController@urlgetcwlist');
+	
+	Route::post('deletecw','CoursewareController@deletecw');
+	
+	Route::post('urlgetflist','CoursewareController@urlgetflist');
+	
+	Route::post('deletef','CoursewareController@deletef');
+	
     Route::any('video/{videoid}', 'VideoController@videoplay');
     
     Route::any('getvideoupdateauth', 'VideoController@getupdateauth');
@@ -94,6 +102,10 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('videoupdate','LessonController@videoupdate');
 	
 	Route::post('tscwstore','CoursewareController@tscwstore');
+	
+	Route::post('fstore','CoursewareController@fstore');
+	
+	Route::get('showflist/{url}', 'CoursewareController@showflist');
 
 	
 });
