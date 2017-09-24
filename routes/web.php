@@ -42,6 +42,10 @@ Route::group(['middleware' => ['wechat.oauth' , 'wechat.checkcon']], function ()
     Route::any('wechat/userinfo', 'StudentController@userinfo');
        
     Route::any('/wechat/video/{videoid}', 'VideoController@videoplay');
+    
+	Route::get('flist/{url}', 'CoursewareController@showflist');
+	
+	Route::get('cwlist/{url}', 'CoursewareController@showcwlist');
 
 });
 

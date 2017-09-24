@@ -169,7 +169,7 @@ class CoursewareController extends Controller
 		if ( $url <> null )
 		{
 			$data = $this -> getfiles( 'files/' . $url );
-			return view('admin.flist' , ['files' => $data , 'title' => '附件列表']);
+			return view('student.flist' , ['files' => $data , 'title' => '附件列表']);
 		}
 			
 		return 0;
@@ -184,7 +184,7 @@ class CoursewareController extends Controller
 		{
 			$data = $this -> getfiles( 'courseware/' . $url );
 //			dd( $data[0] -> get('name') );
-			return view('admin.flist' , ['files' => $data , 'title' => '课件列表']);
+			return view('student.flist' , ['files' => $data , 'title' => '课件列表']);
 		}
 			
 		return 0;

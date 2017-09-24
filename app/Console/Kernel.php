@@ -13,9 +13,13 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        // 微信发送上课提醒
+        \App\Console\Commands\SendStartMassage::class,
     ];
 
+
+	
+	
     /**
      * Define the application's command schedule.
      *
@@ -24,9 +28,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+           $schedule->command('SendStartMassage')->dailyAt('10:00');// 每天10:00运行一次...
+        
     }
+    
+
 
     /**
      * Register the Closure based commands for the application.

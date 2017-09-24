@@ -35,10 +35,10 @@
 					<a href="{{ url('wechat/video') . '/' . $lesson -> vid }}">视频</a>
 				@endif
 				@if ( $lesson -> furl <> null )
-					<a href="{{ $lesson -> furl }}">附件</a>
+					<a href="{{ '/flist/' .$lesson -> furl }}">附件</a>
 				@endif
 				@if ( $lesson -> cwurl <> null )
-					<a href="{{ $lesson -> cwurl }}">课件</a>
+					<a href="{{ '/cwlist/' .$lesson -> cwurl }}">课件</a>
 				@endif
 			</td>
 		</tr>

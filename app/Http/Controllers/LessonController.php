@@ -25,23 +25,29 @@ class LessonController extends Controller
 	// 显示学生课程信息
 	public function info($sid)
 	{
+		// 学生信息
 		$students = Student::where('id' , $sid)
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 			
+		// 固定课程信息
 		$courses = Course::where('sid' , $sid)
 			-> orderby('dow')
     		-> get();
 			
+		// 购课记录
 		$recharges = Recharge::where('sid' , $sid)
 			-> orderby('created_at' , 'desc' )
     		-> get();
     	
+    	// 已上课程列表
     	$lessons = Lesson::where('sid' , $sid)
+			-> where('conduct' , 1 )
 			-> orderby('date' , 'desc' )
 			-> orderby('etime' , 'desc' )
     		-> get();
     		
+    	// 下节课程	
     	$newlessons = Lesson::where('sid' , $sid)
 			-> where('conduct' , 0 )
 			-> orderby('date' )
