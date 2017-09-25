@@ -14,6 +14,8 @@ trait FileGet
 	public function getfiles( $furl )
 	{          
         $files = Storage::disk('public') -> files($furl);
+//      dd($files);
+        asort($files);
         $data = array();
         $i = 0;
         foreach ( $files as $file )
@@ -28,6 +30,7 @@ trait FileGet
 	public function getfilelist( $url )
 	{
 		$files = Storage::disk('public') -> files($url);
+        asort($files);
 		for ( $i=0 ; $i<count($files) ; $i++)
 		{
 			$files[$i] = substr( $files[$i] , strrpos( $files[$i] , '/' )+1 );

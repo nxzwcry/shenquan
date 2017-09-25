@@ -113,6 +113,8 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::get('showcwlist/{url}', 'CoursewareController@showcwlist');
 	
+	Route::get('deletelesson/{sid}/{id}', 'LessonController@delete');
+	
 });
 
 Auth::routes();

@@ -4,27 +4,6 @@
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 
-<script type="text/javascript">	
-function getlist1(){
-    var strvalue=$("#cwid-class option:selected").val();
-    console.log(strvalue);
-//  var strvalue=$("#name").val();
-    $.ajax({
-      timeout: 3000,
-      async: false,
-      url: 'getcwlist',
-      type: "post",
-      data: {'id':strvalue, '_token': $('input[name=_token]').val()},
-      success: function(data){
-        $('#list').html("已有课件<br/>"); //清空
-        for (var i=0;i<data.length;i++){		
-			$('#list').append( data[i] + "<br/>");
-		}
-      }
-    });      
-  }
-
-</script>
 @endsection
 
 @section('content')
@@ -33,6 +12,11 @@ function getlist1(){
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
+            	<ol class="breadcrumb">
+				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li><a href="{{ url('lessonsinfo') . '/' . $students -> id }}">学生课程信息</a></li>
+				  <li class="active">增加课程</li>
+				</ol>
                 <ul class="nav nav-tabs" role="tablist">      
 					<li role="presentation" class="active">
 					  	<a href="#courses" role="tab" data-toggle="tab">增加固定课程</a>
@@ -163,7 +147,7 @@ function getlist1(){
 		                        </div>
 		                                                                                           
 		                        <div class="form-group{{ $errors->has('cost') ? ' has-error' : '' }}">
-			                        <label for="cost" class="col-md-4 control-label" >消耗课时数*</label>
+			                        <label for="cost" class="col-md-4 control-label" >消耗课时数(外教1对1)*</label>
 			
 			                        <div class="col-md-6">
 										<select id="cost" class="form-control" name="cost" required>
@@ -175,19 +159,36 @@ function getlist1(){
 											  <option value="5" {{ old('cost')==5 ? ' selected' : '' }}>5课时</option>
 										</select>	
 									</div>
-		                        </div>                       
-		
-		                        <div class="form-group{{ $errors->has('cid') ? ' has-error' : '' }}">                     
-		                            <label class="col-md-4 control-label">课程类别*</label>
-		                            <div class="col-md-6">
-				                        <label class="radio-inline">
-										  	<input type="radio" name="cid" id="kk" value="1" checked="checked" required> KK Talkee
-										</label>
-										<label class="radio-inline">
-										  	<input type="radio" name="cid" id="fu" value="2"  {{ old('cid')==2 ? ' checked' : '' }} required> 辅导君
-										</label>
+		                        </div>                                                                     
+		                        <div class="form-group{{ $errors->has('cost1') ? ' has-error' : '' }}">
+			                        <label for="cost1" class="col-md-4 control-label" >消耗课时数(中教课时)*</label>
+			
+			                        <div class="col-md-6">
+										<select id="cost1" class="form-control" name="cost1" required>
+											  <option value="0" {{ old('cost1')==0 ? ' selected' : '' }}>0课时</option>
+											  <option value="1" {{ old('cost1')==1 ? ' selected' : '' }}>1课时</option>
+											  <option value="2" {{ old('cost1')==2 ? ' selected' : '' }}>2课时</option>
+											  <option value="3" {{ old('cost1')==3 ? ' selected' : '' }}>3课时</option>
+											  <option value="4" {{ old('cost1')==4 ? ' selected' : '' }}>4课时</option>
+											  <option value="5" {{ old('cost1')==5 ? ' selected' : '' }}>5课时</option>
+										</select>	
 									</div>
-		                       </div>   
+		                        </div>                                                                          
+		                        <div class="form-group{{ $errors->has('cost2') ? ' has-error' : '' }}">
+			                        <label for="cost2" class="col-md-4 control-label" >消耗课时数(精品课时)*</label>
+			
+			                        <div class="col-md-6">
+										<select id="cost2" class="form-control" name="cost2" required>
+											  <option value="0" {{ old('cost2')==0 ? ' selected' : '' }}>0课时</option>
+											  <option value="1" {{ old('cost2')==1 ? ' selected' : '' }}>1课时</option>
+											  <option value="2" {{ old('cost2')==2 ? ' selected' : '' }}>2课时</option>
+											  <option value="3" {{ old('cost2')==3 ? ' selected' : '' }}>3课时</option>
+											  <option value="4" {{ old('cost2')==4 ? ' selected' : '' }}>4课时</option>
+											  <option value="5" {{ old('cost2')==5 ? ' selected' : '' }}>5课时</option>
+										</select>	
+									</div>
+		                        </div>                
+		
 		                                   
 		                        <div class="form-group{{ $errors->has('cwid') ? ' has-error' : '' }}">
 			                        <label for="cwid" class="col-md-4 control-label" >课程课件</label>
@@ -309,9 +310,9 @@ function getlist1(){
 			                            @endif
 			                        </div>
 		                        </div>
-		                                                                                           
+		                                                                                     
 		                        <div class="form-group{{ $errors->has('cost') ? ' has-error' : '' }}">
-			                        <label for="cost" class="col-md-4 control-label" >消耗课时数*</label>
+			                        <label for="cost" class="col-md-4 control-label" >消耗课时数(外教1对1)*</label>
 			
 			                        <div class="col-md-6">
 										<select id="cost" class="form-control" name="cost" required>
@@ -323,19 +324,35 @@ function getlist1(){
 											  <option value="5" {{ old('cost')==5 ? ' selected' : '' }}>5课时</option>
 										</select>	
 									</div>
-		                        </div>                       
-		
-		                        <div class="form-group{{ $errors->has('cid') ? ' has-error' : '' }}">                     
-		                            <label class="col-md-4 control-label">课程类别*</label>
-		                            <div class="col-md-6">
-				                        <label class="radio-inline">
-										  	<input type="radio" name="cid" id="kk" value="1" checked="checked" required> KK Talkee
-										</label>
-										<label class="radio-inline">
-										  	<input type="radio" name="cid" id="fu" value="2"  {{ old('cid')==2 ? ' checked' : '' }} required> 辅导君
-										</label>
+		                        </div>                                                                     
+		                        <div class="form-group{{ $errors->has('cost1') ? ' has-error' : '' }}">
+			                        <label for="cost1" class="col-md-4 control-label" >消耗课时数(中教课时)*</label>
+			
+			                        <div class="col-md-6">
+										<select id="cost1" class="form-control" name="cost1" required>
+											  <option value="0" {{ old('cost1')==0 ? ' selected' : '' }}>0课时</option>
+											  <option value="1" {{ old('cost1')==1 ? ' selected' : '' }}>1课时</option>
+											  <option value="2" {{ old('cost1')==2 ? ' selected' : '' }}>2课时</option>
+											  <option value="3" {{ old('cost1')==3 ? ' selected' : '' }}>3课时</option>
+											  <option value="4" {{ old('cost1')==4 ? ' selected' : '' }}>4课时</option>
+											  <option value="5" {{ old('cost1')==5 ? ' selected' : '' }}>5课时</option>
+										</select>	
 									</div>
-		                       </div>     
+		                        </div>                                                                          
+		                        <div class="form-group{{ $errors->has('cost2') ? ' has-error' : '' }}">
+			                        <label for="cost2" class="col-md-4 control-label" >消耗课时数(精品课时)*</label>
+			
+			                        <div class="col-md-6">
+										<select id="cost2" class="form-control" name="cost2" required>
+											  <option value="0" {{ old('cost2')==0 ? ' selected' : '' }}>0课时</option>
+											  <option value="1" {{ old('cost2')==1 ? ' selected' : '' }}>1课时</option>
+											  <option value="2" {{ old('cost2')==2 ? ' selected' : '' }}>2课时</option>
+											  <option value="3" {{ old('cost2')==3 ? ' selected' : '' }}>3课时</option>
+											  <option value="4" {{ old('cost2')==4 ? ' selected' : '' }}>4课时</option>
+											  <option value="5" {{ old('cost2')==5 ? ' selected' : '' }}>5课时</option>
+										</select>	
+									</div>
+		                        </div>                               
 		
 		                        <div class="form-group">
 		                            <div class="col-md-8 col-md-offset-4">

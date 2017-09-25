@@ -29,6 +29,11 @@ function change(){
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
+            	
+            	<ol class="breadcrumb">
+				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li class="active">上传课件</li>
+				</ol>
             	<ul class="nav nav-tabs" role="tablist">      
 					<li role="presentation" class="active">
 					  	<a href="#newcw" role="tab" data-toggle="tab">添加新课件系列</a>

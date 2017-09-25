@@ -212,7 +212,12 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
+            <div class="panel panel-default">            	
+            	<ol class="breadcrumb">
+				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">学生课程信息</a></li>
+				  <li class="active">上传附件</li>
+				</ol>
                 <ul class="nav nav-tabs" role="tablist">      
 					<li role="presentation" class="active">
 					  	<a href="#video" role="tab" data-toggle="tab">上传视频</a>

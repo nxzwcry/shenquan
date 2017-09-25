@@ -32,6 +32,10 @@ class LessonController extends Controller
 			
 		// 固定课程信息
 		$courses = Course::where('sid' , $sid)
+			-> where(function($query){
+				$query -> where( 'edate' , null )
+				-> orwhere( 'edate' , '>=' , Carbon::now() -> timestamp );
+			})
 			-> orderby('dow')
     		-> get();
 			
@@ -76,7 +80,9 @@ class LessonController extends Controller
             'etime' => 'required',
             'date' => 'required|date',
             'mid' => 'nullable|numeric', 
-            'cost' => 'required|numeric|max:5',           
+            'cost' => 'required|numeric|max:5',  
+            'cost1' => 'required|numeric|max:5',
+            'cost2' => 'required|numeric|max:5',         
         ],[
             'required' => '输入不能为空',
             'date.date' => '请按照正确格式输入日期',
@@ -84,7 +90,31 @@ class LessonController extends Controller
         
         $ans = $this -> createlesson( $request -> all() );        
 		
-        return $ans;
+        return redirect('lessonsinfo/' . $request -> sid );
+	}
+	
+	//处理删除单节课程请求
+	public function delete(Request $request)
+	{
+		
+//      $this -> validate -> errors() -> add('lerror' , '1');
+//		$this -> validate($request,[
+//          'sid' => 'required|numeric|exists:students,id',
+//          'id' => 'required|numeric|exists:lessons,id',
+//      ]);
+        
+        $lesson = Lesson::find($request -> id);
+//      dd($lesson);
+//      $lesson -> delete();
+		if ( $lesson -> sid == $request -> sid )
+		{			
+        	if( $this -> deletelesson( $request -> id ) )
+        	{        		
+        		return redirect('lessonsinfo/' . $request -> sid );
+        	} 
+		}
+		
+        return 0;
 	}
 	
 	// 显示文件上传页面

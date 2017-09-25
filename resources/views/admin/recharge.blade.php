@@ -5,6 +5,12 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
+            	          	
+            	<ol class="breadcrumb">
+				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li><a href="{{ url('lessonsinfo') . '/' . $students -> id }}">学生课程信息</a></li>
+				  <li class="active">课时充值</li>
+				</ol>
                 <div class="panel-heading">课时充值</div>
 
                 <div class="panel-body">
@@ -44,7 +50,7 @@
                             </div>                            
                         </div>
                         
-                        <div class="form-group{{ $errors->has('cid') ? ' has-error' : '' }}">                     
+                        <!--<div class="form-group{{ $errors->has('cid') ? ' has-error' : '' }}">                     
 		                            <label class="col-md-4 control-label">课程类别*</label>
 		                            <div class="col-md-6">
 				                        <label class="radio-inline">
@@ -54,18 +60,42 @@
 										  	<input type="radio" name="cid" id="fu" value="2"  {{ old('cid')==2 ? ' checked' : '' }} required> 辅导君
 										</label>
 									</div>
-		                       </div> 
+		                       </div> -->
 		                         
                         <input type="text" name="sid" value="{{ $students -> id }}"  hidden>
                         
                         <div class="form-group{{ $errors->has('lessons') ? ' has-error' : '' }}">
-	                        <label for="lessons" class="col-md-4 control-label" >课时数*</label>
+	                        <label for="lessons" class="col-md-4 control-label" >外教1对1课时数*</label>
 	
 	                        <div class="col-md-6">
 	                            <input id="lessons" type="text" class="form-control" name="lessons" value="{{ old('lessons') }}" required>
 		                        @if ($errors->has('lessons'))
 	                                <span class="help-block">
 	                                    <strong>{{ $errors->first('lessons') }}</strong>
+	                                </span>
+	                            @endif
+	                        </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('lessons1') ? ' has-error' : '' }}">
+	                        <label for="lessons1" class="col-md-4 control-label" >中教课程课时数*</label>
+	
+	                        <div class="col-md-6">
+	                            <input id="lessons1" type="text" class="form-control" name="lessons1" value="{{ old('lessons1') }}" required>
+		                        @if ($errors->has('lessons1'))
+	                                <span class="help-block">
+	                                    <strong>{{ $errors->first('lessons1') }}</strong>
+	                                </span>
+	                            @endif
+	                        </div>
+                        </div>
+                        <div class="form-group{{ $errors->has('lessons2') ? ' has-error' : '' }}">
+	                        <label for="lessons2" class="col-md-4 control-label" >外教精品课课时数*</label>
+	
+	                        <div class="col-md-6">
+	                            <input id="lessons2" type="text" class="form-control" name="lessons2" value="{{ old('lessons2') }}" required>
+		                        @if ($errors->has('lessons2'))
+	                                <span class="help-block">
+	                                    <strong>{{ $errors->first('lessons2') }}</strong>
 	                                </span>
 	                            @endif
 	                        </div>

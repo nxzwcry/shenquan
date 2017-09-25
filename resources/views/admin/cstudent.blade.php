@@ -5,6 +5,11 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
+            	
+            	<ol class="breadcrumb">
+				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li class="active">添加</li>
+				</ol>
                 <div class="panel-heading">添加学生</div>
 
                 <div class="panel-body">

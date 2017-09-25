@@ -32,7 +32,9 @@ class CourseController extends Controller
             'sdate' => 'required|date',
             'edate' => 'nullable|date',
             'mid' => 'nullable|numeric', 
-            'cost' => 'required|numeric|max:5',           
+            'cost' => 'required|numeric|max:5',
+            'cost1' => 'required|numeric|max:5',
+            'cost2' => 'required|numeric|max:5',           
         ],[
             'required' => '输入不能为空',
             'date.date' => '请按照正确格式输入日期',
@@ -98,7 +100,7 @@ class CourseController extends Controller
 
 //		if ( $bool ){
 		    $this-> clesson($class);
-		    return redirect('/admin');
+		    return redirect('lessonsinfo/' . $request -> sid );
 //		    }
 //		else
 //			return 0;
@@ -113,17 +115,27 @@ class CourseController extends Controller
        	{
        		// 追加一个自定义的 name=date
 //			$request -> offsetSet('date', $now -> addDays( $class -> dow - $today ) -> toDateString() );
-			$next = $class -> sdate -> addDays( $class -> dow - $class -> sdate -> dayOfWeek );
+			$next = $class -> sdate;
+			$next -> addDays( $class -> dow - $class -> sdate -> dayOfWeek );
        	}
        	else
        	{
-       		$next = $class -> sdate -> addDays( $class -> dow - $class -> sdate -> dayOfWeek + 7 );
+			$next = $class -> sdate;
+			$next -> addDays( $class -> dow - $class -> sdate -> dayOfWeek + 7 );
        	}
        	
        	if ( $class -> edate == null )
        	{
-       		$edate = Carbon::now();	
-       		$edate -> addDays( 60 );	
+       		if ( $next -> lte( Carbon::now() ) )
+       		{       			
+	       		$edate = Carbon::now();	
+	       		$edate -> addDays( 7 );
+       		}
+       		else
+       		{
+       			$edate = $next;	
+	       		$edate -> addDays( 1 );
+       		}	
        	}
        	else 
        	{

@@ -32,6 +32,12 @@ trait LessonCreate
         return $lesson;
 	}
 	
+	//处理删除单节课程请求
+	public function deletelesson( $lessonid )
+	{                  
+		return Lesson::find($lessonid) -> delete();
+	}
+	
 	// 发送上课提醒
 	public function send()
 	{

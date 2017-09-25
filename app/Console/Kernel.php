@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         // 微信发送上课提醒
         \App\Console\Commands\SendStartMassage::class,
+        // 处理完课
+        \App\Console\Commands\AfterClass::class,
     ];
 
 
@@ -29,7 +31,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
            $schedule->command('SendStartMassage')->dailyAt('10:00');// 每天10:00运行一次...
-        
+           $schedule->command('AfterClass')
+           			->everyThirtyMinutes()
+           			->between('9:15', '21:15');// 每天9:15~21:15 每半小时运行一次        
     }
     
 

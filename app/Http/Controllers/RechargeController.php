@@ -36,26 +36,22 @@ class RechargeController extends Controller
 		$this -> validate($request,[
             'sid' => 'required|numeric|exists:students,id',
             'lessons' => 'required|numeric|max:200',
+            'lessons1' => 'required|numeric|max:200',
+            'lessons2' => 'required|numeric|max:200',
             'money' => 'nullable|numeric',          
         ],[
             'required' => '输入不能为空',
             'lessons.max:200' => '请输入200以下的数字',
+            'lessons1.max:200' => '请输入200以下的数字',
+            'lessons2.max:200' => '请输入200以下的数字',
         ]);
        	
        	$rechargeinfo = $request -> all();
        	
 //		使用模型的Create方法新增充值记录
-		$recharge = Recharge::create($rechargeinfo
-//		[
-//			'sid'=> $request -> sid,
-//			'lessons' => $request -> lessons,
-//			'money' => $request -> money,
-//			'note' => $request -> note
-//		]
-		);
-
-		
-		return 1;
+		$recharge = Recharge::create($rechargeinfo);
+				
+		return redirect('lessonsinfo/' . $request -> sid );
 	}	
 	
 }
