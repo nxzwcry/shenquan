@@ -12,7 +12,7 @@
 
                 <div class="panel-body">
                     <table class="table table-hover">
-						<tr><th>学生号</th><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>邮箱</th><!--<th>创建时间</th>--><th>操作</th></tr>
+						<tr><th>学生号</th><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>操作</th></tr>
 					@foreach ( $students as $student )
 						<tr>
 							<td>{{ $student -> id }}</td>
@@ -21,8 +21,6 @@
 							<td>{{ $student -> ename }}</td>
 							<td>{{ Carbon\Carbon::now() -> diffInYears($student -> birthday , 'true') }}岁</td>
 							<td>{{ $student -> grade }}</td>
-							<td>{{ $student -> email }}</td>
-							<!--<td>{{ $student -> created_at }}</td>-->
 							<td><div class="btn-group">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 									操作 <span class="caret"></span>
@@ -32,7 +30,7 @@
 									<li><a href="{{ url('createcourse') . '/' . $student -> id }}">添加课程</a></li>
 									<li><a href="{{ url('recharge') . '/' . $student -> id }}">课时充值</a></li>
 									<li class="divider"></li>
-									<li><a href="#">修改学生信息</a></li>
+									<li><a href="{{ url('/student/change') . '/' . $student -> id }}">修改学生信息</a></li>
 									<li hidden><a href="#">删除学生</a></li>
 								</ul>
 							</div></td>

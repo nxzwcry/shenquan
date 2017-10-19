@@ -61,11 +61,19 @@ class SendStartMassage extends Command
 			$wechats = Wechat::where( 'sid' , $lesson -> sid ) -> get();
 			foreach( $wechats as $wechat )
 			{
+				if ( ( $lesson -> tname <> '' ) && ( $lesson -> cteacher ) )
+				{
+					$teacher = $lesson -> tname . ' & ' . $lesson -> cteacher -> tname;
+				}
+				else
+				{
+					$teacher = $lesson -> tname . $lesson -> cteacher -> tname;
+				}
 				$this -> startmassage( [ 'touser' => $wechat -> openid ,
 					'sname' => $student -> name . ' ' . $student -> ename , 
 					'time' => $lesson -> date . ' ' . substr( $lesson -> stime , 0 , 5 ) . '~' . substr( $lesson -> etime , 0 , 5 ) ,
 					'place' => '家中' . '',
-					'teacher' => $lesson -> tname . '',
+					'teacher' => $teacher,
 					'mid' => $lesson -> mid . ''] );
 			}
 		}
@@ -87,7 +95,7 @@ class SendStartMassage extends Command
 	            'place' => $data['place'],
 	            'teacher' => $data['teacher'],
 	            'mid' => $data['mid'],
-	            'remark' => "请按时上课，如有疑问请拨打电话15378928311",
+	            'remark' => "\n请按时上课，如有疑问请拨打电话15378928311",
 	        ],
 	    ]);
     }

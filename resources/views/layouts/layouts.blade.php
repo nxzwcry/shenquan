@@ -11,18 +11,11 @@
 				height: 100%;
 			}
 		</style>
+		@yield('header')
 		<title>@yield('title')</title>
 	</head>
 	
 	<body>
-		
-		<!--@section('header')
-		@show-->
-		
-		<!--@section('footer')
-		@show-->
-		
-		<!--@yield('content','主要内容区域')-->
 		
 		<div class="weui-tab">
 			

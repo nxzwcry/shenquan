@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Lesson extends Model
+class Cteacher extends Model
 {
 	use SoftDeletes;
     /**
@@ -14,36 +14,31 @@ class Lesson extends Model
      * @var string
      */
     //指定表名
-    protected $table = 'lessons';
+    protected $table = 'cteachers';
     //指定关键字
     protected $primaryKey = 'id';
     //自动维护时间戳
     public $timestamps = true;
     
-    protected $dates = ['deleted_at'];
-    
     //不允许批量赋值的字段
     protected $guarded = [ 'id' , 'created_at' , 'updated_at' ];
+    
+    protected $dates = ['deleted_at'];
     
     protected function getDateFormat()
     {
     	return time();
     }
     
-    public function student()
+    public function courses()
     {
-        return $this->belongsTo('App\Student' , 'sid');
+        return $this->hasMany('App\Course');
     }
     
-    public function course()
+    public function lessons()
     {
-        return $this->belongsTo('App\Course' , 'courseid');
+        return $this->hasMany('App\Lesson');
     }
-    
-    public function cteacher()
-    {
-    	return $this->belongsTo('App\Cteacher' , 'cteacher_id');
-    }  
     
     //对时间戳不作处理
 //  protected function asDateTime($val)

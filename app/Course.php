@@ -53,6 +53,21 @@ class Course extends Model
         return Carbon::createFromTimeStamp($value);
     }
     
+    public function student()
+    {
+        return $this->belongsTo('App\Student' , 'sid');
+    }
+    
+    public function lessons()
+    {
+    	return $this->hasMany('App\Lesson', 'courseid');
+    }  
+    
+    public function cteacher()
+    {
+    	return $this->belongsTo('App\Cteacher' , 'cteacher_id');
+    }  
+    
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

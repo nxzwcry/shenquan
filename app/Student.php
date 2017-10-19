@@ -44,6 +44,27 @@ class Student extends Model
     	return time();
     }
     
+    public function lessons()
+    {
+    	return $this->hasMany('App\Lesson', 'sid');
+    }    
+    
+    public function courses()
+    {
+    	return $this->hasMany('App\Course', 'sid');
+    }   
+     
+    public function recharges()
+    {
+    	return $this->hasMany('App\Recharge', 'sid');
+    }
+    
+    public function wechats()
+    {
+    	return $this->hasMany('App\Wechat', 'sid');
+    }
+    
+    
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

@@ -8,6 +8,7 @@ use App\Student;
 use App\Course;
 use App\Lesson;
 use App\Courseware;
+use App\Cteacher;
 
 class CourseController extends Controller
 {
@@ -17,9 +18,10 @@ class CourseController extends Controller
 		$students = Student::where('id' , $sid)
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
+		$cteachers = Cteacher::all();
 		$cws = Courseware::all();
 //  	dd($students);
-        return view('admin.ccourse' , ['students' => $students , 'cws' => $cws]);
+        return view('admin.ccourse' , ['students' => $students , 'cws' => $cws , 'cteachers' => $cteachers]);
 	}
 	
 	//处理添加固定课程请求
@@ -105,22 +107,91 @@ class CourseController extends Controller
 //		else
 //			return 0;
 	}
+			
+	//处理删除单节课程请求
+	public function delete(Request $request)
+	{
+		
+//      $this -> validate -> errors() -> add('lerror' , '1');
+		$this -> validate($request,[
+            'sid' => 'required|numeric|exists:students,id',
+            'id' => 'required|numeric|exists:lessons,id',
+        ]);
+        
+        $course = Course::find($request -> id);
+//      dd($lesson);
+//      $lesson -> delete();
+		$sum = 0;
+		if ( $course -> sid == $request -> sid )
+		{			
+        	if( $request -> option == 'after' )
+        	{        		
+        		$sum = $sum + Lesson::where( 'conduct' , 0 )
+					-> where( 'courseid' , $course -> id )
+					-> delete();
+        	}
+        	elseif( $request -> option == 'all' )
+        	{        		
+        		$sum = $sum + Lesson::where( 'courseid' , $course -> id )
+					-> delete();
+        	}
+        	$sum = $sum + $course -> delete();
+		}
+		
+        return redirect('lessonsinfo/' . $request -> sid );
+	}
+	
+	//处理修改固定课程请求
+	public function update(Request $request)
+	{
+		$this -> validate($request,[
+            'id' => 'required|numeric|exists:course,id',
+            'sid' => 'required|numeric|exists:students,id',
+            'stime' => 'required',
+            'etime' => 'required',
+            'sdate' => 'required|date',
+            'edate' => 'nullable|date',
+            'mid' => 'nullable|numeric', 
+            'cost' => 'required|numeric|max:5',
+            'cost1' => 'required|numeric|max:5',
+            'cost2' => 'required|numeric|max:5',           
+        ],[
+            'required' => '输入不能为空',
+            'date.date' => '请按照正确格式输入日期',
+        ]);
+       	
+		
+		$classinfo = $request -> all();
+		
+		$classinfo['sdate'] = Carbon::parse($classinfo['sdate'] . ' 0:00:00');
+		if ( $classinfo['edate'] <> null )
+		{
+			$classinfo['edate'] = Carbon::parse($classinfo['edate'] . ' 23:59:59');
+		}
+			
+		unset($classinfo['id']);
+		unset($classinfo['option']);
+		$class = Carbon::find($request -> id);
+		$class -> fill($classinfo);			
+	
+		$option = $request -> option;
+		$this-> clesson($class);
+		return redirect('lessonsinfo/' . $request -> sid );
+	}
 	
 	//根据固定课程添加单节课程请求
 	public function clesson(Course $class)
 	{		
-       	$now = Carbon::now();
-       	
+       	$now = Carbon::now();       	
+		$next = $class -> sdate;
        	if ( $class -> sdate -> dayOfWeek <= $class -> dow )
        	{
        		// 追加一个自定义的 name=date
 //			$request -> offsetSet('date', $now -> addDays( $class -> dow - $today ) -> toDateString() );
-			$next = $class -> sdate;
 			$next -> addDays( $class -> dow - $class -> sdate -> dayOfWeek );
        	}
        	else
        	{
-			$next = $class -> sdate;
 			$next -> addDays( $class -> dow - $class -> sdate -> dayOfWeek + 7 );
        	}
        	
@@ -141,17 +212,20 @@ class CourseController extends Controller
        	{
        		$edate = $class -> edate;
        	}
-       	       	
-       	while ( $next -> lte( $edate ) && $next -> lte( $now ) )
+       	           	
+       	if ( $next  -> lte( $edate ) )
        	{
-       		$this -> precreate( $class -> toArray() , $next -> toDateString() );
-       		$next = $next -> addDays(7);
+	       	$lesson = $this -> precreate( $class -> toArray() , $next -> toDateString() ); 
+	       	$next = $next -> addDays(7); 	
+	       	$i = 1;
+	       	while ( $lesson -> conduct == 1 &&  $next  -> lte( $edate ) )
+	       	{
+	       		$lesson = $this -> precreate( $class -> toArray() , $next -> toDateString() );
+	       		$next = $next -> addDays(7);
+	       		$i++;
+	       	}
        	}
        	
-       	if ( $next -> lte( $edate ) && $next -> gt( $now ) )
-       	{
-       		$this -> precreate( $class -> toArray() , $next -> toDateString() );       		
-       	}
        	return 1;
 	}
 		
@@ -161,7 +235,14 @@ class CourseController extends Controller
 	public function precreate( $lessoninfo , $date )
 	{			
 //		使用模型的Create方法新增单节数据
-		$lessoninfo['cwurl'] = Courseware::find($lessoninfo['cwid']) -> url;
+		if ( $lessoninfo['cwid'] )
+		{
+			$courseware = Courseware::find($lessoninfo['cwid']);
+			if ( $courseware )
+			{
+				$lessoninfo['cwurl'] = $courseware -> url;
+			}
+		}
 		$lessoninfo['courseid'] = $lessoninfo['id'];
 		$lessoninfo['date'] = $date;
 //		$lessoninfo['conduct'] = $conduct;
@@ -189,6 +270,73 @@ class CourseController extends Controller
 //		]
 //		);
 		return $lesson;
+	}
+		
+	// 固定课程停课
+	public function stop(Request $request)
+	{
+		$course = Course::find( $request -> id );
+		if ( $course )
+		{
+			if ( $course -> sid == $request -> sid )
+			{
+				$course -> edate = Carbon::now() -> subSecond();
+				$course -> save();				
+				Lesson::where( 'conduct' , 0 )
+							->where( 'courseid' , $course -> id )
+							->delete();
+			}
+		}
+		return redirect('lessonsinfo/' . $request -> sid );
+	}
+	
+	// 固定课程复课
+	public function restart(Request $request)
+	{
+		$course = Course::find( $request -> id );
+		if ( $course )
+		{
+			if ( $course -> sid == $request -> sid )
+			{
+				$lessons = Lesson::where( 'conduct' , 0 )
+							->where( 'courseid' , $course -> id )
+							->get();
+				if ( !$lessons -> first() )
+				{					        
+			        $next = Carbon::now();    
+			       	if ( $next -> dayOfWeek < $course -> dow )
+			       	{
+			       		// 追加一个自定义的 name=date
+						$next -> addDays( $course -> dow - $next -> dayOfWeek );
+			       	}
+			       	else
+			       	{
+						$next -> addDays( $course -> dow - $next -> dayOfWeek + 7 );
+			       	}     
+					
+			//		使用模型的Create方法新增数据
+					$lesson = Lesson::create(
+					[
+						'sid'=> $course -> sid,
+						'courseid' => $course -> id,
+						'tname' => $course -> tname,
+						'cteacher_id' => $course -> cteacher_id,
+						'name' => $course -> name ,
+						'date' => $next -> toDateString(),
+						'stime' => $course -> stime,
+						'etime' => $course -> etime,
+						'mid' => $course -> mid,
+						'cost' => $course -> cost,
+						'cost1' => $course -> cost1,
+						'cost2' => $course -> cost2,
+					]
+					);
+				}
+				$course -> edate = NULL;
+				$course -> save();
+			}
+		}
+		return redirect('lessonsinfo/' . $request -> sid );
 	}
 	
 }

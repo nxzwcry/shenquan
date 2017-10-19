@@ -7,6 +7,7 @@ use Log;
 use App\Wechat;
 use App\Student;
 use App\Lesson;
+use App\Course;
 use Carbon\Carbon;
 
 class AfterClass extends Command
@@ -62,6 +63,10 @@ class AfterClass extends Command
 			$wechats = Wechat::where( 'sid' , $lesson -> sid ) -> get();
 			$lesson -> conduct = 1;
 			$lesson -> save();
+			if( $lesson -> courseid <> null )
+			{
+				$this -> createlesson( $lesson -> courseid );				
+			}
 			$cost = '';
 			if ( $lesson -> cost <> 0 )
 			{
@@ -84,7 +89,14 @@ class AfterClass extends Command
 					-> orderby('date')
 					-> orderby('stime')
 		    		-> first();
-		    $nexttime = Carbon::parse( $next -> date . $next -> stime );
+		    if ( $next )
+		    {
+			    $nexttime = Carbon::parse( $next -> date . $next -> stime );
+			    $nextstring = $nexttime -> format('m月d日 H:i') . ' ' . numtoweek($nexttime ->dayOfWeek);
+			}
+			else{
+				$nextstring = '未安排下一节课程';
+			}
 			foreach( $wechats as $wechat )
 			{
 				$this -> endmassage( [ 'touser' => $wechat -> openid ,
@@ -92,7 +104,7 @@ class AfterClass extends Command
 					'keyword2' => $lesson -> date ,
 					'keyword3' => $cost ,
 					'keyword4' => '外教:' . $lesson -> cost . '节 ' . '中教:' . $lesson -> cost1 . '节 ' . '精品课:' . $lesson -> cost2 . '节' ,
-					'keyword5' => $nexttime -> format('m月d日 H:i') . ' ' . numtoweek($nexttime ->dayOfWeek) ] );
+					'keyword5' => $nextstring ] );
 			}
 		}
 		Log::info('完课执行完成');
@@ -113,8 +125,52 @@ class AfterClass extends Command
 	            'keyword3' => $data['keyword3'],
 	            'keyword4' => $data['keyword4'],
 	            'keyword5' => $data['keyword5'],
-	            'remark' => "复习视频和作业预计两天内上传，请及时复习。如需更改时间或取消课程请提前48小时以上向老师请假，如有疑问请拨打电话15378928311",
+	            'remark' => "\n复习视频和作业预计两天内上传，请及时复习。如需更改时间或取消课程请提前48小时以上向老师请假，如有疑问请拨打电话15378928311",
 	        ],
 	    ]);
+    }
+      
+    public function createlesson( $cid )
+    {
+    	$course = Course::find($cid);
+    	        
+        $next = Carbon::now();    
+       	if ( $next -> dayOfWeek < $course -> dow )
+       	{
+       		// 追加一个自定义的 name=date
+			$next -> addDays( $course -> dow - $next -> dayOfWeek );
+       	}
+       	else
+       	{
+			$next -> addDays( $course -> dow - $next -> dayOfWeek + 7 );
+       	}
+       	
+       	if ( $course -> edate <> null )
+       	{
+       		if ( $next -> gte( $edate ) )
+       		{
+       			return 0;
+       		}
+       	}     	          
+		
+//		使用模型的Create方法新增数据
+		$lesson = Lesson::create(
+		[
+			'sid'=> $course -> sid,
+			'courseid' => $course -> id,
+			'tname' => $course -> tname,
+			'cteacher' => $course -> cteacher,
+			'name' => $course -> name ,
+			'date' => $next -> toDateString(),
+			'stime' => $course -> stime,
+			'etime' => $course -> etime,
+			'mid' => $course -> mid,
+			'cost' => $course -> cost,
+			'cost1' => $course -> cost1,
+			'cost2' => $course -> cost2,
+		]
+		);
+		
+        return $lesson;
     }
 }

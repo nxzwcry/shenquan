@@ -30,6 +30,11 @@ class Recharge extends Model
     	return time();
     }
     
+    public function student()
+    {
+        return $this->belongsTo('App\Student' , 'sid');
+    }
+    
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

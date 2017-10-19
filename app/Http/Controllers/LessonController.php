@@ -9,18 +9,19 @@ use App\Lesson;
 use App\Course;
 use App\Recharge;
 use App\Courseware;
+use App\Cteacher;
 
 class LessonController extends Controller
 {
 	// 显示增加页面
-	public function index($sid)
-	{
-		$students = Student::where('id' , $sid)
-    		-> get(['id' , 'name' , 'ename'])
-			-> first();
-//  	dd($students);
-        return view('admin.clesson' , ['students' => $students]);
-	}
+//	public function index($sid)
+//	{
+//		$students = Student::where('id' , $sid)
+//  		-> get(['id' , 'name' , 'ename'])
+//			-> first();
+////  	dd($students);
+//      return view('admin.clesson' , ['students' => $students]);
+//	}
 	
 	// 显示学生课程信息
 	public function info($sid)
@@ -37,6 +38,14 @@ class LessonController extends Controller
 				-> orwhere( 'edate' , '>=' , Carbon::now() -> timestamp );
 			})
 			-> orderby('dow')
+			-> with('cteacher')
+    		-> get();
+    			
+		// 已完成固定课程信息
+		$oldcourses = Course::where('sid' , $sid)
+			-> where( 'edate' , '<' , Carbon::now() -> timestamp )
+			-> orderby('edate' , 'desc' )
+			-> with('cteacher')
     		-> get();
 			
 		// 购课记录
@@ -49,6 +58,7 @@ class LessonController extends Controller
 			-> where('conduct' , 1 )
 			-> orderby('date' , 'desc' )
 			-> orderby('etime' , 'desc' )
+			-> with('cteacher')
     		-> get();
     		
     	// 下节课程	
@@ -56,12 +66,14 @@ class LessonController extends Controller
 			-> where('conduct' , 0 )
 			-> orderby('date' )
 			-> orderby('stime' )
+			-> with('cteacher')
     		-> get();
     	
-//  	dd($students);
+//  	dd($newlessons);
         return view('admin.lessonsinfo' , 
         ['students' => $students , 
         'courses' => $courses , 
+        'oldcourses' => $oldcourses , 
         'recharges' => $recharges , 
         'lessons' => $lessons,
         'newlessons' => $newlessons]);
@@ -184,6 +196,56 @@ class LessonController extends Controller
 		$lesson -> furl = $request -> furl;
 		$lesson -> save();
 		return $this -> info( $request -> sid );
+	}	
+	
+	
+	// 修改课程信息显示页面
+	public function changeindex(Request $request)
+	{
+		$lesson = Lesson::find($request -> id);
+		if ($lesson)
+		{			
+			$cteachers = Cteacher::all();
+			return view( 'admin.lchange' , [ 'lesson' => $lesson , 'cteachers' => $cteachers]);
+		}
 	}
+		
+	// 修改课程信息操作
+	public function change(Request $request)
+	{
+		$this -> validate($request,[
+            'id' => 'required|numeric|exists:lessons,id',
+            'stime' => 'required',
+            'etime' => 'required',
+            'date' => 'required|date',
+            'mid' => 'nullable|numeric', 
+            'cost' => 'required|numeric|max:5',  
+            'cost1' => 'required|numeric|max:5',
+            'cost2' => 'required|numeric|max:5',         
+        ],[
+            'required' => '输入不能为空',
+            'date.date' => '请按照正确格式输入日期',
+        ]);
+		$lesson = Lesson::find($request -> id);
+		$info = $request -> all();
+		$etime = Carbon::parse( $request -> date . $request -> etime );
+                
+        if ( Carbon::now() -> gte( $etime ) )
+        {
+        	$info['conduct'] = 1;
+        }
+        else 
+        {
+        	$info['conduct'] = 0;
+        }
+		if ( $lesson )
+		{
+			if ( $lesson -> update($info) )
+			{
+				return redirect('lessonsinfo/' . $lesson -> sid );
+			}
+		}
+	}
+	
 }
 ?>

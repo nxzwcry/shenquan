@@ -44,14 +44,16 @@ trait LessonCreate
 		$wechat = app('wechat');
 		$notice = $wechat->notice;
 		$messageId = $notice->send([
-	        'touser' => 'o1XxxxB81qwbsP75Ecoquf5mdCyg',
-	        'template_id' => '0vuoBhcp-78VRZTe4Kw50ID6GVRY8v9nWbX8ORHJ2qU',
+	        'touser' => 'oxxhXwMDaLaCBaLu5tOgdpM8jGRQ',
+	        'template_id' => 'tUHvlvnWntF6COoDXjQKLtctmRkhozX9fdieWtcNGK0',
 	        'url' => 'deepspring.cn/wechat/userinfo',
 	        'data' => [
-	            'first' => '明天有朱瀚东的外教英语课！',
-	            'keyword1' => '认识字母A',
-	            'keyword2' => '2017-07-28 20:00 ~ 20:30',
-	            'remark' => "会议ID:1111111111",
+//	            'first' => '明天有朱瀚东的外教英语课！',
+//	            'keyword1' => '认识字母A',
+//	            'keyword2' => '2017-07-28 20:00 ~ 20:30',
+//	            'keyword3' => "会议ID:1111111111",
+//	            'keyword4' => "上课教师：Brooky",
+	            'remark' => "1 \n 2",
 	        ],
 	    ]);
 	    return 1;

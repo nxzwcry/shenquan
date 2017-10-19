@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Student;
 use App\Lesson;
+use App\Course;
+use App\Recharge;
 
 class StudentController extends Controller
 {
@@ -44,6 +46,43 @@ class StudentController extends Controller
         return redirect('/admin');
 	}
 	
+	// 修改学生信息显示页面
+	public function changeindex(Request $request)
+	{
+		$student = Student::find($request -> id);
+		if ($student)
+		{
+			return view( 'admin.schange' , [ 'student' => $student ]);
+		}
+	}
+		
+	// 修改学生信息操作
+	public function change(Request $request)
+	{
+		$sex = ['boy' , 'girl'];
+		$this -> validate($request,[
+            'id' => 'required|numeric|exists:students,id',
+            'name' => 'required',
+            'ename' => 'nullable|alpha',
+            'sex' => 'required|in_array:sex',
+            'birthday' => 'required|date',
+        ],[
+            'required' => '输入不能为空',
+            'ename.alpha' => '请输入正确的英文名',
+            'birthday.date' => '请按照正确格式输入日期',
+        ]);
+		$student = Student::find($request -> id);
+		$info = $request -> all();
+		$info['birthday'] = Carbon::parse($request -> birthday);
+		if ( $student )
+		{
+			if ( $student -> update($info) )
+			{
+				return redirect('/admin');
+			}
+		}
+	}
+	
 	// 在微信客户端显示用户信息
 	public function userinfo(Request $request)
 	{
@@ -64,18 +103,42 @@ class StudentController extends Controller
 		
 		$sid = $request->session()->get('sid', null);
 		
-//			dd($sid);
 		if ( $sid == null ) return view( 'student.connect' );
 
+		// 获取学生信息
 		$students = Student::where( 'id' , $sid ) -> first();
 		
 		if ( $students == null ) return view( 'student.connect' );
 			
-		$lessons = Lesson::where( 'sid' , $sid )
-			-> orderBy( 'date'  , 'desc' )
-			->orderBy('stime','desc')
-			-> get();
-		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons ]);
+		// 固定课程信息
+		$courses = Course::where('sid' , $sid)
+			-> where(function($query){
+				$query -> where( 'edate' , null )
+				-> orwhere( 'edate' , '>=' , Carbon::now() -> timestamp );
+			})
+			-> orderby('dow')
+    		-> get();
+			
+		// 购课记录
+		$recharges = Recharge::where('sid' , $sid)
+			-> orderby('created_at' , 'desc' )
+    		-> get();
+    	
+    	// 已上课程列表
+    	$lessons = Lesson::where('sid' , $sid)
+			-> where('conduct' , 1 )
+			-> orderby('date' , 'desc' )
+			-> orderby('etime' , 'desc' )
+    		-> get();
+    		
+    	// 下节课程	
+    	$newlessons = Lesson::where('sid' , $sid)
+			-> where('conduct' , 0 )
+			-> orderby('date' )
+			-> orderby('stime' )
+    		-> get();
+
+		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons , 'recharges' => $recharges , 'newlessons' => $newlessons , 'courses' => $courses ]);
 
 	}
 	

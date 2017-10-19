@@ -2,10 +2,39 @@
 
 @section('head')
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript">	
+	function pop( id , sid ){
+	    $("#courseid").val(id);
+	    $("#studentid").val(sid);
+	    $("#modal").modal();
+	 }
+	</script>
 @endsection
 
 @section('content')
-
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="modal">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+    	<div class="modal-header">
+      		<h4 class="modal-title" >删除方式</h4>
+      	</div>
+      	<form class="form-horizontal" method="POST" action="/deletecourse">
+      		<div class="modal-body">
+      			{{ csrf_field() }}
+      			<input type="hidden" id="courseid" name="id" value=""/>
+      			<input type="hidden" id="studentid" name="sid" value=""/>
+			  	<input type="radio" name="option" value="no" checked required> 不删除关联课程</input><br />
+			  	<input type="radio" name="option" value="after" required> 删除未上关联课程</input><br />
+			  	<input type="radio" name="option" value="all" required> 删除所有关联课程</input>
+		  	</div>	 
+		  	<div class="modal-footer">
+		  		<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+		  		<button type="submit" class="btn btn-primary">删除</button>
+		  	</div> 		
+      	</form>
+    </div>
+  </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -72,17 +101,17 @@
 			                   		</div>
 			                   		<div class="row">
 			                			<div class="col-md-4">
-			                   				授课教师：{{ $newlesson -> tname }}
+			                   				授课教师：{{ $newlesson -> tname }}{{ ( $newlesson -> cteacher ) && ( $newlesson -> tname <> '' ) ? ' & ' : '' }}{{ $newlesson -> cteacher ? $newlesson -> cteacher -> tname : '' }}
 			                   			</div>
 			                			<div class="col-md-4">
 			                   				会议ID：{{ $newlesson -> mid }}
 			                   			</div>
 			                			<div class="col-md-2">
-			                   				{{ $newlesson -> courseid == null ? '单节课程' : '固定课程' }}
+			                   				{{ $newlesson -> course ? '固定课程' : '单节课程' }}
 			                   			</div>
 			                   			<div class="col-md-2">
-			                   				修改
-			                   				<a href="{{ url('deletelesson/' . $newlesson -> sid . '/' . $newlesson -> id) }}" >删除</a>
+			                   				<a href="{{ url('/lesson/change/' . $newlesson -> id) }}" >修改</a>
+			                   				<a href="{{ url('/deletelesson/' . $newlesson -> sid . '/' . $newlesson -> id) }}" {{ $newlesson -> courseid == null ? '' : 'class=hidden' }}>删除</a>
 			                   			</div>
 			                   		</div>
 			                   	</div>
@@ -92,7 +121,7 @@
 			                <div class="row">
 			                	<div class="col-md-12">
 			                   		<strong>固定课程</strong>
-			                  </div>
+			                  	</div>
 			                </div>
 			                   	@foreach ( $courses as $course )			                   		
 	                   			<div class="bg-info">
@@ -114,14 +143,53 @@
 			                   		</div>
 			                   		<div class="row">
 			                			<div class="col-md-4">
-			                   				授课教师：{{ $course -> tname }}
+			                   				授课教师：{{ $course -> tname }}{{ ( $course -> cteacher ) && ( $course -> tname <> '' ) ? ' & ' : '' }}{{ $course -> cteacher ? $course -> cteacher -> tname : '' }}
 			                   			</div>
 			                			<div class="col-md-6">
 			                   				会议ID：{{ $course -> mid }}
 			                   			</div>
 			                   			<div class="col-md-2">
-			                   				修改
-			                   				<a href="#" >删除</a>
+			                   				<a href="{{ url('course/stop/' . $course -> sid . '/' . $course -> id) }}" >停课</a>
+			                   				<a href="#" onclick="pop('{{$course -> id}}' , '{{$course -> sid}}')" >删除</a>
+			                   			</div>
+			                   		</div>
+			                   	</div>
+			                   	<br/>
+			                   	@endforeach
+			                   	
+			                   	    		
+			                <div class="row">
+			                	<div class="col-md-12">
+			                   		<strong>已完成固定课程</strong>
+			                  	</div>
+			                </div>
+			                   	@foreach ( $oldcourses as $course )			                   		
+	                   			<div class="bg-info">
+		                			<div class="row">		                				
+			                			<div class="col-md-4">
+			                   				{{ $course -> sdate -> toDateString() }} ~ {{ $course -> edate -> toDateString() }}
+			                   			</div>
+			                			<div class="col-md-4">
+			                   				每周{{ numtoweek($course -> dow) }}
+			                   			</div>
+			                   			<div class="col-md-4">
+			                   				{{ substr( $course -> stime , 0 , 5 ) . '~' . substr( $course -> etime , 0 , 5 ) }}
+			                   			</div>			
+			                   		</div>
+			                   		<div class="row">
+			                			<div class="col-md-12">
+			                   				课程名称：{{ $course -> name }}
+			                   			</div>
+			                   		</div>
+			                   		<div class="row">
+			                			<div class="col-md-4">
+			                   				授课教师：{{ $course -> tname }}{{ ( $course -> cteacher ) && ( $course -> tname <> '' ) ? ' & ' : '' }}{{ $course -> cteacher ? $course -> cteacher -> tname : '' }}
+			                   			</div>
+			                   			<div class="col-md-6">
+			                   				消费课时：外{{ $course -> cost }}/中{{ $course -> cost1 }}/精{{ $course -> cost2 }}
+			                   			</div>	
+			                   			<div class="col-md-2">			                   				
+			                   				<a href="{{ url('course/restart/' . $course -> sid . '/' . $course -> id) }}" >复课</a>
 			                   			</div>
 			                   		</div>
 			                   	</div>
@@ -141,7 +209,7 @@
 								<tr><th>老师姓名</th><th>课程内容</th><th>上课日期</th><th>附件</th><th>消耗课时</th><th>课程类型</th><th>操作</th></tr>
 							@foreach ( $lessons as $lesson )
 								<tr>
-									<td>{{ $lesson -> tname }}</td>
+									<td>{{ $lesson -> tname }}{{ ( $lesson -> cteacher ) && ( $lesson -> tname <> '' ) ? ' & ' : '' }}{{ $lesson -> cteacher ? $lesson -> cteacher -> tname : '' }}</td>
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
 									<td>
@@ -157,8 +225,8 @@
 												操作 <span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu" role="menu">
-												<li class="disabled"><a href="#">修改课程信息</a></li>
-												<li><a href="{{ url('fileupdate') . '/' . $lesson -> id }}">上传附件</a></li>
+												<li><a href="{{ url('/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>			                   				
+												<li><a href="{{ url('fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
 												<li class="divider"></li>
 												<li><a href="{{ url('deletelesson/' .$lesson -> sid . '/' . $lesson -> id) }}">删除课程</a></li>
 											</ul>
@@ -183,7 +251,7 @@
 									<td>{{ $recharge -> note }}</td>								
 									<td>
 										修改
-										<a href="#" >删除</a>
+										<a href="#" onclick="">删除</a>
 									</td>
 								</tr>
 							@endforeach

@@ -1,15 +1,17 @@
 @extends('layouts.layouts')
 
-<!--@section('header')
-	hello world!
-@stop-->
+@section('header')
+<style type="text/css">
+	  h1 {
+	  	color: #666;
+	  	margin: 10% 0;
+	  }
+</style>
+@stop
 
 @section('userinfo')
 	<div class="weui-flex">
-	  <div class="weui-flex__item">姓名：{{ $students -> name }}</div>
-	</div>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">英文名：{{ $students -> ename }}</div>
+		<h1>{{ $students -> name }} {{ $students -> ename }}</h1>
 	</div>
 	<div class="weui-flex">
 	  <div class="weui-flex__item">性别：{{ $students -> sex }}</div>
@@ -18,7 +20,23 @@
 	  <div class="weui-flex__item">生日：{{ $students -> birthday }}</div>
 	</div>
 	<div class="weui-flex">
-	  <div class="weui-flex__item">邮箱：{{ $students -> email }}</div>
+	  <div class="weui-flex__item">积分：</div>
+	</div>
+	<br/>
+	<div class="weui-flex">
+	  <div class="weui-flex__item">已用课时：<br/>
+	  	外教1对1&emsp;&emsp;&emsp;{{ $lessons -> sum('cost') }}节<br/>
+	  	中教课程&emsp;&emsp;&emsp;{{ $lessons -> sum('cost1') }}节<br/>
+	  	外教精品课&emsp;&emsp;{{ $lessons -> sum('cost2') }}节
+	  </div>
+	</div>
+	<br/>
+	<div class="weui-flex">
+	  <div class="weui-flex__item">剩余课时：<br/>
+	  	外教1对1&emsp;&emsp;&emsp;{{ $recharges -> sum('lessons') - $lessons -> sum('cost') }}节<br/>
+	  	中教课程&emsp;&emsp;&emsp;{{ $recharges -> sum('lessons1') - $lessons -> sum('cost1') }}节<br/>
+	  	外教精品课&emsp;&emsp;{{ $recharges -> sum('lessons2') - $lessons -> sum('cost2') }}节<br/>
+	  </div>
 	</div>
 @stop
 

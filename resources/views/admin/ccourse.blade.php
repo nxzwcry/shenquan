@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('head')
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
 
 @endsection
 
@@ -66,7 +64,7 @@
 		                        </div>
 		                        
 		                        <div class="form-group{{ $errors->has('tname') ? ' has-error' : '' }}">
-			                        <label for="tname" class="col-md-4 control-label" >授课教师</label>
+			                        <label for="tname" class="col-md-4 control-label" >外教教师</label>
 			
 			                        <div class="col-md-6">
 			                            <input id="tname" type="text" class="form-control" name="tname" value="{{ old('tname') }}" >
@@ -77,6 +75,19 @@
 			                            @endif
 			                        </div>
 		                        </div>
+		                        		                           
+		                        <div class="form-group{{ $errors->has('cteacher_id') ? ' has-error' : '' }}">
+			                        <label for="cteacher_id" class="col-md-4 control-label" >中教教师</label>
+			
+			                        <div class="col-md-6">
+										<select class="form-control" name="cteacher_id">
+											  	<option value="">无</option>
+											@foreach ( $cteachers as $cteacher )
+											  	<option value="{{$cteacher -> id}}" {{ old('cteacher_id')==$cteacher -> id ? ' selected' : '' }}>{{$cteacher -> tname}}</option>
+											@endforeach
+										</select>	
+									</div>
+		                        </div>       
 		                                                
 		                        <div class="form-group{{ $errors->has('dow') ? ' has-error' : '' }}">
 			                        <label for="dow" class="col-md-4 control-label" >授课时间*</label>
@@ -96,40 +107,28 @@
 		                        <div class="form-group{{ $errors->has('stime') ? ' has-error' : '' }}">
 			                        <label for="stime" class="col-md-4 control-label" >开始时间*</label>	
 			                        <div class="col-md-6">
-										<div class="input-group date form_time col-md-6" data-date="" data-date-format="hh:ii" data-link-field="stime" data-link-format="hh:ii">
-						                    <input class="form-control" size="16" type="text" value="{{ old('stime') }}" name="stime" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-						                </div>
+						                <input class="form-control time_form" size="16" type="text" value="{{ old('stime') }}" name="stime" readonly required>
 									</div>
 		                        </div>
 		                                     
 		                        <div class="form-group{{ $errors->has('etime') ? ' has-error' : '' }}">
 			                        <label for="etime" class="col-md-4 control-label" >结束时间*</label>
 				                    <div class="col-md-6">
-										<div class="input-group date form_time col-md-6" data-date="" data-date-format="hh:ii" data-link-field="etime" data-link-format="hh:ii">
-						                    <input class="form-control" size="16" type="text" value="{{ old('etime') }}" name="etime" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-						                </div>
+						                    <input class="form-control time_form" size="16" type="text" value="{{ old('etime') }}" name="etime" readonly required>
 									</div>
 		                        </div>
 		                        
 		                        <div class="form-group{{ $errors->has('sdate') ? ' has-error' : '' }}">
 			                        <label for="sdate" class="col-md-4 control-label" >课程开始日期*</label>
 				                    <div class="col-md-6">
-										<div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="sdate" data-link-format="yyyy-mm-dd">
-						                    <input class="form-control" size="16" type="text" value="{{ old('edate') }}" name="sdate" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						                </div>
+						                    <input class="form-control date_form" size="16" type="text" value="{{ old('edate') }}" name="sdate" readonly required>
 									</div>
 		                        </div>
 		                        
 		                        <div class="form-group{{ $errors->has('edate') ? ' has-error' : '' }}">
 			                        <label for="edate" class="col-md-4 control-label" >课程结束日期</label>
 				                    <div class="col-md-6">
-										<div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="edate" data-link-format="yyyy-mm-dd">
-						                    <input class="form-control" size="16" type="text" value="{{ old('edate') }}" name="edate" readonly>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						                </div>
+						                    <input class="form-control date_form" size="16" type="text" value="{{ old('edate') }}" name="edate" readonly>
 									</div>
 		                        </div>
 		                                                                   
@@ -194,7 +193,8 @@
 			                        <label for="cwid" class="col-md-4 control-label" >课程课件</label>
 			
 			                        <div class="col-md-6">
-										<select onchange="getlist1()" id="cwid-class" class="form-control" name="cwid" required>
+										<select id="cwid-class" class="form-control" name="cwid">
+											  	<option value="">无</option>
 											@foreach ( $cws as $cw )
 											  	<option value="{{$cw -> id}}" {{ old('cwid')==$cw -> id ? ' selected' : '' }}>{{$cw -> name}}</option>
 											@endforeach
@@ -240,7 +240,7 @@
 		                        <input type="text" name="sid" value="{{ $students -> id }}"  hidden>
 		                        
 		                        <div class="form-group{{ $errors->has('tname') ? ' has-error' : '' }}">
-			                        <label for="tname" class="col-md-4 control-label" >授课教师</label>
+			                        <label for="tname" class="col-md-4 control-label" >外教教师</label>
 			
 			                        <div class="col-md-6">
 			                            <input id="tname" type="text" class="form-control" name="tname" value="{{ old('tname') }}" >
@@ -251,7 +251,20 @@
 			                            @endif
 			                        </div>
 		                        </div>
-		                                                
+		                        		                           
+		                        <div class="form-group{{ $errors->has('cteacher_id') ? ' has-error' : '' }}">
+			                        <label for="cteacher_id" class="col-md-4 control-label" >中教教师</label>
+			
+			                        <div class="col-md-6">
+										<select class="form-control" name="cteacher_id">
+											  	<option value="">无</option>
+											@foreach ( $cteachers as $cteacher )
+											  	<option value="{{$cteacher -> id}}" {{ old('cteacher_id')==$cteacher -> id ? ' selected' : '' }}>{{$cteacher -> tname}}</option>
+											@endforeach
+										</select>	
+									</div>
+		                        </div>       
+		                                     		                                                
 		                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
 			                        <label for="name" class="col-md-4 control-label" >课程内容</label>
 			
@@ -269,10 +282,7 @@
 			                        <label for="date" class="col-md-4 control-label" >授课日期*</label>
 			
 			                        <div class="col-md-6">
-										<div class="input-group date form_date col-md-5" data-date="" data-date-format="yyyy-mm-dd" data-link-field="date" data-link-format="yyyy-mm-dd">
-						                    <input class="form-control" size="16" type="text" value="{{ old('date') }}" name="date" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-						                </div>
+						                    <input class="form-control date_form" size="16" type="text" value="{{ old('date') }}" name="date" readonly required>
 									</div>
 		                        </div>
 		                                                
@@ -280,10 +290,7 @@
 			                        <label for="stime" class="col-md-4 control-label" >开始时间*</label>
 			
 			                        <div class="col-md-6">
-										<div class="input-group date form_time col-md-6" data-date="" data-date-format="hh:ii" data-link-field="stime" data-link-format="hh:ii">
-						                    <input class="form-control" size="16" type="text" value="{{ old('stime') }}" name="stime" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-						                </div>
+						                    <input class="form-control time_form" size="16" type="text" value="{{ old('stime') }}" name="stime" readonly required>
 									</div>
 		                        </div>
 		                                     
@@ -291,10 +298,7 @@
 			                        <label for="etime" class="col-md-4 control-label" >结束时间*</label>
 			
 			                        <div class="col-md-6">
-										<div class="input-group date form_time col-md-6" data-date="" data-date-format="hh:ii" data-link-field="etime" data-link-format="hh:ii">
-						                    <input class="form-control" size="16" type="text" value="{{ old('etime') }}" name="etime" readonly required>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-						                </div>
+						                    <input class="form-control time_form" size="16" type="text" value="{{ old('etime') }}" name="etime" readonly required>
 									</div>
 		                        </div>
 		                                                                   
@@ -352,8 +356,8 @@
 											  <option value="5" {{ old('cost2')==5 ? ' selected' : '' }}>5课时</option>
 										</select>	
 									</div>
-		                        </div>                               
-		
+		                        </div>                                   
+		                        
 		                        <div class="form-group">
 		                            <div class="col-md-8 col-md-offset-4">
 		                                <button type="submit" class="btn btn-primary">
@@ -375,31 +379,29 @@
 @endsection
 
 @section('tail')
-<!--<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
-<script type="text/javascript" src="{{ asset('js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
-<script type="text/javascript" src="{{ asset('js/locales/bootstrap-datetimepicker.zh-CN.js') }}" charset="UTF-8"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script type="text/javascript">	
-	$('.form_date').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 1,
-        todayBtn:  1,
-		autoclose: 1,
-		todayHighlight: 1,
-		startView: 2,
-		minView: 2,
-		forceParse: 0
-    });
-	$('.form_time').datetimepicker({
-        language:  'zh-CN',
-        weekStart: 0,
-        todayBtn:  0,
-		autoclose: 1,
-		todayHighlight: 0,
-		startView: 1,
-		minView: 0,
-		maxView: 1,
-		forceParse: 0
-   });
+	$(".date_form").flatpickr();
+	$(".time_form").flatpickr({
+	    enableTime: true,
+	    noCalendar: true,
+	
+	    enableSeconds: false, // disabled by default
+	
+	    time_24hr: true, // AM/PM time picker is used by default
+	
+	    // default format
+	    dateFormat: "H:i", 
+	
+	    // initial values for time. don't use these to preload a date
+//	    defaultHour: 12,
+//	    defaultMinute: 0
+	
+	    // Preload time with defaultDate instead:
+	    // defaultDate: "3:30"
+	});
+	
 </script>
 
 @endsection

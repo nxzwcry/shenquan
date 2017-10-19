@@ -115,6 +115,20 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::get('deletelesson/{sid}/{id}', 'LessonController@delete');
 	
+	Route::post('deletecourse', 'CourseController@delete');
+	
+	Route::get('course/stop/{sid}/{id}', 'CourseController@stop');	
+	
+	Route::get('course/restart/{sid}/{id}', 'CourseController@restart');
+	
+	Route::post('student/change', 'StudentController@change');	
+	
+	Route::get('student/change/{id}', 'StudentController@changeindex');	
+	
+	Route::post('lesson/change', 'LessonController@change');	
+	
+	Route::get('lesson/change/{id}', 'LessonController@changeindex');	
+	
 });
 
 Auth::routes();
