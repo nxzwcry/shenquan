@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('tail')
+<style>
+	.color-warning {background-color:#f0ad4e;color:#FFFFFF;}
+	.color-danger {background-color:#d9534f;color:#FFFFFF;}
+</style>
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -12,15 +19,16 @@
 
                 <div class="panel-body">
                     <table class="table table-hover">
-						<tr><th>学生号</th><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><th>年级</th><th>操作</th></tr>
+						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
 					@foreach ( $students as $student )
 						<tr>
-							<td>{{ $student -> id }}</td>
-							<td>{{ $student -> name }}</td>
+							<!--<td>{{ $student -> id }}</td>-->
+							<td>{{ $student -> name }} &emsp;{{$student -> getfuxi()}}{{$student -> getjingpin()}}<span class="{{ $student -> getfuxi() > 5 ? 'color-danger' : ( $student -> getfuxi() == 5 ? 'color-warning' : 'hidden' ) }}">复</span>&emsp;<span class="{{ $student -> getjingpin() > 5 ? 'color-danger' : ( $student -> getjingpin() == 5 ? 'color-warning' : 'hidden' ) }}">精</span></td>
 							<td>{{ $student -> sex }}</td>
 							<td>{{ $student -> ename }}</td>
 							<td>{{ Carbon\Carbon::now() -> diffInYears($student -> birthday , 'true') }}岁</td>
-							<td>{{ $student -> grade }}</td>
+							<td>{{ $student -> lessons -> sum('score') }}</td>
+							<!--<td>{{ $student -> grade }}</td>-->
 							<td><div class="btn-group">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 									操作 <span class="caret"></span>

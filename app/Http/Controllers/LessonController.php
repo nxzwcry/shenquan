@@ -68,8 +68,7 @@ class LessonController extends Controller
 			-> orderby('stime' )
 			-> with('cteacher')
     		-> get();
-    	
-//  	dd($newlessons);
+
         return view('admin.lessonsinfo' , 
         ['students' => $students , 
         'courses' => $courses , 
@@ -100,7 +99,8 @@ class LessonController extends Controller
             'date.date' => '请按照正确格式输入日期',
         ]);
         
-        $ans = $this -> createlesson( $request -> all() );        
+        $lessoninfo = $request -> all();
+        $ans = $this -> createlesson( $lessoninfo );        
 		
         return redirect('lessonsinfo/' . $request -> sid );
 	}

@@ -107,7 +107,7 @@ class StudentController extends Controller
 
 		// 获取学生信息
 		$students = Student::where( 'id' , $sid ) -> first();
-		
+				
 		if ( $students == null ) return view( 'student.connect' );
 			
 		// 固定课程信息
@@ -137,7 +137,7 @@ class StudentController extends Controller
 			-> orderby('date' )
 			-> orderby('stime' )
     		-> get();
-
+    	
 		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons , 'recharges' => $recharges , 'newlessons' => $newlessons , 'courses' => $courses ]);
 
 	}

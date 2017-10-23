@@ -64,6 +64,58 @@ class Student extends Model
     	return $this->hasMany('App\Wechat', 'sid');
     }
     
+    public function getfuxi()
+    {
+    	$lessons = $this -> lessons()
+			-> where('conduct' , 1 )
+			-> orderby('date' , 'desc' )
+			-> orderby('etime' , 'desc' )
+			-> with('cteacher')
+    		-> get();
+    	$fuxi = 0;
+    	if ( $this -> recharges() -> sum('lessons1') - $lessons -> sum('cost1') > 0 )
+		{
+			foreach ( $lessons as $lesson )
+			{
+				if ( $lesson -> type == 'w' )
+				{
+					$fuxi++;
+				}
+				elseif ( ( $lesson -> type == 'f' ) || ( $fuxi > 5 )  )
+				{
+					break;
+				}
+			}
+		}
+		return $fuxi;
+    }
+    
+    public function getjingpin()
+    {
+    	$lessons = $this -> lessons()
+			-> where('conduct' , 1 )
+			-> orderby('date' , 'desc' )
+			-> orderby('etime' , 'desc' )
+			-> with('cteacher')
+    		-> get();
+    	$jingpin = 0;
+    	if ( $this -> recharges() -> sum('lessons2') - $lessons -> sum('cost2') > 0 )
+		{
+			foreach ( $lessons as $lesson )
+			{
+				if ( $lesson -> type == 'w' )
+				{
+					$jingpin++;
+				}
+				elseif ( ( $lesson -> type == 'j' ) || ( $jingpin > 5 )  )
+				{
+					break;
+				}
+			}
+		}
+		return $jingpin;
+    }
+    
     
     //对时间戳不作处理
 //  protected function asDateTime($val)

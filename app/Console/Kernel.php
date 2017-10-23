@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
            				}
            				return false;
 					});// 每年年级更新一次 
-//      $schedule->command('AddGrade')->dailyAt('15:34');// 每天10:00运行一次...   
+//      $schedule->command('AfterClass')->dailyAt('14:21');// 每天10:00运行一次...   
     }
     
 

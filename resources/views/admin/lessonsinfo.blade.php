@@ -218,7 +218,7 @@
 										<a href="{{ '/showcwlist/' .$lesson -> cwurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>外{{ $lesson -> cost }}/中{{ $lesson -> cost1 }}/精{{ $lesson -> cost2 }}</td>
-									<td>{{ $lesson -> courseid == null ? '单节课程' : '固定课程' }}</td>									
+									<td>{{ $lesson -> type == 'w' ? '外教1对1' : ( $lesson -> type == 'f' ? '复习课' : ( $lesson -> type == 'j' ? '精品课' :   ( $lesson -> type == 'b' ? '班课' : '' ) ) ) }}</td>									
 									<td>
 										<div class="btn-group">
 											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

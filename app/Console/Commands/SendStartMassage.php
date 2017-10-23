@@ -67,7 +67,11 @@ class SendStartMassage extends Command
 				}
 				else
 				{
-					$teacher = $lesson -> tname . $lesson -> cteacher -> tname;
+					$teacher = $lesson -> tname;
+					if ( $lesson -> cteacher )
+					{
+						$teacher = $teacher . $lesson -> cteacher -> tname;
+					}
 				}
 				$this -> startmassage( [ 'touser' => $wechat -> openid ,
 					'sname' => $student -> name . ' ' . $student -> ename , 

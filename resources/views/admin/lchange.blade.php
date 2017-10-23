@@ -19,7 +19,20 @@
 		                    <form class="form-horizontal" method="POST" action="{{ url('/lesson/change') }}">
 		                    	<input type="hidden" name="id" value="{{ $lesson -> id }}"/>
 		                        {{ csrf_field() }}
-		
+		                                           
+		                        <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+			                        <label for="type" class="col-md-4 control-label" >课程种类*</label>
+			
+			                        <div class="col-md-6">
+										<select id="type" class="form-control" name="type" required>
+											  <option value="w" {{ old('type') <> null ? ( old('type')=='w' ? ' selected' : '' ) : ( $lesson -> type =='w' ? ' selected' : '' ) }}>外教1对1</option>
+											  <option value="j" {{ old('type') <> null ? ( old('type')=='j' ? ' selected' : '' ) : ( $lesson -> type =='j' ? ' selected' : '' ) }}>精品课</option>
+											  <option value="f" {{ old('type') <> null ? ( old('type')=='f' ? ' selected' : '' ) : ( $lesson -> type =='f' ? ' selected' : '' ) }}>复习课</option>
+											  <option value="b" {{ old('type') <> null ? ( old('type')=='b' ? ' selected' : '' ) : ( $lesson -> type =='b' ? ' selected' : '' ) }}>小班课</option>
+										</select>	
+									</div>
+		                        </div>      
+		                        
 		                        <div class="form-group{{ $errors->has('tname') ? ' has-error' : '' }}">
 			                        <label for="tname" class="col-md-4 control-label" >外教教师</label>
 			
@@ -142,7 +155,7 @@
 		                        <div class="form-group">
 		                            <div class="col-md-8 col-md-offset-4">
 		                                <button type="submit" class="btn btn-primary">
-		                                    	添加
+		                                    	修改
 		                                </button>
 		
 		                            </div>
@@ -173,8 +186,8 @@
 	    dateFormat: "H:i", 
 	
 	    // initial values for time. don't use these to preload a date
-	    defaultHour: 12,
-	    defaultMinute: 0
+//	    defaultHour: 12,
+//	    defaultMinute: 0
 	
 	    // Preload time with defaultDate instead:
 	    // defaultDate: "3:30"

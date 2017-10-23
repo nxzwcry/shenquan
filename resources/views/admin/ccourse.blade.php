@@ -238,6 +238,19 @@
 		                        </div>
 		                        
 		                        <input type="text" name="sid" value="{{ $students -> id }}"  hidden>
+		                                                                                               
+		                        <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+			                        <label for="type" class="col-md-4 control-label" >课程种类*</label>
+			
+			                        <div class="col-md-6">
+										<select id="type" class="form-control" name="type" required>
+											  <option value="w" {{ old('type')=='w' ? ' selected' : '' }}>外教1对1</option>
+											  <option value="j" {{ old('type')=='j' ? ' selected' : '' }}>精品课</option>
+											  <option value="f" {{ old('type')=='f' ? ' selected' : '' }}>复习课</option>
+											  <option value="b" {{ old('type')=='b' ? ' selected' : '' }}>小班课</option>
+										</select>	
+									</div>
+		                        </div>      
 		                        
 		                        <div class="form-group{{ $errors->has('tname') ? ' has-error' : '' }}">
 			                        <label for="tname" class="col-md-4 control-label" >外教教师</label>

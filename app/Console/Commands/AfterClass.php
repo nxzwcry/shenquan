@@ -9,6 +9,7 @@ use App\Student;
 use App\Lesson;
 use App\Course;
 use Carbon\Carbon;
+use App\Http\Controllers\CourseToNewLesson;
 
 class AfterClass extends Command
 {
@@ -65,7 +66,7 @@ class AfterClass extends Command
 			$lesson -> save();
 			if( $lesson -> courseid <> null )
 			{
-				$this -> createlesson( $lesson -> courseid );				
+				$this -> nextlesson( $lesson -> courseid );				
 			}
 			$cost = '';
 			if ( $lesson -> cost <> 0 )
@@ -130,47 +131,5 @@ class AfterClass extends Command
 	    ]);
     }
       
-    public function createlesson( $cid )
-    {
-    	$course = Course::find($cid);
-    	        
-        $next = Carbon::now();    
-       	if ( $next -> dayOfWeek < $course -> dow )
-       	{
-       		// 追加一个自定义的 name=date
-			$next -> addDays( $course -> dow - $next -> dayOfWeek );
-       	}
-       	else
-       	{
-			$next -> addDays( $course -> dow - $next -> dayOfWeek + 7 );
-       	}
-       	
-       	if ( $course -> edate <> null )
-       	{
-       		if ( $next -> gte( $edate ) )
-       		{
-       			return 0;
-       		}
-       	}     	          
-		
-//		使用模型的Create方法新增数据
-		$lesson = Lesson::create(
-		[
-			'sid'=> $course -> sid,
-			'courseid' => $course -> id,
-			'tname' => $course -> tname,
-			'cteacher' => $course -> cteacher,
-			'name' => $course -> name ,
-			'date' => $next -> toDateString(),
-			'stime' => $course -> stime,
-			'etime' => $course -> etime,
-			'mid' => $course -> mid,
-			'cost' => $course -> cost,
-			'cost1' => $course -> cost1,
-			'cost2' => $course -> cost2,
-		]
-		);
-		
-        return $lesson;
-    }
+    use CourseToNewLesson;
 }
