@@ -68,6 +68,25 @@ class LessonController extends Controller
 			-> orderby('stime' )
 			-> with('cteacher')
     		-> get();
+    		
+    	$i = 0;
+    	$tenlessons = [];
+    	foreach ( $lessons as $lesson )
+    	{
+    		$tenlessons[$i] = $lesson -> type;
+    		$i++;
+    		if ( $i >= 10 )
+    		{
+    			break;
+    		}
+    	}
+    	if ( $i < 10 )
+    	{
+    		for ( $i ; $i < 10 ; $i++ )
+    		{
+    			$tenlessons[$i] = 'n';	
+    		}	
+    	}
 
         return view('admin.lessonsinfo' , 
         ['students' => $students , 
@@ -75,7 +94,8 @@ class LessonController extends Controller
         'oldcourses' => $oldcourses , 
         'recharges' => $recharges , 
         'lessons' => $lessons,
-        'newlessons' => $newlessons]);
+        'newlessons' => $newlessons,
+        'tenlessons' => $tenlessons]);
 	}
 	
 	use LessonCreate;
@@ -90,7 +110,6 @@ class LessonController extends Controller
             'stime' => 'required',
             'etime' => 'required',
             'date' => 'required|date',
-            'mid' => 'nullable|numeric', 
             'cost' => 'required|numeric|max:5',  
             'cost1' => 'required|numeric|max:5',
             'cost2' => 'required|numeric|max:5',         
@@ -218,7 +237,6 @@ class LessonController extends Controller
             'stime' => 'required',
             'etime' => 'required',
             'date' => 'required|date',
-            'mid' => 'nullable|numeric', 
             'cost' => 'required|numeric|max:5',  
             'cost1' => 'required|numeric|max:5',
             'cost2' => 'required|numeric|max:5',         

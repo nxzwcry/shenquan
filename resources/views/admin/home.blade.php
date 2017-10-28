@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('tail')
+@section('head')
 <style>
 	.color-warning {background-color:#f0ad4e;color:#FFFFFF;}
 	.color-danger {background-color:#d9534f;color:#FFFFFF;}
@@ -21,9 +21,15 @@
                     <table class="table table-hover">
 						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
 					@foreach ( $students as $student )
-						<tr>
+						@if ( $student -> getbalance() <= 5 )
+               				<tr class="danger">
+               			@elseif ( $student -> getbalance() <= 10 )
+               				<tr class="warning">
+               			@else
+               				<tr>
+               			@endif
 							<!--<td>{{ $student -> id }}</td>-->
-							<td>{{ $student -> name }} &emsp;{{$student -> getfuxi()}}{{$student -> getjingpin()}}<span class="{{ $student -> getfuxi() > 5 ? 'color-danger' : ( $student -> getfuxi() == 5 ? 'color-warning' : 'hidden' ) }}">复</span>&emsp;<span class="{{ $student -> getjingpin() > 5 ? 'color-danger' : ( $student -> getjingpin() == 5 ? 'color-warning' : 'hidden' ) }}">精</span></td>
+							<td>{{ $student -> name }} &emsp;<span class="{{ $student -> getfuxi() > 5 ? 'color-danger' : ( $student -> getfuxi() == 5 ? 'color-warning' : 'hidden' ) }}">复</span>&emsp;<span class="{{ $student -> getjingpin() > 5 ? 'color-danger' : ( $student -> getjingpin() == 5 ? 'color-warning' : 'hidden' ) }}">精</span></td>
 							<td>{{ $student -> sex }}</td>
 							<td>{{ $student -> ename }}</td>
 							<td>{{ Carbon\Carbon::now() -> diffInYears($student -> birthday , 'true') }}岁</td>

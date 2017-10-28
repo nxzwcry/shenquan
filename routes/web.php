@@ -127,7 +127,9 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::post('lesson/change', 'LessonController@change');	
 	
-	Route::get('lesson/change/{id}', 'LessonController@changeindex');	
+	Route::get('lesson/change/{id}', 'LessonController@changeindex');
+		
+	Route::get('recharge/delete/{sid}/{id}', 'RechargeController@delete');
 	
 });
 

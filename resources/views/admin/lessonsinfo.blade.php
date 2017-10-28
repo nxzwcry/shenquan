@@ -2,6 +2,13 @@
 
 @section('head')
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		.color-waijiao {background-color:#428bca;color:#FFFFFF;}
+		.color-jingpin {background-color:#5cb85c;color:#FFFFFF;}
+		.color-fuxi {background-color:#f0ad4e;color:#FFFFFF;}
+		.color-ban {background-color:#5bc0de;color:#FFFFFF;}
+		.color-null {background-color:#FFFFFF;color:#FFFFFF;}
+	</style>
     <script type="text/javascript">	
 	function pop( id , sid ){
 	    $("#courseid").val(id);
@@ -62,27 +69,60 @@
 	 				<div role="tabpanel" class="tab-pane fade in active" id="baseinfo">
 	
 		                <div class="panel-body">
-		                	<div class="row">
-			                	<div class="col-md-7">
+				            <div class="row">
+			                	<div class="col-md-5">
+			                    	<h4>{{ $students -> id }}</h4>
 			                    	<h2>{{ $students -> name . ' ' . $students -> ename }}</h2>
+			                    	<h4>{{ $lessons -> sum('score') }}分</h4>
 			                   	</div>
-			                   	<div class="col-md-3">
-			                   		已上：外{{ $lessons -> sum('cost') }}/中{{ $lessons -> sum('cost1') }}/精{{ $lessons -> sum('cost2') }} <br/>
-			                   		剩余：外{{ $recharges -> sum('lessons') - $lessons -> sum('cost') }}/中{{ $recharges -> sum('lessons1') - $lessons -> sum('cost1') }}/精{{ $recharges -> sum('lessons2') - $lessons -> sum('cost2') }}
+			                   	<div class="col-md-5">
 			                   		
+				                	<div class="row">
+					                   		已上：外{{ $lessons -> sum('cost') }}/中{{ $lessons -> sum('cost1') }}/精{{ $lessons -> sum('cost2') }} <br/>
+					                </div>
+				                	<div class="row">
+					                   		剩余：外{{ $recharges -> sum('lessons') - $lessons -> sum('cost') }}/中{{ $recharges -> sum('lessons1') - $lessons -> sum('cost1') }}/精{{ $recharges -> sum('lessons2') - $lessons -> sum('cost2') }} <br/>
+					                  		
+					                </div>
+				                	<div class="row">
+						                <div class="col-md-8">
+					                   		@for ( $i = 9 ; $i >= 0 ; $i-- )
+					                   			@if ( $tenlessons[$i] == 'w' )
+					                   				<span class="color-waijiao">_</span>&emsp;
+					                   			@elseif ( $tenlessons[$i] == 'f' )
+					                   				<span class="color-fuxi">_</span>&emsp;
+					                   			@elseif ( $tenlessons[$i] == 'j' )
+					                   				<span class="color-jingpin">_</span>&emsp;
+					                   			@elseif ( $tenlessons[$i] == 'b' )
+					                   				<span class="color-ban">_</span>&emsp;
+					                   			@elseif ( $tenlessons[$i] == 'n' )
+					                   				<span class="color-null">_</span>&emsp;
+					                   			@endif
+					                   			@if ( $i == 5 ) 
+					                   				<span class="color-null">_</span>
+					                   			@endif
+					                   		@endfor
+					                   	</div>
+				                   		<div class="col-md-4">
+				                   			<span class="color-waijiao">外</span>
+				                   			<span class="color-fuxi">复</span>
+				                   			<span class="color-jingpin">精</span>
+				                   			<span class="color-ban">班</span>
+				                   		</div>	
+					                </div>
 			                   	</div>
 			                   	<div class="col-md-2">
 			                   		<a href="{{ url('createcourse') . '/' . $students -> id }}">增加课程</a> <br/>
 			                   		<a href="{{ url('recharge') . '/' . $students -> id }}">课时充值</a>			                   
 			                   </div>
-			                </div>
+			               </div>
 		                	<div class="row">
 			                	<div class="col-md-12">
 			                   		<strong>下节课程</strong>
 			                  	</div>
 			                </div>
 			                   	@foreach ( $newlessons as $newlesson )			                   		
-	                   			<div class="bg-info">
+	                   			<div class="{{ ($newlesson -> type == 'w') || ($newlesson -> type == 'b') ? 'bg-info' : ($newlesson -> type == 'f' ? 'bg-warning' : ($newlesson -> type == 'j' ? 'bg-success' : '' ))}}">
 		                			<div class="row">
 			                			<div class="col-md-4">
 			                   				{{ $newlesson -> date . ' ' . substr( $newlesson -> stime , 0 , 5 ) . '~' . substr( $newlesson -> etime , 0 , 5 ) }}
@@ -107,7 +147,15 @@
 			                   				会议ID：{{ $newlesson -> mid }}
 			                   			</div>
 			                			<div class="col-md-2">
-			                   				{{ $newlesson -> course ? '固定课程' : '单节课程' }}
+			                   				@if ( $newlesson -> type == 'w' )
+					                   			外教1对1
+				                   			@elseif ( $newlesson -> type == 'f' )
+				                   				复习课
+				                   			@elseif ( $newlesson -> type == 'j' )
+				                   				精品课
+				                   			@elseif ( $newlesson -> type == 'b' )
+				                   				班课
+				                   			@endif
 			                   			</div>
 			                   			<div class="col-md-2">
 			                   				<a href="{{ url('/lesson/change/' . $newlesson -> id) }}" >修改</a>
@@ -206,9 +254,17 @@
 	
 		                <div class="panel-body">
 		                	<table class="table table-hover">
-								<tr><th>老师姓名</th><th>课程内容</th><th>上课日期</th><th>附件</th><th>消耗课时</th><th>课程类型</th><th>操作</th></tr>
+								<tr><th>老师姓名</th><th>课程内容</th><th>上课日期</th><th>附件</th><th>消耗课时</th><th>课程类型</th><th>得分</th><th>操作</th></tr>
 							@foreach ( $lessons as $lesson )
-								<tr>
+								@if ( $lesson -> type == 'w' )
+	                   				<tr class="info">
+	                   			@elseif ( $lesson -> type == 'f' )
+	                   				<tr class="warning">
+	                   			@elseif ( $lesson -> type == 'j' )
+	                   				<tr class="success">
+	                   			@else
+	                   				<tr class="info">
+	                   			@endif
 									<td>{{ $lesson -> tname }}{{ ( $lesson -> cteacher ) && ( $lesson -> tname <> '' ) ? ' & ' : '' }}{{ $lesson -> cteacher ? $lesson -> cteacher -> tname : '' }}</td>
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
@@ -218,7 +274,8 @@
 										<a href="{{ '/showcwlist/' .$lesson -> cwurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
 									<td>外{{ $lesson -> cost }}/中{{ $lesson -> cost1 }}/精{{ $lesson -> cost2 }}</td>
-									<td>{{ $lesson -> type == 'w' ? '外教1对1' : ( $lesson -> type == 'f' ? '复习课' : ( $lesson -> type == 'j' ? '精品课' :   ( $lesson -> type == 'b' ? '班课' : '' ) ) ) }}</td>									
+									<td>{{ $lesson -> type == 'w' ? '外教1对1' : ( $lesson -> type == 'f' ? '复习课' : ( $lesson -> type == 'j' ? '精品课' :   ( $lesson -> type == 'b' ? '班课' : '' ) ) ) }}</td>	
+									<td>{{ $lesson -> score }}</td>								
 									<td>
 										<div class="btn-group">
 											<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -251,7 +308,7 @@
 									<td>{{ $recharge -> note }}</td>								
 									<td>
 										修改
-										<a href="#" onclick="">删除</a>
+										<a href="{{ url( 'recharge/delete/' . $recharge -> sid . '/' . $recharge -> id ) }}" onclick="">删除</a>
 									</td>
 								</tr>
 							@endforeach

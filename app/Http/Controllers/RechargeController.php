@@ -53,6 +53,21 @@ class RechargeController extends Controller
 				
 		return redirect('lessonsinfo/' . $request -> sid );
 	}	
+		
+	//处理删除充值记录请求
+	public function delete(Request $request)
+	{       	
+        $recharge = Recharge::find($request -> id);
+		if ( $recharge -> sid == $request -> sid )
+		{			
+        	if( $recharge -> delete() )
+        	{        		
+        		return redirect('lessonsinfo/' . $request -> sid );
+        	} 
+		}
+		
+        return 0;
+	}	
 	
 }
 ?>

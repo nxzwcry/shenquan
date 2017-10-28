@@ -6,9 +6,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/weui.min.css') }}"/>
 		<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/jquery-weui.min.css') }}"/>
+		<link rel="stylesheet" type="text/css" href="{{ URL::asset('css/demos.css') }}"/>
 		<style type="text/css">
-			html,body{
-				height: 100%;
+			body{
+				background-color: #fdfdfd;
 			}
 		</style>
 		@yield('header')
@@ -19,6 +20,22 @@
 		
 		<div class="weui-tab">
 			
+		  <div class="weui-navbar">
+		    <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+		      学生信息
+		    </a>
+		    
+		    <a class="weui-navbar__item" href="#tab2">
+		      课程信息
+		      
+		    </a>
+		    
+		    <a class="weui-navbar__item" href="#tab3">
+		      课件视频
+		      
+		    </a>
+		  </div>
+		  
 		  <div class="weui-tab__bd">
 		
 		    <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
@@ -35,21 +52,6 @@
 		    
 		  </div>
 		  
-		  <div class="weui-tabbar">
-		    <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
-		      学生信息
-		    </a>
-		    
-		    <a class="weui-navbar__item" href="#tab2">
-		      课程信息
-		      
-		    </a>
-		    
-		    <a class="weui-navbar__item" href="#tab3">
-		      课件视频
-		      
-		    </a>
-		  </div>
 		
 		</div>
 

@@ -68,7 +68,7 @@
 	                        <label for="lessons" class="col-md-4 control-label" >外教1对1课时数*</label>
 	
 	                        <div class="col-md-6">
-	                            <input id="lessons" type="text" class="form-control" name="lessons" value="{{ old('lessons') }}" required>
+	                            <input id="lessons" type="number" class="form-control" name="lessons" value="{{ old('lessons') <> null ? old('lessons') : 0 }}" required>
 		                        @if ($errors->has('lessons'))
 	                                <span class="help-block">
 	                                    <strong>{{ $errors->first('lessons') }}</strong>
@@ -80,7 +80,7 @@
 	                        <label for="lessons1" class="col-md-4 control-label" >中教课程课时数*</label>
 	
 	                        <div class="col-md-6">
-	                            <input id="lessons1" type="text" class="form-control" name="lessons1" value="{{ old('lessons1') }}" required>
+	                            <input id="lessons1" type="number" class="form-control" name="lessons1" value="{{ old('lessons1') <> null ? old('lessons1') : 0 }}" required>
 		                        @if ($errors->has('lessons1'))
 	                                <span class="help-block">
 	                                    <strong>{{ $errors->first('lessons1') }}</strong>
@@ -92,7 +92,7 @@
 	                        <label for="lessons2" class="col-md-4 control-label" >外教精品课课时数*</label>
 	
 	                        <div class="col-md-6">
-	                            <input id="lessons2" type="text" class="form-control" name="lessons2" value="{{ old('lessons2') }}" required>
+	                            <input id="lessons2" type="number" class="form-control" name="lessons2" value="{{ old('lessons2') <> null ? old('lessons2') : 0 }}" required>
 		                        @if ($errors->has('lessons2'))
 	                                <span class="help-block">
 	                                    <strong>{{ $errors->first('lessons2') }}</strong>
@@ -105,7 +105,7 @@
 	                        <label for="money" class="col-md-4 control-label" >金额</label>
 	
 	                        <div class="col-md-6">
-	                            <input id="money" type="text" class="form-control" name="money" value="{{ old('money') }}">
+	                            <input id="money" type="number" class="form-control" name="money" value="{{ old('money') <> null ? old('money') : 0 }}">
 		                        @if ($errors->has('money'))
 	                                <span class="help-block">
 	                                    <strong>{{ $errors->first('money') }}</strong>

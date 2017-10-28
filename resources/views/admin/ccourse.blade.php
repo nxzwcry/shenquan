@@ -48,6 +48,17 @@
 		                            </div>                            
 		                        </div>
 		                        
+		                        <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
+			                        <label for="type" class="col-md-4 control-label" >课程种类*</label>
+			
+			                        <div class="col-md-6">
+										<select id="type" class="form-control" name="type" required>
+											  <option value="w" {{ old('type') }}>外教1对1</option>
+											  <option value="b" {{ old('type') }}>小班课</option>
+										</select>	
+									</div>
+		                        </div>    
+		                        
 		                        <input type="text" name="sid" value="{{ $students -> id }}"  hidden>
 		                        	
 		                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -121,7 +132,7 @@
 		                        <div class="form-group{{ $errors->has('sdate') ? ' has-error' : '' }}">
 			                        <label for="sdate" class="col-md-4 control-label" >课程开始日期*</label>
 				                    <div class="col-md-6">
-						                    <input class="form-control date_form" size="16" type="text" value="{{ old('edate') }}" name="sdate" readonly required>
+						                    <input class="form-control date_form" size="16" type="text" value="{{ old('sdate') }}" name="sdate" readonly required>
 									</div>
 		                        </div>
 		                        

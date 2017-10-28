@@ -66,24 +66,42 @@ class Student extends Model
     
     public function getfuxi()
     {
-    	$lessons = $this -> lessons()
-			-> where('conduct' , 1 )
-			-> orderby('date' , 'desc' )
-			-> orderby('etime' , 'desc' )
-			-> with('cteacher')
+    	$after = 1;
+    	
+    	$newlessons = $this -> lessons()
+			-> where('conduct' , 0 )
     		-> get();
+    	foreach ( $newlessons as $newlesson )
+    	{
+    		if ( $newlesson -> type == 'f' )
+    		{
+    			$after = 0;
+    			break;
+    		}
+    	}
+    	
     	$fuxi = 0;
-    	if ( $this -> recharges() -> sum('lessons1') - $lessons -> sum('cost1') > 0 )
-		{
-			foreach ( $lessons as $lesson )
+    	
+    	if ( $after )
+    	{
+	    	$lessons = $this -> lessons()
+				-> where('conduct' , 1 )
+				-> orderby('date' , 'desc' )
+				-> orderby('etime' , 'desc' )
+				-> with('cteacher')
+	    		-> get();
+	    	if ( $this -> recharges() -> sum('lessons1') - $lessons -> sum('cost1') > 0 )
 			{
-				if ( $lesson -> type == 'w' )
+				foreach ( $lessons as $lesson )
 				{
-					$fuxi++;
-				}
-				elseif ( ( $lesson -> type == 'f' ) || ( $fuxi > 5 )  )
-				{
-					break;
+					if ( $lesson -> type == 'w' )
+					{
+						$fuxi++;
+					}
+					elseif ( ( $lesson -> type == 'f' ) || ( $fuxi > 5 )  )
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -92,28 +110,60 @@ class Student extends Model
     
     public function getjingpin()
     {
+    	
+    	$after = 1;
+    	
+    	$newlessons = $this -> lessons()
+			-> where('conduct' , 0 )
+    		-> get();
+    	foreach ( $newlessons as $newlesson )
+    	{
+    		if ( $newlesson -> type == 'j' )
+    		{
+    			$after = 0;
+    			break;
+    		}
+    	}
+    	
+    	$jingpin = 0;
+    	
+    	if ( $after )
+	    {
+	    	$lessons = $this -> lessons()
+				-> where('conduct' , 1 )
+				-> orderby('date' , 'desc' )
+				-> orderby('etime' , 'desc' )
+				-> with('cteacher')
+	    		-> get();
+	    	if ( $this -> recharges() -> sum('lessons2') - $lessons -> sum('cost2') > 0 )
+			{
+				foreach ( $lessons as $lesson )
+				{
+					if ( $lesson -> type == 'w' )
+					{
+						$jingpin++;
+					}
+					elseif ( ( $lesson -> type == 'j' ) || ( $jingpin > 5 )  )
+					{
+						break;
+					}
+				}
+			}
+		}
+		return $jingpin;
+    }
+    
+    
+    public function getbalance()
+    {
     	$lessons = $this -> lessons()
 			-> where('conduct' , 1 )
 			-> orderby('date' , 'desc' )
 			-> orderby('etime' , 'desc' )
 			-> with('cteacher')
     		-> get();
-    	$jingpin = 0;
-    	if ( $this -> recharges() -> sum('lessons2') - $lessons -> sum('cost2') > 0 )
-		{
-			foreach ( $lessons as $lesson )
-			{
-				if ( $lesson -> type == 'w' )
-				{
-					$jingpin++;
-				}
-				elseif ( ( $lesson -> type == 'j' ) || ( $jingpin > 5 )  )
-				{
-					break;
-				}
-			}
-		}
-		return $jingpin;
+    	$recharges = $this -> recharges;
+		return $recharges -> sum('lessons') + $recharges -> sum('lessons1') + $recharges -> sum('lessons2') - $lessons -> sum('cost') - $lessons -> sum('cost1') - $lessons -> sum('cost2');
     }
     
     

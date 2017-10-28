@@ -1,65 +1,193 @@
 @extends('layouts.layouts')
 
 @section('header')
-<style type="text/css">
+<!--<style type="text/css">
 	  h1 {
 	  	color: #666;
 	  	margin: 10% 0;
 	  }
-</style>
+</style>-->
 @stop
 
 @section('userinfo')
-	<div class="weui-flex">
-		<h1>{{ $students -> name }} {{ $students -> ename }}</h1>
+<header class="demos-header">
+	<h1 class="demos-title">{{ $students -> name }} {{ $students -> ename }}</h1>
+</header>
+<div class="bd">
+	<div class="page__bd">
+		<!--<div class="weui-cells__title">学生基本信息</div>-->
+		<div class="weui-cells">
+		  <!--<div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>性别</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $students -> sex }}</div>
+		  </div>
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>生日</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ substr( $students -> birthday , 0 , 10 ) }}</div>
+		  </div>-->
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>积分</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $lessons -> sum('score') }}</div>
+		  </div>
+		</div>
+		
+		<div class="weui-cells__title">已用课时</div>
+			
+		<div class="weui-cells">
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>外教1对1</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $lessons -> sum('cost') }}节</div>
+		  </div>
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>中教课程</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $lessons -> sum('cost1') }}节</div>
+		  </div>
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>外教精品课</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $lessons -> sum('cost2') }}节</div>
+		  </div>
+		</div>
+		
+		<div class="weui-cells__title">剩余课时</div>
+		<div class="weui-cells">
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>外教1对1</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $recharges -> sum('lessons') - $lessons -> sum('cost') }}节</div>
+		  </div>
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>中教课程</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $recharges -> sum('lessons1') - $lessons -> sum('cost1') }}节</div>
+		  </div>
+		  <div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>外教精品课</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $recharges -> sum('lessons2') - $lessons -> sum('cost2') }}节</div>
+		  </div>
+		</div>
 	</div>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">性别：{{ $students -> sex }}</div>
+</div>
+@stop
+
+@section('lessons')
+
+<div class="bd">
+	<div class="page__bd">
+	<div class="weui-panel__hd">下节课程</div>
+		@foreach ( $newlessons as $newlesson )
+    <div class="weui-form-preview">
+      <div class="weui-form-preview__hd">
+         <h4 class="weui-media-box__title">{{ $newlesson -> date . ' ' . numtoweek(Carbon\Carbon::parse($newlesson -> date) -> dayOfWeek) . ' ' . substr( $newlesson -> stime , 0 , 5 ) . '~' . substr( $newlesson -> etime , 0 , 5 ) }}</h4>
+  		</div>
+      <div class="weui-form-preview__bd">
+      	<div class="weui-form-preview__item">
+        	<label class="weui-form-preview__label">授课内容</label>
+        	<span class="weui-form-preview__value">{{ $newlesson -> name }}</span>
+        </div>
+      	<div class="weui-form-preview__item">
+        	<label class="weui-form-preview__label">课程类型</label>
+        	<span class="weui-form-preview__value">
+					@if ( $newlesson -> type == 'w' )
+			   		外教1对1
+					@elseif ( $newlesson -> type == 'f' )
+						复习课
+					@elseif ( $newlesson -> type == 'j' )
+						精品课
+					@elseif ( $newlesson -> type == 'b' )
+						班课
+					@endif
+					</span>
+        </div>
+      	<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">授课教师</label>
+					<span class="weui-form-preview__value">
+					{{ $newlesson -> tname }}{{ ( $newlesson -> cteacher ) && ( $newlesson -> tname <> '' ) ? ' & ' : '' }}{{ $newlesson -> cteacher ? $newlesson -> cteacher -> tname : '' }}<br/>
+					</span>
+        </div>
+      	<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">会议ID</label>
+					<span class="weui-form-preview__value">{{ $newlesson -> mid }}</span>
+        </div>
+      	<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">消费课时</label>
+					<span class="weui-form-preview__value">
+					@if ( $newlesson -> cost <> 0 )
+						外教1对1&emsp;{{ $newlesson -> cost }}节&emsp;
+					@endif
+					@if ( $newlesson -> cost1 <> 0 )
+						中教课程&emsp;{{ $newlesson -> cost1 }}节&emsp;
+					@endif
+					@if ( $newlesson -> cost2 <> 0 )
+						外教精品课&emsp;{{ $newlesson -> cost2 }}节
+					@endif
+					</span>
+       </div>
+      </div>
+    </div>
+    @endforeach
+		
+		<div class="weui-cells__title">每周固定课程</div>
+	<div class="weui-cells">
+		@foreach ( $courses as $course )
+		<div class="weui-cell">
+		    <div class="weui-cell__bd">
+		      <p>每周{{ numtoweek($course -> dow) }}&emsp;{{ substr( $course -> stime , 0 , 5 ) . '~' . substr( $course -> etime , 0 , 5 ) }}</p>
+		    </div>
+		    <div class="weui-cell__ft">{{ $course -> tname }}{{ ( $course -> cteacher ) && ( $course -> tname <> '' ) ? ' & ' : '' }}{{ $course -> cteacher ? $course -> cteacher -> tname : '' }}老师</div>
+		</div>
+	@endforeach
 	</div>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">生日：{{ $students -> birthday }}</div>
+	
 	</div>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">积分：</div>
-	</div>
-	<br/>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">已用课时：<br/>
-	  	外教1对1&emsp;&emsp;&emsp;{{ $lessons -> sum('cost') }}节<br/>
-	  	中教课程&emsp;&emsp;&emsp;{{ $lessons -> sum('cost1') }}节<br/>
-	  	外教精品课&emsp;&emsp;{{ $lessons -> sum('cost2') }}节
-	  </div>
-	</div>
-	<br/>
-	<div class="weui-flex">
-	  <div class="weui-flex__item">剩余课时：<br/>
-	  	外教1对1&emsp;&emsp;&emsp;{{ $recharges -> sum('lessons') - $lessons -> sum('cost') }}节<br/>
-	  	中教课程&emsp;&emsp;&emsp;{{ $recharges -> sum('lessons1') - $lessons -> sum('cost1') }}节<br/>
-	  	外教精品课&emsp;&emsp;{{ $recharges -> sum('lessons2') - $lessons -> sum('cost2') }}节<br/>
-	  </div>
-	</div>
+</div>
 @stop
 
 @section('file')
-	<table>
-		<tr><th>上课时间</th><th>上课教师</th><th>课程名称</th><th>课程附件</th></tr>
-	@foreach ( $lessons as $lesson )
-		<tr>
-			<td>{{ $lesson -> date }}</td>
-			<td>{{ $lesson -> tname }}</td>
-			<td>{{ $lesson -> name }}</td>
-			<td>
-				@if ( $lesson -> vid <> null )
-					<a href="{{ url('wechat/video') . '/' . $lesson -> vid }}">视频</a>
-				@endif
-				@if ( $lesson -> furl <> null )
-					<a href="{{ '/flist/' .$lesson -> furl }}">附件</a>
-				@endif
-				@if ( $lesson -> cwurl <> null )
-					<a href="{{ '/cwlist/' .$lesson -> cwurl }}">课件</a>
-				@endif
-			</td>
-		</tr>
-	@endforeach
-	</table>
+
+<div class="bd">
+	<div class="page__bd">
+		<div class="weui-panel">
+			<div class="weui-panel__hd">已完成课程列表</div>
+			<div class="weui-panel__bd">
+				@foreach ( $lessons as $lesson )
+					<div class="weui-media-box weui-media-box_text">
+						<h4 class="weui-media-box__title">{{ $lesson -> date }}</h4>
+						<p class="weui-media-box__desc">
+							上课教师：{{ $lesson -> tname }}{{ ( $lesson -> cteacher ) && ( $lesson -> tname <> '' ) ? ' & ' : '' }}{{ $lesson -> cteacher ? $lesson -> cteacher -> tname : '' }}<br/>
+							课程内容：{{ $lesson -> name }}
+						</p>
+						<ul class="weui-media-box__info">
+							@if ( $lesson -> vid <> null )
+								<li class="weui-media-box__info__meta"><a href="{{ url('wechat/video') . '/' . $lesson -> vid }}">视频</a></li>
+							@endif
+							@if ( $lesson -> furl <> null )
+								<li class="weui-media-box__info__meta"><a href="{{ '/flist/' .$lesson -> furl }}">附件</a></li>
+							@endif
+							@if ( $lesson -> cwurl <> null )
+								<li class="weui-media-box__info__meta"><a href="{{ '/cwlist/' .$lesson -> cwurl }}">课件</a></li>
+							@endif
+						</ul>
+	
+					</div>
+				@endforeach
+			</div>
+		</div>
+	</div>
+</div>
 @stop

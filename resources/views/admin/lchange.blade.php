@@ -12,6 +12,7 @@
             	
             	<ol class="breadcrumb">
 				  <li><a href="{{ route('home') }}">首页</a></li>
+				  <li><a href="{{ url('lessonsinfo') . '/' . $lesson -> sid }}">学生课程信息</a></li>
 				  <li class="active">修改课程信息</li>
 				</ol>
 
@@ -150,7 +151,20 @@
 											  <option value="5" {{ old('cost2') <> null ? ( old('cost2') == 5 ? ' selected' : '' ) : ( $lesson -> cost2 == 5 ? ' selected' : '' ) }}>5课时</option>
 										</select>	
 									</div>
-		                        </div>                                   
+		                        </div>      
+		                        
+		                        <div class="form-group{{ $errors->has('score') ? ' has-error' : '' }}">
+			                        <label for="score" class="col-md-4 control-label" >得分</label>
+			
+			                        <div class="col-md-6">
+			                            <input id="score" type="number" class="form-control" name="score" value="{{ old('score') <> null ? old('score') : $lesson -> score }}" >
+				                        @if ($errors->has('score'))
+			                                <span class="help-block">
+			                                    <strong>{{ $errors->first('score') }}</strong>
+			                                </span>
+			                            @endif
+			                        </div>
+		                        </div>                             
 		                        
 		                        <div class="form-group">
 		                            <div class="col-md-8 col-md-offset-4">
