@@ -140,6 +140,11 @@
 			                   			</div>
 			                   		</div>
 			                   		<div class="row">
+			                			<div class="col-md-12">
+			                   				授课地点：{{ $newlesson -> place -> name }}
+			                   			</div>
+			                   		</div>
+			                   		<div class="row">
 			                			<div class="col-md-4">
 			                   				授课教师：{{ $newlesson -> tname }}{{ ( $newlesson -> cteacher ) && ( $newlesson -> tname <> '' ) ? ' & ' : '' }}{{ $newlesson -> cteacher ? $newlesson -> cteacher -> tname : '' }}
 			                   			</div>
@@ -187,6 +192,11 @@
 			                   		<div class="row">
 			                			<div class="col-md-12">
 			                   				课程名称：{{ $course -> name }}
+			                   			</div>
+			                   		</div>
+			                   		<div class="row">
+			                			<div class="col-md-12">
+			                   				授课地点：{{ $course -> place -> name }}
 			                   			</div>
 			                   		</div>
 			                   		<div class="row">

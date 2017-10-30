@@ -68,6 +68,10 @@ class Course extends Model
     	return $this->belongsTo('App\Cteacher' , 'cteacher_id');
     }  
     
+    public function place()
+    {
+    	return $this->belongsTo('App\Place' , 'place_id');
+    }  
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

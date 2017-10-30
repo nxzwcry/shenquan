@@ -21,9 +21,9 @@
                     <table class="table table-hover">
 						<tr><!--<th>学生号</th>--><th>姓名</th><th>性别</th><th>英文名</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
 					@foreach ( $students as $student )
-						@if ( $student -> getbalance() <= 5 )
+						@if ( $student -> getbalance() <= 2 )
                				<tr class="danger">
-               			@elseif ( $student -> getbalance() <= 10 )
+               			@elseif ( $student -> getbalance() <= 3 )
                				<tr class="warning">
                			@else
                				<tr>

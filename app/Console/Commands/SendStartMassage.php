@@ -76,7 +76,7 @@ class SendStartMassage extends Command
 				$this -> startmassage( [ 'touser' => $wechat -> openid ,
 					'sname' => $student -> name . ' ' . $student -> ename , 
 					'time' => $lesson -> date . ' ' . substr( $lesson -> stime , 0 , 5 ) . '~' . substr( $lesson -> etime , 0 , 5 ) ,
-					'place' => '家中' . '',
+					'place' => $lesson -> place -> name . '',
 					'teacher' => $teacher,
 					'mid' => $lesson -> mid . ''] );
 			}

@@ -10,6 +10,7 @@ use App\Course;
 use App\Recharge;
 use App\Courseware;
 use App\Cteacher;
+use App\Place;
 
 class LessonController extends Controller
 {
@@ -225,7 +226,8 @@ class LessonController extends Controller
 		if ($lesson)
 		{			
 			$cteachers = Cteacher::all();
-			return view( 'admin.lchange' , [ 'lesson' => $lesson , 'cteachers' => $cteachers]);
+			$places = Place::all();
+			return view( 'admin.lchange' , [ 'lesson' => $lesson , 'cteachers' => $cteachers , 'places' => $places]);
 		}
 	}
 		

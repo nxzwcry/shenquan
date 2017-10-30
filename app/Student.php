@@ -158,12 +158,23 @@ class Student extends Model
     {
     	$lessons = $this -> lessons()
 			-> where('conduct' , 1 )
-			-> orderby('date' , 'desc' )
-			-> orderby('etime' , 'desc' )
-			-> with('cteacher')
     		-> get();
     	$recharges = $this -> recharges;
-		return $recharges -> sum('lessons') + $recharges -> sum('lessons1') + $recharges -> sum('lessons2') - $lessons -> sum('cost') - $lessons -> sum('cost1') - $lessons -> sum('cost2');
+    	
+    	// 固定课程信息
+		$courses = $this -> courses()
+			-> where(function($query){
+				$query -> where( 'edate' , null )
+				-> orwhere( 'edate' , '>=' , Carbon::now() -> timestamp );
+			})
+    		-> get();
+    		if ( $courses -> sum('cost') > 0 )
+    		{    			
+				return ceil( ( $recharges -> sum('lessons') - $lessons -> sum('cost') )/( $courses -> sum('cost') ) ) ;
+    		}
+    		else{
+    			return 4;
+    		}
     }
     
     

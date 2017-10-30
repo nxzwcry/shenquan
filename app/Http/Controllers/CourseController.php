@@ -9,6 +9,7 @@ use App\Course;
 use App\Lesson;
 use App\Courseware;
 use App\Cteacher;
+use App\Place;
 use Log;
 
 class CourseController extends Controller
@@ -20,9 +21,10 @@ class CourseController extends Controller
     		-> get(['id' , 'name' , 'ename'])
 			-> first();
 		$cteachers = Cteacher::all();
+		$places = Place::all();
 		$cws = Courseware::all();
 //  	dd($students);
-        return view('admin.ccourse' , ['students' => $students , 'cws' => $cws , 'cteachers' => $cteachers]);
+        return view('admin.ccourse' , ['students' => $students , 'cws' => $cws , 'cteachers' => $cteachers , 'places' => $places]);
 	}
 	
 	//处理添加固定课程请求

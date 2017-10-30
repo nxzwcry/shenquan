@@ -125,6 +125,10 @@
 					<span class="weui-form-preview__value">{{ $newlesson -> mid }}</span>
         </div>
       	<div class="weui-form-preview__item">
+					<label class="weui-form-preview__label">授课地点</label>
+					<span class="weui-form-preview__value">{{ $newlesson -> place -> name }}</span>
+        </div>
+      	<div class="weui-form-preview__item">
 					<label class="weui-form-preview__label">消费课时</label>
 					<span class="weui-form-preview__value">
 					@if ( $newlesson -> cost <> 0 )

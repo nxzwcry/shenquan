@@ -109,7 +109,19 @@
 			                            @endif
 			                        </div>
 		                        </div>
-		                                                                                     
+		                                                               
+		                        <div class="form-group{{ $errors->has('place_id') ? ' has-error' : '' }}">
+			                        <label for="place_id" class="col-md-4 control-label" >上课地点</label>
+			
+			                        <div class="col-md-6">
+										<select class="form-control" name="place_id">
+											@foreach ( $places as $place )
+												<option value="{{$place -> id}}" {{ old('place_id') <> null ? ( old('place_id')== $place -> id ? ' selected' : '' ) : ( $lesson -> place ? ( $lesson -> place -> id == $place -> id ? ' selected' : '' ) : '' )}}>{{$place -> name}}</option>
+											@endforeach
+										</select>	
+									</div>
+		                        </div>       
+		                                                                                 
 		                        <div class="form-group{{ $errors->has('cost') ? ' has-error' : '' }}">
 			                        <label for="cost" class="col-md-4 control-label" >消耗课时数(外教1对1)*</label>
 			
