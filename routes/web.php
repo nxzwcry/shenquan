@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/admin', 'AdminhomeController@index')->name('home');
 	
 	Route::any('wechat/menu','WechatController@menu');
+	Route::get('wechat/list/{type}/{offset}', 'WechatController@getlist');
 	Route::any('wechat/enter','EnterController@index');
 		
 	Route::get('createstudent',function () {
