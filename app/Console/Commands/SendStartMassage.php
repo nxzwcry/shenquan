@@ -37,7 +37,8 @@ class SendStartMassage extends Command
 
 
 
-	protected $tempid = 'M7rVONQSBYxSA1Sfn5UsPIPkXRW4EXGiKHmFayoFlM8';
+//	protected $tempid = 'M7rVONQSBYxSA1Sfn5UsPIPkXRW4EXGiKHmFayoFlM8'; //测试ID
+	protected $tempid = 'CNTO2nogT9MngwGN-TCIfWv5c21Wq9UBlnpk-5w69z0'; //正式ID
 	protected $url = 'deepspring.cn/wechat/userinfo';
     /**
      * Execute the console command.
@@ -57,28 +58,38 @@ class SendStartMassage extends Command
 		$lessons = $lessons1 -> merge( $lessons2 );
 		foreach( $lessons as $lesson )
 		{
-			$student = Student::find( $lesson -> sid );
-			$wechats = Wechat::where( 'sid' , $lesson -> sid ) -> get();
+			$student = Student::find( $lesson -> sid );				
+			if ( ( $lesson -> tname <> '' ) && ( $lesson -> cteacher ) )
+			{
+				$teacher = $lesson -> tname . ' & ' . $lesson -> cteacher -> tname;
+			}
+			else
+			{
+				$teacher = $lesson -> tname;
+				if ( $lesson -> cteacher )
+				{
+					$teacher = $teacher . $lesson -> cteacher -> tname;
+				}
+			}		
+			if ( $lesson -> date > Carbon::now() -> toDateString() )
+			{
+				$first = '深泉教育提醒 明天 有您的课程';
+			}
+			else
+			{
+				$first = '深泉教育提醒 今天 有您的课程';
+			}
+			$message = ['first' => $first , 
+						'sname' => $student -> name . ' ' . $student -> ename , 
+						'time' => $lesson -> date . ' ' . substr( $lesson -> stime , 0 , 5 ) . '~' . substr( $lesson -> etime , 0 , 5 ) ,
+						'place' => $lesson -> place -> name . '',
+						'teacher' => $teacher,
+						'mid' => $lesson -> mid . ''];
+			$wechats = Wechat::where( 'sid' , $lesson -> sid ) -> get();	
 			foreach( $wechats as $wechat )
 			{
-				if ( ( $lesson -> tname <> '' ) && ( $lesson -> cteacher ) )
-				{
-					$teacher = $lesson -> tname . ' & ' . $lesson -> cteacher -> tname;
-				}
-				else
-				{
-					$teacher = $lesson -> tname;
-					if ( $lesson -> cteacher )
-					{
-						$teacher = $teacher . $lesson -> cteacher -> tname;
-					}
-				}
-				$this -> startmassage( [ 'touser' => $wechat -> openid ,
-					'sname' => $student -> name . ' ' . $student -> ename , 
-					'time' => $lesson -> date . ' ' . substr( $lesson -> stime , 0 , 5 ) . '~' . substr( $lesson -> etime , 0 , 5 ) ,
-					'place' => $lesson -> place -> name . '',
-					'teacher' => $teacher,
-					'mid' => $lesson -> mid . ''] );
+				$message['touser'] = $wechat -> openid;
+				$this -> startmassage( $message );
 			}
 		}
 		Log::info('微信上课提醒发送完成');
@@ -93,13 +104,12 @@ class SendStartMassage extends Command
 	        'template_id' => $this -> tempid,
 	        'url' => $this -> url,
 	        'data' => [
-	            'first' => '深泉教育上课提醒',
-	            'sname' => $data['sname'],
-	            'time' => $data['time'],
-	            'place' => $data['place'],
-	            'teacher' => $data['teacher'],
-	            'mid' => $data['mid'],
-	            'remark' => "\n请按时上课，如有疑问请拨打电话15378928311",
+	            'first' => $data['first'],
+	            'keyword1' => $data['sname'],
+	            'keyword2' => $data['time'],
+	            'keyword3' => $data['teacher'],
+	            'keyword4' => $data['place'],
+	            'remark' => "\n会议ID:" . $data['mid'] . "\n请按时上课，如有疑问请拨打电话15378928311",
 	        ],
 	    ]);
     }

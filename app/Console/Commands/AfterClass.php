@@ -39,7 +39,8 @@ class AfterClass extends Command
 
 
 
-	protected $tempid = 'wAwg1tpsE-VMQhhXmu35J9fJe9evuNjFH3WbRa5D3V8';
+//	protected $tempid = 'wAwg1tpsE-VMQhhXmu35J9fJe9evuNjFH3WbRa5D3V8'; //测试ID
+	protected $tempid = 'M1-y9hs_aaNIAFPm_DaWYRZIKjQLRYYXArPFNprKMXk'; //正式ID
 	protected $url = 'deepspring.cn/wechat/userinfo';
     /**
      * Execute the console command.
@@ -120,7 +121,7 @@ class AfterClass extends Command
 	        'template_id' => $this -> tempid,
 	        'url' => $this -> url,
 	        'data' => [
-	            'first' => '深泉教育提醒您刚刚上完如下课程',
+	            'first' => '深泉教育提醒您 刚刚上完如下课程',
 	            'keyword1' => $data['keyword1'],
 	            'keyword2' => $data['keyword2'],
 	            'keyword3' => $data['keyword3'],
