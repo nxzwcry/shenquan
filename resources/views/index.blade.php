@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>深泉教育</title>
+<title>宁夏深泉教育</title>
 <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" media="all" />
 <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" type="text/css" media="all" />
 
