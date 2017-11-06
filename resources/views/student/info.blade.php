@@ -178,7 +178,7 @@
 						</p>
 						<ul class="weui-media-box__info">
 							@if ( $lesson -> vid <> null )
-								<li class="weui-media-box__info__meta"><a href="{{ url('wechat/video') . '/' . $lesson -> vid }}">视频</a></li>
+								<li class="weui-media-box__info__meta"><a href="{{ url('wechat/video') . '/' . $lesson -> id }}">视频</a></li>
 							@endif
 							@if ( $lesson -> furl <> null )
 								<li class="weui-media-box__info__meta"><a href="{{ '/flist/' .$lesson -> furl }}">附件</a></li>

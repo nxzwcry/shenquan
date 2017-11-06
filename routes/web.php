@@ -96,7 +96,7 @@ Route::group(['middleware' => ['auth']], function () {
 	
 	Route::post('deletef','CoursewareController@deletef');
 	
-    Route::any('video/{videoid}', 'VideoController@videoplay');
+    Route::any('video/{lessonid}', 'VideoController@videoplay');
     
     Route::any('getvideoupdateauth', 'VideoController@getupdateauth');
        

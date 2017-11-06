@@ -279,7 +279,7 @@
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
 									<td>
-										<a href="{{ '/video/' . $lesson -> vid }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
+										<a href="{{ '/video/' . $lesson -> id }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
 										<a href="{{ '/showflist/' .$lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
 										<a href="{{ '/showcwlist/' .$lesson -> cwurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>

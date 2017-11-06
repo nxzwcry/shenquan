@@ -8,32 +8,90 @@ use Aliyun\Core\DefaultAcsClient;
 use vod\Request\V20170321\GetPlayInfoRequest;
 use vod\Request\V20170321\CreateUploadVideoRequest;
 use Aliyun\Core\Config;
+use OSS\OssClient;
+use OSS\Core\OssException;
 
 class VideoController extends Controller
 {
-	// 处理视频播放请求
-	public function videoplay( $videoid )
-	{
-		Config::load();		
+    protected $accessKeyId = "LTAIM1kjoOKiPGrq";
+    protected $accessKeySecret = "rIZhoCetGywhK1rFPPVL9yA4lgSsAa";
+    protected $endpoint = "oss-cn-beijing.aliyuncs.com";
+
+    // 处理视频播放请求
+    public function videoplay( $lessonid )
+    {
+        $lesson = Lesson::find( $lessonid );
+        if( !$lesson ) return 0; //如果课程id有误
+        $videoid = $lesson -> vid;
+        if ( strlen( $videoid ) < 20  )
+        {
+            $title =  $lesson -> student -> ename . '_' . $lesson -> date . '_' . $lesson -> name;
+            $bucket= "ds-classvideo";
+            $object = $videoid;
+            $timeout = 1800; // URL的有效期是1800秒
+            try {
+                $ossClient = new OssClient($this -> accessKeyId, $this -> accessKeySecret, $this -> endpoint);
+            } catch (OssException $e) {
+                print $e->getMessage(); // 代码完善师补全log
+            }
+            if ( $ossClient )
+            {
+                try{
+                    $signedUrl = $ossClient->signUrl($bucket, $object, $timeout);
+                } catch(OssException $e) {
+                    printf(__FUNCTION__ . ": FAILED\n"); // 代码完善师补全log
+                    printf($e->getMessage() . "\n");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            Config::load();
 //		$videoid = '3a0241ea20254bf4a0fd824b091b8195';
-		$regionId = 'cn-shanghai';
-		$access_key_id = 'LTAIM1kjoOKiPGrq';
-		$access_key_secret = 'rIZhoCetGywhK1rFPPVL9yA4lgSsAa';
-		$profile = DefaultProfile::getProfile($regionId, $access_key_id, $access_key_secret);
-		$client = new DefaultAcsClient($profile);
-		$request = new GetPlayInfoRequest();
+            $regionId = 'cn-shanghai';
+            $access_key_id = 'LTAIM1kjoOKiPGrq';
+            $access_key_secret = 'rIZhoCetGywhK1rFPPVL9yA4lgSsAa';
+            $profile = DefaultProfile::getProfile($regionId, $access_key_id, $access_key_secret);
+            $client = new DefaultAcsClient($profile);
+            $request = new GetPlayInfoRequest();
 //		$request->setAcceptFormat('JSON');
 //		$request->setRegionId($regionId);
-		$request->setVideoId($videoid);            //视频ID
-		$request->setFormats('mp4');
-		$request->setAuthTimeout('1800');
+            $request->setVideoId($videoid);            //视频ID
+            $request->setFormats('mp4');
+            $request->setAuthTimeout('1800');
 //		$request->setChannel('HTTP');
-		$response = $client->getAcsResponse($request);
-		$playurl = $response -> PlayInfoList -> PlayInfo[0] -> PlayURL;
-		$title = $response -> VideoBase -> Title;
-		
-		return view( 'student.video' , [ 'playurl' => $playurl , 'title' => $title ]);
-	}
+            $response = $client->getAcsResponse($request);
+            $signedUrl = $response -> PlayInfoList -> PlayInfo[0] -> PlayURL;
+            $title = $response -> VideoBase -> Title;
+        }
+
+        return view( 'student.video' , [ 'playurl' => $signedUrl , 'title' => $title ]);
+    }
+
+	// 处理视频播放请求
+//	public function videoplay( $videoid )
+//	{
+//		Config::load();
+////		$videoid = '3a0241ea20254bf4a0fd824b091b8195';
+//		$regionId = 'cn-shanghai';
+//		$access_key_id = 'LTAIM1kjoOKiPGrq';
+//		$access_key_secret = 'rIZhoCetGywhK1rFPPVL9yA4lgSsAa';
+//		$profile = DefaultProfile::getProfile($regionId, $access_key_id, $access_key_secret);
+//		$client = new DefaultAcsClient($profile);
+//		$request = new GetPlayInfoRequest();
+////		$request->setAcceptFormat('JSON');
+////		$request->setRegionId($regionId);
+//		$request->setVideoId($videoid);            //视频ID
+//		$request->setFormats('mp4');
+//		$request->setAuthTimeout('1800');
+////		$request->setChannel('HTTP');
+//		$response = $client->getAcsResponse($request);
+//		$playurl = $response -> PlayInfoList -> PlayInfo[0] -> PlayURL;
+//		$title = $response -> VideoBase -> Title;
+//
+//		return view( 'student.video' , [ 'playurl' => $playurl , 'title' => $title ]);
+//	}
 	
 	// 处理获取上传地址和凭证的请求(Ajax)
 	public function getupdateauth()
