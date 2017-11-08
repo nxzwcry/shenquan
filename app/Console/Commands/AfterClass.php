@@ -127,7 +127,7 @@ class AfterClass extends Command
 	            'keyword3' => $data['keyword3'],
 	            'keyword4' => $data['keyword4'],
 	            'keyword5' => $data['keyword5'],
-	            'remark' => "\n复习视频和作业预计两天内上传，请及时复习。如需更改时间或取消课程请提前48小时以上向老师请假，如有疑问请拨打电话15378928311",
+	            'remark' => "\n复习视频预计两天内上传，请及时复习。如需更改时间或取消课程请提前48小时以上向老师请假，如有疑问请拨打电话15378928311",
 	        ],
 	    ]);
     }

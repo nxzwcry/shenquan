@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('SendStartMassage')->dailyAt('10:00');// 每天10:00运行一次...
         $schedule->command('AfterClass')
            			->everyThirtyMinutes()
-           			->between('9:30', '21:30');// 每天9:30~21:30 每半小时运行一次  
+           			->between('9:30', '23:00');// 每天9:30~21:30 每半小时运行一次  
         $schedule->command('AddGrade')
            			->monthlyOn( 1 , '00:00' )
            			->when(function () {
@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
            				}
            				return false;
 					});// 每年年级更新一次 
-//      $schedule->command('SendStartMassage')->dailyAt('11:40');// 测试行
+//      $schedule->command('SendStartMassage')->dailyAt('11:54');// 测试行
     }
     
 
