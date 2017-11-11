@@ -24,7 +24,7 @@ class LessonController extends Controller
 //      return view('admin.clesson' , ['students' => $students]);
 //	}
 	
-	// 显示学生课程信息
+	// 显示学生课程信息(管理界面)
 	public function info($sid)
 	{
 		// 学生信息

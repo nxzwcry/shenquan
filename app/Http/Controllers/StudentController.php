@@ -141,6 +141,5 @@ class StudentController extends Controller
 		return view( 'student.info' , [ 'students' => $students , 'lessons' => $lessons , 'recharges' => $recharges , 'newlessons' => $newlessons , 'courses' => $courses ]);
 
 	}
-	
 }
 ?>
