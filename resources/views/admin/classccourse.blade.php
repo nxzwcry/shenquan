@@ -12,7 +12,7 @@
             <div class="panel panel-default">
             	<ol class="breadcrumb">
 				  <li><a href="{{ route('home') }}">首页</a></li>
-				  <li><a href="{{ url('lessonsinfo') . '/' . $students -> id }}">{{ $students -> name }}</a></li>
+				  <li><a href="{{ url('class') . '/' . $class -> id }}">{{ $class -> name }}</a></li>
 				  <li class="active">增加课程</li>
 				</ol>
                 <ul class="nav nav-tabs" role="tablist">      
@@ -28,8 +28,8 @@
 	 				<div role="tabpanel" class="tab-pane fade in active" id="courses">
 	
 		                <div class="panel-body">
-							<form class="form-horizontal" method="POST" action="{{url('/createcourse')}}">
-								<input type="text" name="sid" value="{{ $students -> id }}"  hidden>
+							<form class="form-horizontal" method="POST" action="{{url('/class/createcourse')}}">
+								<input type="text" name="class_id" value="{{ $class -> id }}"  hidden>
 								@include('shared.CourseForm')
 							</form>
 		                </div>
@@ -38,8 +38,8 @@
                                 
 	 				<div role="tabpanel" class="tab-pane fade{{ $errors->has('lerror') ? ' active' : '' }}" id="lessons">
 	 					<div class="panel-body">
-							<form class="form-horizontal" method="POST" action="{{ url('/createlesson') }}">
-								<input type="text" name="sid" value="{{ $students -> id }}"  hidden>
+							<form class="form-horizontal" method="POST" action="{{ url('/class/createlesson') }}">
+								<input type="text" name="class_id" value="{{ $class -> id }}"  hidden>
 								@include('shared.LessonForm')
 							</form>
 	                	</div>

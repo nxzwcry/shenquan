@@ -93,7 +93,7 @@
 														操作 <span class="caret"></span>
 													</button>
 													<ul class="dropdown-menu" role="menu">
-														<li><a href="#">查看班级信息</a></li>
+														<li><a href="{{ url('class') . '/' . $class -> id }}">查看班级信息</a></li>
 														<li><a href="#">修改班级信息</a></li>
 													</ul>
 												</div>
@@ -108,7 +108,7 @@
 
 						<div class="panel-body">
 							<table class="table table-hover">
-								<tr><th>英文名</th>姓名</th><th>性别</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
+								<tr><th>英文名</th><th>姓名</th><th>性别</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
 								@foreach ( $classs as $student )
 									@if ( $student -> getbalance() <= 2 )
 										<tr class="danger">
@@ -152,14 +152,9 @@
 						<div class="panel-body">
 							<table class="table table-hover">
 								<tr><th>英文名</th><th>姓名</th><th>性别</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>操作</th></tr>
-								@foreach ( $stops as $student )
-									@if ( $student -> getbalance() <= 2 )
-										<tr class="danger">
-									@elseif ( $student -> getbalance() <= 3 )
-										<tr class="warning">
-									@else
+								@foreach ( $allstudents as $student )
+									@if ( !$student -> havenewlessons() )
 										<tr>
-										@endif
 											<td>{{ $student -> ename }}</td>
 											<td>{{ $student -> name }} &emsp;<span class="{{ $student -> getfuxi() > 5 ? 'color-danger' : ( $student -> getfuxi() == 5 ? 'color-warning' : 'hidden' ) }}">复</span>&emsp;<span class="{{ $student -> getjingpin() > 5 ? 'color-danger' : ( $student -> getjingpin() == 5 ? 'color-warning' : 'hidden' ) }}">精</span></td>
 											<td>{{ $student -> sex }}</td>
@@ -184,7 +179,8 @@
 										<a href="/createlesson/{{ $student -> id }}">增加单节课程</a>
 										<a href="">删除用户</a></td>-->
 										</tr>
-										@endforeach
+									@endif
+								@endforeach
 							</table>
 						</div>
 					</div>

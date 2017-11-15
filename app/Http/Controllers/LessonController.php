@@ -227,6 +227,8 @@ class LessonController extends Controller
 		{			
 			$cteachers = Cteacher::all();
 			$places = Place::all();
+//			$request -> flash('type' , 'j');
+//			dd($request);
 			return view( 'admin.lchange' , [ 'lesson' => $lesson , 'cteachers' => $cteachers , 'places' => $places]);
 		}
 	}

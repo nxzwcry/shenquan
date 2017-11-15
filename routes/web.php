@@ -131,6 +131,16 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('lesson/change/{id}', 'LessonController@changeindex');
 		
 	Route::get('recharge/delete/{sid}/{id}', 'RechargeController@delete');
+
+    Route::get('class/{cid}', 'ClassController@info');
+
+    Route::post('/class/addstudent', 'ClassController@add');
+
+    Route::get('/class/deletestudent/{cid}/{sid}', 'ClassController@deletestudent');
+
+    Route::post('/class/createcourse','ClassController@createcourse');
+
+    Route::get('/class/createcourse/{id}', 'ClassController@createcourseindex');
 	
 });
 

@@ -47,8 +47,24 @@ class Student extends Model
     public function lessons()
     {
     	return $this->hasMany('App\Lesson', 'sid');
-    }    
-    
+    }
+
+    public function getoldlessons()
+    {
+        $lessons = $this -> lessons()
+            -> where('conduct' , 1 )
+            -> get();
+        return $lessons;
+    }
+
+    public function havenewlessons()
+    {
+        if ( $this -> lessons() -> where( 'conduct' , '0' ) ->first() )
+            return true;
+        else
+            return false;
+    }
+
     public function courses()
     {
     	return $this->hasMany('App\Course', 'sid');
@@ -106,6 +122,14 @@ class Student extends Model
 			}
 		}
 		return $fuxi;
+    }
+
+    public function classes()
+    {
+        if ( $this -> class_id != 0 )
+            return $this->belongsTo('App\Classes' , 'class_id');
+        else
+            return 0;
     }
     
     public function getjingpin()

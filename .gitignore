@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/dbv-1.1/config.php
 /storage/*.key
 /vendor
 /storage

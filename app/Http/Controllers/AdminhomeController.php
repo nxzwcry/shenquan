@@ -20,7 +20,7 @@ class AdminhomeController extends Controller
   	    $res = $this -> getstudentlist();
   	    $classes = Classes::orderby( 'name' )
             -> get();;
-        return view('admin.home' , [ 'stops' => $res['stops'] , 'classs' => $res['classs'] , 'one2ones' => $res['one2ones'] , 'classes' => $classes ]);
+        return view('admin.home' , [ 'allstudents' => Student::orderby( 'ename' ) -> get() , 'classs' => $res['classs'] , 'one2ones' => $res['one2ones'] , 'classes' => $classes ]);
     }
 
 
@@ -29,20 +29,9 @@ class AdminhomeController extends Controller
      */
     public function getstudentlist()
     {
-        $allsids = collect( array_column ( Student::all('id') -> toArray() , 'id' ) );
-        $classes = Classes::all();
-        $classsids = collect();
-        foreach ( $classes as $class )
-        {
-            $classsids = $classsids -> merge( $class -> sids() );
-        }
-        $classsids = $classsids -> unique();
-        $lessonsids = Lesson::where( 'conduct' , '0' ) -> groupBy('sid') -> get(['sid']) ->toArray();
-        $lessonsids = collect( array_column( $lessonsids , 'sid' ) ) -> unique();
+        $classs = Student::where( 'class_id' , '>' , '0' ) -> orderby( 'ename' ) -> get();
+        $one2ones = Student::where( 'class_id' , '0' ) -> orderby( 'ename' ) -> get();
 
-        $lessonnoclasssid = $lessonsids -> diff( $classsids );
-        $nolessonsid = $allsids -> diff( $lessonsids );
-
-        return [ 'stops' => Student::orderby( 'ename' ) -> find($nolessonsid), 'classs' => Student::orderby( 'ename' ) -> find($classsids) , 'one2ones' => Student::orderby( 'ename' ) -> find($lessonnoclasssid) ];
+        return [ 'classs' => $classs , 'one2ones' => $one2ones ];
     }
 }

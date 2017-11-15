@@ -48,7 +48,23 @@ class Lesson extends Model
     public function place()
     {
     	return $this->belongsTo('App\Place' , 'place_id');
-    }  
+    }
+
+    public function copytostudent($sid) //将该节课程复制给学生
+    {
+        $linfo = $this -> toArray();
+        $linfo['sid'] = $sid;
+        return Lesson::create($linfo);
+    }
+
+    public function sameclasslesson()
+    {
+        return Lesson::where('class_id' , $this -> class_id)
+                    -> where('date' , $this -> date)
+                    -> where('stime' , $this -> stime)
+                    -> get();
+    }
+
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

@@ -61,8 +61,13 @@ class Course extends Model
     public function lessons()
     {
     	return $this->hasMany('App\Lesson', 'courseid');
-    }  
-    
+    }
+
+    public function nextlessons()
+    {
+        return $this-> lessons() -> where('conduct' , 0 );
+    }
+
     public function cteacher()
     {
     	return $this->belongsTo('App\Cteacher' , 'cteacher_id');
@@ -71,7 +76,30 @@ class Course extends Model
     public function place()
     {
     	return $this->belongsTo('App\Place' , 'place_id');
-    }  
+    }
+
+    public function stop()
+    {
+        $this -> edate = Carbon::now() -> subSecond();
+        $this -> save();
+        return $this -> nextlessons() ->delete();
+    }
+
+    public function copytostudent($sid) //将该节课程复制给学生
+    {
+        $cinfo = $this -> toArray();
+        $cinfo['sid'] = $sid;
+        return Course::create($cinfo);
+    }
+
+    public function sameclasscourse()
+    {
+        return Course::where('class_id' , $this -> class_id)
+            -> where('dow' , $this -> dow)
+            -> where('sdate' , $this -> sdate)
+            -> where('stime' , $this -> stime)
+            -> get();
+    }
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {
