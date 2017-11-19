@@ -29,9 +29,8 @@ class LessonController extends Controller
 	{
 		// 学生信息
 		$students = Student::where('id' , $sid)
-    		-> get(['id' , 'name' , 'ename'])
+//    		-> get(['id' , 'name' , 'ename'])
 			-> first();
-			
 		// 固定课程信息
 		$courses = Course::where('sid' , $sid)
 			-> where(function($query){
@@ -171,7 +170,7 @@ class LessonController extends Controller
 			}
 		}
 //  	dd($students);
-        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student , 'cws' => $cws , 'cwid' => $cwid ]);
+        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student , 'cws' => $cws , 'cwid' => $cwid , 'url' => '/lesson']);
 	}
 		
 	// 存储视频上传信息
@@ -248,6 +247,7 @@ class LessonController extends Controller
             'required' => '输入不能为空',
             'date.date' => '请按照正确格式输入日期',
         ]);
+
 		$lesson = Lesson::find($request -> id);
 		$info = $request -> all();
 		$etime = Carbon::parse( $request -> date . $request -> etime );

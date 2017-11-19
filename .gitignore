@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/dbv-1.1/config.php
+/config/wechat.php
 /storage/*.key
 /vendor
 /storage

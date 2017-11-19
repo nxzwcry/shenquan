@@ -24,7 +24,7 @@ Route::get('/', function () {
 // 测试区域
 Route::get('wechat/send', 'LessonController@send' );
 
-Route::any('wechat','WechatController@serve');
+Route::any('/wechat','WechatController@serve');
 
 Route::get('test/{url}','CoursewareController@getfile')->where('url', '.*$');
     
@@ -63,6 +63,11 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('createstudent',function () {
 	    	return view('admin.cstudent');
 	    });
+    Route::get('createclass',function () {
+        return view('admin.cclass');
+    });
+
+    Route::post('createclass','ClassController@createclass');
 	    
     Route::post('createstudent','StudentController@create');
     
@@ -100,11 +105,11 @@ Route::group(['middleware' => ['auth']], function () {
     
     Route::any('getvideoupdateauth', 'VideoController@getupdateauth');
        
-    Route::get('fileupdate/{lessonid}', 'LessonController@fileupdateindex');
+    Route::get('/lesson/fileupdate/{lessonid}', 'LessonController@fileupdateindex');
     
-    Route::post('fileupdate', 'LessonController@fileupdate');
+    Route::post('/lesson/fileupdate', 'LessonController@fileupdate');
     
-	Route::post('videoupdate','LessonController@videoupdate');
+	Route::post('/lesson/videoupdate','LessonController@videoupdate');
 	
 	Route::post('tscwstore','CoursewareController@tscwstore');
 	
@@ -141,6 +146,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/class/createcourse','ClassController@createcourse');
 
     Route::get('/class/createcourse/{id}', 'ClassController@createcourseindex');
+
+    Route::get('/class/fileupdate/{lessonid}', 'ClassController@fileupdateindex');
+
+    Route::post('/class/fileupdate', 'ClassController@fileupdate');
+
+    Route::post('/class/videoupdate','ClassController@videoupdate');
 	
 });
 

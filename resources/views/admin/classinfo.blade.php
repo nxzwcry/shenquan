@@ -123,7 +123,9 @@
 			                   		<strong>下节课程</strong>
 			                  	</div>
 								<div class="col-md-2">
+									@if($class->students()->first())
 									<a href="{{ url('/class/createcourse/' . $class -> id ) }}">增加课程</a> <br/>
+									@endif
 								</div>
 			                </div>
 			                   	@foreach ( $class -> getnextlessons() as $newlesson )
@@ -168,7 +170,7 @@
 				                   			@endif
 			                   			</div>
 			                   			<div class="col-md-2">
-			                   				<a href="{{ url('/lesson/change/' . $newlesson -> id) }}" >修改</a>
+			                   				<a href="{{ url('/class/lesson/change/' . $newlesson -> id) }}" >修改</a>
 			                   				<a href="{{ url('/deletelesson/' . $newlesson -> sid . '/' . $newlesson -> id) }}" {{ $newlesson -> courseid == null ? '' : 'class=hidden' }}>删除</a>
 			                   			</div>
 			                   		</div>
@@ -212,8 +214,8 @@
 			                   				会议ID：{{ $course -> mid }}
 			                   			</div>
 			                   			<div class="col-md-2">
-			                   				<a href="{{ url('course/stop/' . $course -> sid . '/' . $course -> id) }}" >停课</a>
-			                   				<a href="#" onclick="pop('{{$course -> id}}' , '{{$course -> sid}}')" >删除</a>
+			                   				停课 &emsp;
+			                   				删除
 			                   			</div>
 			                   		</div>
 			                   	</div>
@@ -252,7 +254,7 @@
 			                   				消费课时：外{{ $course -> cost }}/中{{ $course -> cost1 }}/精{{ $course -> cost2 }}
 			                   			</div>
 			                   			<div class="col-md-2">
-			                   				<a href="{{ url('course/restart/' . $course -> sid . '/' . $course -> id) }}" >复课</a>
+			                   				复课
 			                   			</div>
 			                   		</div>
 			                   	</div>
@@ -297,8 +299,8 @@
 												操作 <span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu" role="menu">
-												<li><a href="{{ url('/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>
-												<li><a href="{{ url('fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
+												<li><a href="{{ url('/class/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>
+												<li><a href="{{ url('/class/fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
 												<li class="divider"></li>
 												<li><a href="{{ url('deletelesson/' .$lesson -> sid . '/' . $lesson -> id) }}">删除课程</a></li>
 											</ul>

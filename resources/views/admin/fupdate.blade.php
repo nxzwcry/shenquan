@@ -215,7 +215,12 @@
 				<div class="panel panel-default">
 					<ol class="breadcrumb">
 						<li><a href="{{ route('home') }}">首页</a></li>
-						<li><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">学生课程信息</a></li>
+                        @if($student -> classes)
+                            <li><a href="{{ url('class') . '/' . $student -> classes -> id }}">{{ $student -> classes -> name }}</a></li>
+                        @endif
+                        @if($url == '/lesson')
+                            <li><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">{{$student -> name}}</a></li>
+                        @endif
 						<li class="active">上传附件</li>
 					</ol>
 					<ul class="nav nav-tabs" role="tablist">
@@ -229,7 +234,7 @@
 					<div class="tab-content">
 						<div role="tabpanel" class="tab-pane fade in active" id="video">
 							<div class="panel-body">
-								<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="/videoupdate">
+								<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{$url}}/videoupdate">
 									{{ csrf_field() }}
 									<input type="hidden" id="id" name="id" value="{{ $lesson -> id }}"/>
 									<input type="hidden" id="sid" name="sid" value="{{ $student -> id }}"/>
@@ -317,7 +322,7 @@
 
 						<div role="tabpanel" class="tab-pane fade{{ $errors->has('lerror') ? ' active' : '' }}" id="file">
 							<div class="panel-body">
-								<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="/fileupdate">
+								<form class="form-horizontal" enctype="multipart/form-data" method="POST" action="{{$url}}/fileupdate">
 									{{ csrf_field() }}
 									<input type="hidden" name="id" value="{{ $lesson -> id }}"/>
 									<input type="hidden" name="sid" value="{{ $student -> id }}"/>

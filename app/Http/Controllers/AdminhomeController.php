@@ -29,7 +29,7 @@ class AdminhomeController extends Controller
      */
     public function getstudentlist()
     {
-        $classs = Student::where( 'class_id' , '>' , '0' ) -> orderby( 'ename' ) -> get();
+        $classs = Student::where( 'class_id' , '>' , '0' ) -> orderby( 'class_id' , 'Desc' ) -> get();
         $one2ones = Student::where( 'class_id' , '0' ) -> orderby( 'ename' ) -> get();
 
         return [ 'classs' => $classs , 'one2ones' => $one2ones ];

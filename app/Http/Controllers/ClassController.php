@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Classes;
 use App\Cteacher;
 use App\Courseware;
+use App\Lesson;
 use App\Student;
 use App\Place;
 use Carbon\Carbon;
@@ -21,6 +22,40 @@ class ClassController extends Controller
         $places = Place::all();
       return view('admin.classccourse' , ['class' => $class , 'cws' => $cws , 'cteachers' => $cteachers , 'places' => $places ]);
 	}
+
+    public function createcourse(Request $request)
+    {
+        $this -> validate($request,[
+            'class_id' => 'required|numeric|exists:classes,id',
+            'stime' => 'required',
+            'etime' => 'required',
+            'sdate' => 'required|date',
+            'edate' => 'nullable|date',
+            'cost' => 'required|numeric|max:5',
+            'cost1' => 'required|numeric|max:5',
+            'cost2' => 'required|numeric|max:5',
+        ],[
+            'required' => '输入不能为空',
+            'date.date' => '请按照正确格式输入日期',
+        ]);
+        $class = Classes::find($request->class_id);
+        if ( $class )
+        {
+            $courseinfo = $request -> all();
+            foreach ( $class -> students as $student )
+            {
+                $course = $student->createcourse($courseinfo);//创建固定课程
+                if ($course)
+                {
+                    //根据固定课程创建单节课程
+                    $course -> CreateLessons();
+                }
+            }
+        }
+
+        return view('admin.classinfo' ,
+            ['class' => $class ]);
+    }
 	
 	// 显示学生课程信息(管理界面)
 	public function info($cid)
@@ -41,82 +76,37 @@ class ClassController extends Controller
             'cid' => 'required|numeric|exists:classes,id',
         ],[
         ]);
-        $this -> addstudent($request->cid,$request->sid);
+        $class = Classes::find( $request->cid );
+        $class -> addstudent($request->sid);
         return redirect('class/' . $request->cid );
     }
 
     public function deletestudent( $cid , $sid )
     {
         $class = Classes::find($cid);
-        $student = Student::find($sid);
-        if ( $class && $student )
+        if ( $class )
         {
-            $courses = $class -> getscourses($sid);
-            foreach ($courses as $course)
+            if ( $class -> deletestudent($sid) )
             {
-                $course -> stop();
+                return redirect('class/' . $cid );
             }
-            $lessons = $class -> getlessons($sid);
-            foreach ($lessons as $lesson)
-            {
-                $lesson -> delete();
-            }
-            $student -> class_id = 0;
-            $student -> save(); //将学生从班级删去
         }
-        return redirect('class/' . $cid );
     }
 
-    // 添加学生的实现
-    public function addstudent( $cid , $sid )
-    {
-        $class = Classes::find( $cid );
-        $student = Student::find( $sid );
-        $student -> class_id = $cid;
-        $student -> save(); //将学生加入班级
+	//处理添加班级请求
+	public function createclass(Request $request)
+	{
+		$this -> validate($request,[
+            'name' => 'required',
+        ],[
+            'required' => '输入不能为空',
+        ]);
 
-        //给加入学生添加目前班级的新课（正式）
-        $courses = $class -> getcourses();
-        foreach( $courses as $course )
-        {
-            $course -> copytostudent($sid);
-        }
-        $lessons = $class -> getnextlessons();
-        foreach( $lessons as $lesson )
-        {
-            $lesson -> copytostudent($sid);
-        }
-        //将学生正在上的课程归入班课（正式删去）
-//        $student -> lessons() -> update(['class_id' => $cid]); //正式删去
-//        $student -> courses() -> update(['class_id' => $cid]); //正式删去
+        $classinfo = $request -> all();
+        $ans = Classes::create( $classinfo );
+        return redirect('class/' . $ans -> id );
+	}
 
-        return true;
-    }
-
-//	//处理添加单节课程请求
-//	public function create(Request $request)
-//	{
-//
-////      $this -> validate -> errors() -> add('lerror' , '1');
-//		$this -> validate($request,[
-//            'sid' => 'required|numeric|exists:students,id',
-//            'stime' => 'required',
-//            'etime' => 'required',
-//            'date' => 'required|date',
-//            'cost' => 'required|numeric|max:5',
-//            'cost1' => 'required|numeric|max:5',
-//            'cost2' => 'required|numeric|max:5',
-//        ],[
-//            'required' => '输入不能为空',
-//            'date.date' => '请按照正确格式输入日期',
-//        ]);
-//
-//        $lessoninfo = $request -> all();
-//        $ans = $this -> createlesson( $lessoninfo );
-//
-//        return redirect('lessonsinfo/' . $request -> sid );
-//	}
-//
 //	//处理删除单节课程请求
 //	public function delete(Request $request)
 //	{
@@ -141,75 +131,99 @@ class ClassController extends Controller
 //        return 0;
 //	}
 //
-//	// 显示文件上传页面
-//	public function fileupdateindex($lid)
-//	{
-//		$lesson = Lesson::find($lid);
-//		$student = Student::find( $lesson -> sid );
-//		$cws = Courseware::all();
-//		if ( $lesson -> cwurl == null )
-//		{
-//			$cwid = 0;
-//		}
-//		else
-//		{
-//			$cw = Courseware::where( 'url' , $lesson -> cwurl );
-//			if ( $cw -> first() )
-//			{
-//				$cwid = $cw -> first() -> id;
-//			}
-//			else{
-//				$cwid = -1;
-//			}
-//		}
-////  	dd($students);
-//        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student , 'cws' => $cws , 'cwid' => $cwid ]);
-//	}
-//
-//	// 存储视频上传信息
-//	public function videoupdate(Request $request)
-//	{
-//		$this -> validate($request,[
-//            'name' => 'required',
-//            'id' => 'required',
-//            'vid' => 'required',
-//        ],[
-//            'required' => '输入不能为空',
-//        ]);
-//
-////      dd($request);
-//		$lesson = Lesson::find( $request -> id );
-//		$lesson -> name =  $request -> name;
-//		$lesson -> tname =  $request -> tname;
-//		$lesson -> vid =  $request -> vid;
-//		$lesson -> save();
-//		return $this -> info( $request -> sid );
-//	}
-//
-//	// 存储文件上传信息
-//	public function fileupdate(Request $request)
-//	{
-//		$lesson = Lesson::find( $request -> id );
-//		if ( $request -> type == 'gd' )
-//		{
-//			if ( $request -> cwid == 0 )
-//			{
-//				$lesson -> cwurl =  null;
-//			}
-//			else
-//			{
-//				$lesson -> cwurl = Courseware::find( $request -> cwid ) -> url;
-//			}
-//		}
-//		else
-//		{
-//			$lesson -> cwurl = $request -> cwurl;
-//		}
-//		$lesson -> furl = $request -> furl;
-//		$lesson -> save();
-//		return $this -> info( $request -> sid );
-//	}
-//
+	// 显示文件上传页面
+	public function fileupdateindex($lid)
+	{
+		$lesson = Lesson::find($lid);
+		$student = Student::find( $lesson -> sid );
+		$cws = Courseware::all();
+		if ( $lesson -> cwurl == null )
+		{
+			$cwid = 0;
+		}
+		else
+		{
+			$cw = Courseware::where( 'url' , $lesson -> cwurl );
+			if ( $cw -> first() )
+			{
+				$cwid = $cw -> first() -> id;
+			}
+			else{
+				$cwid = -1;
+			}
+		}
+//  	dd($students);
+        return view('admin.fupdate' , ['lesson' => $lesson , 'student' => $student , 'cws' => $cws , 'cwid' => $cwid , 'url' => '/class']);
+	}
+
+	// 存储视频上传信息
+	public function videoupdate(Request $request)
+	{
+		$this -> validate($request,[
+            'name' => 'required',
+            'id' => 'required',
+            'vid' => 'required',
+        ],[
+            'required' => '输入不能为空',
+        ]);
+
+        $temp = Lesson::find( $request -> id );
+        if ( $temp )
+        {
+            $class = $temp -> classes;
+            if ( $class )
+            {
+                $lessons = $temp -> sameclasslesson();
+                foreach ($lessons as $lesson)
+                {
+                    $lesson -> name =  $request -> name;
+                    $lesson -> tname =  $request -> tname;
+                    $lesson -> vid =  $request -> vid;
+                    $lesson -> save();
+                }
+                return view('admin.classinfo' ,
+                    ['class' => $class ]);
+            }
+        }
+
+	}
+
+	// 存储文件上传信息
+	public function fileupdate(Request $request)
+	{
+        $temp = Lesson::find( $request -> id );
+        if ( $temp )
+        {
+            $class = $temp -> classes;
+            if ( $class )
+            {
+                $lessons = $temp -> sameclasslesson();
+                foreach ($lessons as $lesson)
+                {
+                    if ( $request -> type == 'gd' )
+                    {
+                        if ( $request -> cwid == 0 )
+                        {
+                            $lesson -> cwurl =  null;
+                        }
+                        else
+                        {
+                            $lesson -> cwurl = Courseware::find( $request -> cwid ) -> url;
+                        }
+                    }
+                    else
+                    {
+                        $lesson -> cwurl = $request -> cwurl;
+                    }
+                    $lesson -> furl = $request -> furl;
+                    $lesson -> save();
+                }
+                return view('admin.classinfo' ,
+                    ['class' => $class ]);
+            }
+        }
+	}
+
 //
 //	// 修改课程信息显示页面
 //	public function changeindex(Request $request)
