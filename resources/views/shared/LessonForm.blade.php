@@ -163,18 +163,18 @@
         </div>
     </div>
 
-    <div class="form-group{{ $errors->has('score') ? ' has-error' : '' }}">
-        <label for="score" class="col-md-4 control-label" >得分</label>
+    {{--<div class="form-group{{ $errors->has('score') ? ' has-error' : '' }}">--}}
+        {{--<label for="score" class="col-md-4 control-label" >得分</label>--}}
 
-        <div class="col-md-6">
-            <input id="score" type="number" class="form-control" name="score" value="{{ old('score') }}" >
-            @if ($errors->has('score'))
-                <span class="help-block">
-                    <strong>{{ $errors->first('score') }}</strong>
-                </span>
-            @endif
-        </div>
-    </div>
+        {{--<div class="col-md-6">--}}
+            {{--<input id="score" type="number" class="form-control" name="score" value="{{ old('score') }}" >--}}
+            {{--@if ($errors->has('score'))--}}
+                {{--<span class="help-block">--}}
+                    {{--<strong>{{ $errors->first('score') }}</strong>--}}
+                {{--</span>--}}
+            {{--@endif--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
     <div class="form-group">
         <div class="col-md-8 col-md-offset-4">

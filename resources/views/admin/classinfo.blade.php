@@ -299,10 +299,10 @@
 												操作 <span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu" role="menu">
-												<li><a href="{{ url('/class/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>
+												{{--<li><a href="{{ url('/class/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>--}}
 												<li><a href="{{ url('/class/fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
-												<li class="divider"></li>
-												<li><a href="{{ url('deletelesson/' .$lesson -> sid . '/' . $lesson -> id) }}">删除课程</a></li>
+												{{--<li class="divider"></li>--}}
+												{{--<li><a href="{{ url('deletelesson/' .$lesson -> sid . '/' . $lesson -> id) }}">删除课程</a></li>--}}
 											</ul>
 										</div>
 									</td>
