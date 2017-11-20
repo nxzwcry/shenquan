@@ -25,14 +25,15 @@ class WechatController extends Controller
 	//处理微信的请求消息
 	public function serve()
 	{
-		Log::info('request arrived.'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
+		Log::info('处理微信请求消息开始'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
 
         $wechat = app('wechat');
         $wechat->server->setMessageHandler(function($message) {
 	        if ($message->MsgType=='event') {
-	             $user_openid = $message->FromUserName;
+	            $user_openid = $message->FromUserName;
+                Log::info('用户'.$user_openid);
 	            if ($message->Event=='subscribe') {
-	            	//下面是你点击关注时，进行的操作	                			
+	            	//下面是你点击关注时，进行的操作
 					return $this -> entermessage();
 	            }
 	            else if ($message->Event=='unsubscribe') {
@@ -58,23 +59,23 @@ class WechatController extends Controller
 					}
 					//报名试课菜单
 					else if ( $message -> EventKey == 'BUTTEN_ENTER' )
-					{						               			
+					{
 						return $this -> entermessage();
 					}
 	            }
 	        }
 	        else	//自动回复
-	        {               			
+	        {
 				return $this -> entermessage();
 	        }
-	        
+
 	    });
     
 //      $wechat->server->setMessageHandler(function($message){
 //          return "欢迎关注 overtrue！";
 //      });
 
-        Log::info('return response.');
+        Log::info('处理微信请求消息结束');
 
         return $wechat->server->serve();
 	}
@@ -119,7 +120,7 @@ class WechatController extends Controller
 	//关联微信和学生
 	public function connect(Request $request)
 	{
-		Log::info('before captcha.');
+		Log::info('关联微信');
 		$this->validate($request, [
 		    'captcha' => 'required|captcha'
 		]);
@@ -139,6 +140,7 @@ class WechatController extends Controller
 					  'nickname' => $user -> nickname
 					]
 				);
+                Log::info('用户'.$user -> name);
 				$request->session()->put('sid', $sid);
 			}
 			else

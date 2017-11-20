@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Lesson;
 use Illuminate\Http\Request;
 use App\Student;
+use App\Classes;
 
 class AdminhomeController extends Controller
 {
@@ -15,9 +17,21 @@ class AdminhomeController extends Controller
      */
     public function index()
     {
-    	$students = Student::orderby('created_at' , 'DESC')
-    		-> get();
-//  	dd($students);
-        return view('admin.home' , ['students' => $students]);
+  	    $res = $this -> getstudentlist();
+  	    $classes = Classes::orderby( 'name' )
+            -> get();;
+        return view('admin.home' , [ 'allstudents' => Student::orderby( 'ename' ) -> get() , 'classs' => $res['classs'] , 'one2ones' => $res['one2ones'] , 'classes' => $classes ]);
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getstudentlist()
+    {
+        $classs = Student::where( 'class_id' , '>' , '0' ) -> orderby( 'class_id' , 'Desc' ) -> get();
+        $one2ones = Student::where( 'class_id' , '0' ) -> orderby( 'ename' ) -> get();
+
+        return [ 'classs' => $classs , 'one2ones' => $one2ones ];
     }
 }

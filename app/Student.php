@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use PhpParser\ErrorHandler\Collecting;
 
 class Student extends Model
 {
@@ -47,8 +48,24 @@ class Student extends Model
     public function lessons()
     {
     	return $this->hasMany('App\Lesson', 'sid');
-    }    
-    
+    }
+
+    public function getoldlessons()
+    {
+        $lessons = $this -> lessons()
+            -> where('conduct' , 1 )
+            -> get();
+        return $lessons;
+    }
+
+    public function havenewlessons()
+    {
+        if ( $this -> lessons() -> where( 'conduct' , '0' ) ->first() )
+            return true;
+        else
+            return false;
+    }
+
     public function courses()
     {
     	return $this->hasMany('App\Course', 'sid');
@@ -63,7 +80,12 @@ class Student extends Model
     {
     	return $this->hasMany('App\Wechat', 'sid');
     }
-    
+
+    public function classes()
+    {
+        return $this->belongsTo('App\Classes' , 'class_id' , 'id');
+    }
+
     public function getfuxi()
     {
     	$after = 1;
@@ -107,6 +129,7 @@ class Student extends Model
 		}
 		return $fuxi;
     }
+
     
     public function getjingpin()
     {
@@ -176,7 +199,19 @@ class Student extends Model
     			return 4;
     		}
     }
-    
+
+    //处理添加固定课程请求(不添加关联单节课程)
+    public function createcourse($classinfo)
+    {
+        $classinfo['sid'] = $this -> id;
+        $classinfo['sdate'] = Carbon::parse($classinfo['sdate'] . ' 0:00:00');
+        if ( $classinfo['edate'] <> null )
+        {
+            $classinfo['edate'] = Carbon::parse($classinfo['edate'] . ' 23:59:59'); //edate的时间设定为该日期的最大值
+        }
+
+        return Course::create($classinfo);
+    }
     
     //对时间戳不作处理
 //  protected function asDateTime($val)

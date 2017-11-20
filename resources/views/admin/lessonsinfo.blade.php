@@ -8,6 +8,23 @@
 		.color-fuxi {background-color:#f0ad4e;color:#FFFFFF;}
 		.color-ban {background-color:#5bc0de;color:#FFFFFF;}
 		.color-null {background-color:#FFFFFF;color:#FFFFFF;}
+		.center-vertical-col {
+
+			display: inline-block;
+
+			float: none;
+
+			vertical-align: middle;
+
+			font-size: 14px;
+
+		}
+
+		.center-vertical-row {
+
+			font-size: 0;
+
+		}
 	</style>
     <script type="text/javascript">	
 	function pop( id , sid ){
@@ -47,8 +64,11 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
             	<ol class="breadcrumb">
-				  <li><a href="{{ route('home') }}">首页</a></li>
-				  <li class="active">学生课程信息</li>
+				  	<li><a href="{{ route('home') }}">首页</a></li>
+					@if($students -> classes)
+				  	<li><a href="{{ url('class') . '/' . $students -> classes -> id }}">{{ $students -> classes -> name }}</a></li>
+					@endif
+				  	<li class="active">{{ $students -> name }}</li>
 				</ol>
                 <ul class="nav nav-tabs" role="tablist">      
 					<li role="presentation" class="active">
@@ -69,13 +89,13 @@
 	 				<div role="tabpanel" class="tab-pane fade in active" id="baseinfo">
 	
 		                <div class="panel-body">
-				            <div class="row">
-			                	<div class="col-md-5">
+				            <div class="row center-vertical-row">
+			                	<div class="col-md-5 center-vertical-col">
 			                    	<h4>{{ $students -> id }}</h4>
 			                    	<h2>{{ $students -> name . ' ' . $students -> ename }}</h2>
 			                    	<h4>{{ $lessons -> sum('score') }}分</h4>
 			                   	</div>
-			                   	<div class="col-md-5">
+			                   	<div class="col-md-5 center-vertical-col">
 			                   		
 				                	<div class="row">
 					                   		已上：外{{ $lessons -> sum('cost') }}/中{{ $lessons -> sum('cost1') }}/精{{ $lessons -> sum('cost2') }} <br/>
@@ -111,9 +131,10 @@
 				                   		</div>	
 					                </div>
 			                   	</div>
-			                   	<div class="col-md-2">
+			                   	<div class="col-md-2 center-vertical-col">
 			                   		<a href="{{ url('createcourse') . '/' . $students -> id }}">增加课程</a> <br/>
-			                   		<a href="{{ url('recharge') . '/' . $students -> id }}">课时充值</a>			                   
+			                   		<a href="{{ url('recharge') . '/' . $students -> id }}">课时充值</a><br/>
+									<a href="{{ url('/student/change') . '/' . $students -> id }}">修改学生信息</a>
 			                   </div>
 			               </div>
 		                	<div class="row">
@@ -279,7 +300,7 @@
 									<td>{{ $lesson -> name }}</td>
 									<td>{{ $lesson -> date }}</td>
 									<td>
-										<a href="{{ '/video/' . $lesson -> vid }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
+										<a href="{{ '/video/' . $lesson -> id }}" {{ $lesson -> vid == null ? 'hidden' : '' }}>视频</a>
 										<a href="{{ '/showflist/' .$lesson -> furl }}" {{ $lesson -> furl == null ? 'hidden' : '' }}>文件</a>
 										<a href="{{ '/showcwlist/' .$lesson -> cwurl }}" {{ $lesson -> cwurl == null ? 'hidden' : '' }}>课件</a>
 									</td>
@@ -293,7 +314,7 @@
 											</button>
 											<ul class="dropdown-menu" role="menu">
 												<li><a href="{{ url('/lesson/change/' . $lesson -> id) }}" >修改课程信息</a></li>			                   				
-												<li><a href="{{ url('fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
+												<li><a href="{{ url('/lesson/fileupdate') . '/' . $lesson -> id }}">上传/修改附件</a></li>
 												<li class="divider"></li>
 												<li><a href="{{ url('deletelesson/' .$lesson -> sid . '/' . $lesson -> id) }}">删除课程</a></li>
 											</ul>

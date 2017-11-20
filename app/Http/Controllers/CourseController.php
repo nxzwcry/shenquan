@@ -43,71 +43,17 @@ class CourseController extends Controller
             'required' => '输入不能为空',
             'date.date' => '请按照正确格式输入日期',
         ]);
-       	
-//		使用模型的Create方法新增固定课程数据
-//		$class = Course::create(
-//		[
-//			'sid'=> $request -> sid,
-//			'tname' => $request -> tname,
-//			'dow' => $request -> dow,
-//			'sdate' => Carbon::parse($request -> sdate . ' 0:00:00') ,
-//			'edate' => Carbon::parse($request -> edate . ' 23:59:59') ,
-//			'stime' => $request -> stime,
-//			'etime' => $request -> etime,
-//			'mid' => $request -> mid,
-//			'cost' => $request -> cost,
-//			'cid' => $request -> cid
-//		]
-//		);
-
-		
-		
-		
-		$classinfo = $request -> all();
-		
-		$classinfo['sdate'] = Carbon::parse($classinfo['sdate'] . ' 0:00:00');
-		if ( $classinfo['edate'] <> null )
-		{
-			$classinfo['edate'] = Carbon::parse($classinfo['edate'] . ' 23:59:59');
-		}
-		
-//		dd($classinfo);
-		
-//		else
-//		{
-//			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
-//		}
-//		
-//		$class = new Course();
-//		$class->sid = $request -> sid;
-//		$class->tname = $request -> tname;
-//		$class->dow = $request -> dow;
-//		$class->sdate = Carbon::parse($request -> sdate . ' 0:00:00');
-//		if ( $request -> edate == null )
-//		{
-//			$class->edate = null;
-//		}
-//		else
-//		{
-//			$class->edate = Carbon::parse($request -> edate . ' 23:59:59') ;
-//		}
-//		$class->stime = $request -> stime;
-//		$class->etime = $request -> etime;
-//		$class->mid = $request -> mid;
-//		$class->cost = $request -> cost;
-//		$class->cid = $request -> cid;	
-		$class = Course::create($classinfo);			
-		
-//		dd($class-> toArray());
-//		$bool = $class->save();
-
-
-//		if ( $bool ){
-		    $this-> clesson($class);
-		    return redirect('lessonsinfo/' . $request -> sid );
-//		    }
-//		else
-//			return 0;
+        $student = Student::find($request -> sid);
+        if ($student)
+        {
+            $course = $student->createcourse($request -> all());//创建固定课程
+            if ($course)
+            {
+                //根据固定课程创建单节课程
+                $course -> CreateLessons();
+            }
+        }
+        return redirect('lessonsinfo/' . $request -> sid );
 	}
 			
 	//处理删除单节课程请求

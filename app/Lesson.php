@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Lesson extends Model
 {
@@ -24,6 +25,10 @@ class Lesson extends Model
     
     //不允许批量赋值的字段
     protected $guarded = [ 'id' , 'created_at' , 'updated_at' ];
+
+    protected $events = [
+        'created' => UserSaved::class
+    ];
     
     protected function getDateFormat()
     {
@@ -48,7 +53,51 @@ class Lesson extends Model
     public function place()
     {
     	return $this->belongsTo('App\Place' , 'place_id');
-    }  
+    }
+
+    public function classes()
+    {
+        return $this->belongsTo('App\Classes' , 'class_id');
+    }
+
+
+    public function copytostudent($sid) //将该节课程复制给学生
+    {
+        $linfo = $this -> toArray();
+        $linfo['sid'] = $sid;
+        return Lesson::create($linfo);
+    }
+
+    public function sameclasslesson()
+    {
+        return Lesson::where('class_id' , $this -> class_id)
+                    -> where('date' , $this -> date)
+                    -> where('stime' , $this -> stime)
+                    -> get();
+    }
+
+    //课程结束时间
+    public function GetEtime()
+    {
+        return Carbon::parse( $this -> date . ' ' . $this -> etime );
+    }
+
+    //如果之后加入事件的话利用事件实现
+    public function ChackConduct()
+    {
+        if ( Carbon::now() -> gte( $this -> GetEtime() ) )
+        {
+            $this -> conduct = 1;
+            $this -> save();
+            $course = $this -> course;
+            if( $course )
+            {
+                $course -> CreateNextLesson();
+            }
+        }
+        return $this -> conduct;
+    }
+
     //对时间戳不作处理
 //  protected function asDateTime($val)
 //  {

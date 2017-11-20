@@ -7,8 +7,12 @@
             <div class="panel panel-default">
             	
             	<ol class="breadcrumb">
-				  <li><a href="{{ route('home') }}">首页</a></li>
-				  <li class="active">修改学生信息</li>
+				    <li><a href="{{ route('home') }}">首页</a></li>
+                    @if($student -> classes)
+                        <li><a href="{{ url('class') . '/' . $student -> classes -> id }}">{{ $student -> classes -> name }}</a></li>
+                    @endif
+                    <li class="active"><a href="{{ url('lessonsinfo') . '/' . $student -> id }}">{{ $student -> name }}</a></li>
+				    <li class="active">修改学生信息</li>
 				</ol>
                 <div class="panel-heading">修改学生信息</div>
 

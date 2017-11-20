@@ -30,6 +30,11 @@ class Courseware extends Model
     {
     	return time();
     }
+
+    public function course()
+    {
+        return $this->hasMany('App\Course' , 'cwid');
+    }
         
     //对时间戳不作处理
 //  protected function asDateTime($val)

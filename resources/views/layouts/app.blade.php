@@ -59,7 +59,10 @@
                                     	
                                     <li>
                                         <a href="{{ url('/createstudent') }}" >添加学生</a>
-                                    </li>	
+                                    </li>
+                                    <li>
+                                        <a href="{{ url('/createclass') }}" >添加班级</a>
+                                    </li>
                                     <li>
                                         <a href="{{ url('/cwupdate') }}" >上传课件</a>
                                     </li>	
