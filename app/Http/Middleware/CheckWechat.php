@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Wechat;
 use App\Student;
+use Log;
 
 class CheckWechat{
 	
@@ -12,7 +13,7 @@ class CheckWechat{
 	public function handle($request, Closure $next)
     {
     	$user = session('wechat.oauth_user'); // 拿到授权用户资料
-    	
+    	Log::info('获取用户资料'.$user->getId());
     	$con = Wechat::where( 'openid' , $user->id ) -> first();
     	
 //  	dd($con);

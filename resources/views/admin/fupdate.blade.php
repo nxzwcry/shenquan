@@ -527,7 +527,7 @@
                         { title : "Video files", extensions : "mp4" }
                         // { title : "Zip files", extensions : "zip,rar" }
                     ],
-                    max_file_size : '200mb', //最大只能上传10mb的文件
+                    max_file_size : '400mb', //最大只能上传10mb的文件
                     prevent_duplicates : true //不允许选取重复文件
                 },
 
