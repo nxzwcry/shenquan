@@ -87,14 +87,24 @@ class WechatController extends Controller
 		$menu->destroy(); // 删除全部
 		$buttons = [
 		    [
-		        "type" => "click",
-		        "name" => "深泉招聘",
-		        "key"  => "BUTTEN_ADV"
+		    	"name"       => "联系我们",
+		        "sub_button" => [
+		            [
+		                "type" => "click",
+		                "name" => "报名试听",
+		                "key"  => "BUTTEN_ENTER"
+		            ],
+		            [
+		                "type" => "click",
+		                "name" => "深泉招聘",
+		                "key"  => "BUTTEN_ADV"
+		            ],
+		        ],
 		    ],
 		    [
-		        "type" => "click",
-		        "name" => "报名试课",
-                "key"  => "BUTTEN_ENTER"
+                "type" => "view",
+                "name" => "绘本跟读",
+                "url"  => "http://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ==&hid=1&sn=e3deacf1eb5c5579f36766bbf18eb4b1#wechat_redirect"
             ],
             [
                 "type" => "view",
