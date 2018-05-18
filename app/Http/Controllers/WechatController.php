@@ -21,6 +21,12 @@ class WechatController extends Controller
               "url" => "http://mp.weixin.qq.com/s?__biz=MzI5NTc3MTg2MQ==&mid=100000079&idx=2&sn=104bf2d05afd3dac3f441b834c53c224&chksm=6c4fcaf55b3843e38d15d534cdd70cc1ea23d2a2ff1ebdb0ccc388bb43dc4c9b4e613f18e24f#rd " ,
               "image" => "http://mmbiz.qpic.cn/mmbiz_jpg/a0PJJ0nV5OTZ8Y55PJn2ar76DyNvp3d0Z4JFKfdmicsXJiaVNdTN7ib3TGy9vgrIOp7eVoGZZ1MQbMcf14T5icnyjw/0?wx_fmt=jpeg" ,
             ];
+    protected $news_tv =[
+        "title" => "除了上电视，我们还做了一些事，还有可能做更多事" ,
+        "description" => "深泉英语，用在线教育连接世界" ,
+        "url" => "http://mp.weixin.qq.com/s?__biz=MzI5NTc3MTg2MQ==&mid=100000578&idx=1&sn=abce25974ad882d2ad62af4cd6937e04&chksm=6c4fc8f85b3841eeb944b5c35575a9ebfbf07f30981323a0335f5c0b10bcb06827280706d77c#rd" ,
+        "image" => "http://mmbiz.qpic.cn/mmbiz_jpg/a0PJJ0nV5OSBsLQa3Ha18egmN6ENcRljlUibbib3BjYntjLqVtuu1ru9k6p3lhZT2hkjOW4GQl33raeTbOmSZSnQ/0?wx_fmt=jpeg" ,
+    ];
 	
 	//处理微信的请求消息
 	public function serve()
@@ -62,6 +68,11 @@ class WechatController extends Controller
 					{
 						return $this -> entermessage();
 					}
+                    //采访报道菜单
+                    else if ( $message -> EventKey == 'BUTTEN_TV' )
+                    {
+                        return $this -> tvmessage();
+                    }
 	            }
 	        }
 	        else	//自动回复
@@ -86,25 +97,55 @@ class WechatController extends Controller
 		$menu = $wechat->menu;
 		$menu->destroy(); // 删除全部
 		$buttons = [
-		    [
-		    	"name"       => "联系我们",
-		        "sub_button" => [
-		            [
-		                "type" => "click",
-		                "name" => "报名试听",
-		                "key"  => "BUTTEN_ENTER"
-		            ],
-		            [
-		                "type" => "click",
-		                "name" => "深泉招聘",
-		                "key"  => "BUTTEN_ADV"
-		            ],
-		        ],
-		    ],
-		    [
-                "type" => "view",
-                "name" => "绘本跟读",
-                "url"  => "http://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ==&hid=1&sn=e3deacf1eb5c5579f36766bbf18eb4b1#wechat_redirect"
+            [
+               "name" => "联系我们",
+                "sub_button" => [
+                    [
+                       "type" => "click",
+                       "name" => "报名试听",
+                       "key"  => "BUTTEN_ENTER"
+                   ],
+                   [
+                       "type" => "click",
+                       "name" => "深泉招聘",
+                       "key"  => "BUTTEN_ADV"
+                   ],
+                    [
+                        "type" => "click",
+                        "name" => "电视报道",
+                        "key"  => "BUTTEN_TV"
+                    ],
+               ],
+            ],
+            [
+                "name" => "深泉活动",
+                "sub_button" => [
+                    [
+                        "type" => "view",
+                        "name" => "绘本跟读",
+                        "url"  => "http://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ==&hid=1&sn=e3deacf1eb5c5579f36766bbf18eb4b1#wechat_redirect"
+                    ],
+//                    [
+//                        "type" => "view",
+//                        "name" => "配音大赛少儿组",
+//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35444"
+//                    ],
+//                    [
+//                        "type" => "view",
+//                        "name" => "配音大赛小低组",
+//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35445"
+//                    ],
+//                    [
+//                        "type" => "view",
+//                        "name" => "配音大赛小高组",
+//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35446"
+//                    ],
+//                    [
+//                        "type" => "view",
+//                        "name" => "配音大赛高年级组",
+//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35448"
+//                    ],
+                ],
             ],
             [
                 "type" => "view",
@@ -186,5 +227,13 @@ class WechatController extends Controller
 		$material = new News( $this -> news_adv );
 		return $material;
 	}
+
+    public function tvmessage()
+    {
+//		$material = new Material('mpnews', $this -> news_adv_id);
+        $material = new News( $this -> news_tv );
+        return $material;
+    }
+
 }
 ?>

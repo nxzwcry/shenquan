@@ -196,7 +196,7 @@ class Student extends Model
 				return ceil( ( $recharges -> sum('lessons') - $lessons -> sum('cost') )/( $courses -> sum('cost') ) ) ;
     		}
     		else{
-    			return 4;
+    			return 10;
     		}
     }
 

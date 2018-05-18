@@ -22,7 +22,11 @@ class VideoController extends Controller
         $lesson = Lesson::find( $lessonid );
         if( !$lesson ) return 0; //如果课程id有误
         $videoid = $lesson -> vid;
-        if ( substr( $videoid , 0 , 6 ) == "lesson" )
+        if ( substr( $videoid , 0 , 23 ) == "http://img.kktalkee.com" ){
+            $title =  $lesson -> student -> ename . '_' . $lesson -> date . '_' . $lesson -> name;
+            $signedUrl = $videoid;
+        }
+        elseif ( substr( $videoid , 0 , 6 ) == "lesson" )
         {
             $title =  $lesson -> student -> ename . '_' . $lesson -> date . '_' . $lesson -> name;
             $bucket= "ds-classvideo";

@@ -36,11 +36,11 @@
 
 						<div class="panel-body">
 							<table class="table table-hover">
-								<tr><th>英文名</th><th>姓名</th><th>性别</th><th>年龄</th><!--<th>年级</th>--><th>积分</th></tr>
+								<tr><th>英文名</th><th>姓名</th><th>性别</th><th>年龄</th><!--<th>年级</th>--><th>积分</th><th>剩余外教</th></tr>
 							@foreach ( $one2ones as $student )
 								@if ( $student -> getbalance() <= 2 )
 									<tr class="danger">
-								@elseif ( $student -> getbalance() <= 3 )
+								@elseif ( $student -> getbalance() <= 4 )
 									<tr class="warning">
 								@else
 									<tr>
@@ -50,6 +50,7 @@
 									<td>{{ $student -> sex }}</td>
 									<td>{{ Carbon\Carbon::now() -> diffInYears($student -> birthday , 'true') }}岁</td>
 									<td>{{ $student -> lessons -> sum('score') }}</td>
+									<td>{{$student->recharges->sum('lessons') - $student->lessons->where('conduct', 1 )->sum('cost')}}</td>
 									<!--<td>{{ $student -> grade }}</td>-->
 									{{--<td><div class="btn-group">--}}
 										{{--<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">--}}
