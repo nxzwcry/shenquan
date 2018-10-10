@@ -9,6 +9,7 @@ use App\Wechat;
 use EasyWeChat\Message\Material;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\News;
+use EasyWeChat\Message\Text;
 
 class WechatController extends Controller
 {
@@ -73,6 +74,11 @@ class WechatController extends Controller
                     {
                         return $this -> tvmessage();
                     }
+                    //用户信息临时菜单
+                    else if ( $message -> EventKey == 'BUTTEN_USER' )
+                    {
+                        return $this -> usermessage();
+                    }
 	            }
 	        }
 	        else	//自动回复
@@ -123,23 +129,23 @@ class WechatController extends Controller
                     [
                         "type" => "view",
                         "name" => "绘本跟读",
-                        "url"  => "http://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ==&hid=1&sn=e3deacf1eb5c5579f36766bbf18eb4b1#wechat_redirect"
+                        "url"  => "https://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ%3D%3D&hid=4&sn=806359302f5ab9bd3178a11740277346"
                     ],
-//                    [
-//                        "type" => "view",
-//                        "name" => "配音大赛少儿组",
-//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35444"
-//                    ],
-//                    [
-//                        "type" => "view",
-//                        "name" => "配音大赛小低组",
-//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35445"
-//                    ],
-//                    [
-//                        "type" => "view",
-//                        "name" => "配音大赛小高组",
-//                        "url"  => "https://video.qupeiyin.cn/index.php?m=Home&c=MatchNew&a=share&id=35446"
-//                    ],
+                    [
+                        "type" => "view",
+                        "name" => "单词打卡Phonics1",
+                        "url"  => "https://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ%3D%3D&hid=5&sn=281bce1e3f7df0340169996df4af81f8"
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "单词打卡Phonics2-4",
+                        "url"  => "https://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ%3D%3D&hid=6&sn=5c2bd3de38b71dda09363e63e63ef29d"
+                    ],
+                    [
+                        "type" => "view",
+                        "name" => "单词打卡Show and Tell",
+                        "url"  => "https://mp.weixin.qq.com/mp/homepage?__biz=MzI5NTc3MTg2MQ%3D%3D&hid=7&sn=e6324b97e86a40bedbac723e3504bacc"
+                    ],
 //                    [
 //                        "type" => "view",
 //                        "name" => "配音大赛高年级组",
@@ -147,10 +153,15 @@ class WechatController extends Controller
 //                    ],
                 ],
             ],
+//            [
+//                "type" => "view",
+//                "name" => "用户信息",
+//                "url"  => "http://deepspring.cn/wechat/userinfo"
+//            ],
             [
-                "type" => "view",
+                "type" => "click",
                 "name" => "用户信息",
-                "url"  => "http://deepspring.cn/wechat/userinfo"
+                "key"  => "BUTTEN_USER"
             ],
 		];
 		$menu->add($buttons);
@@ -233,6 +244,12 @@ class WechatController extends Controller
 //		$material = new Material('mpnews', $this -> news_adv_id);
         $material = new News( $this -> news_tv );
         return $material;
+    }
+
+    public function usermessage()
+    {
+        $text = new Text(['content' => '系统升级，暂不可用。']);
+        return $text;
     }
 
 }
